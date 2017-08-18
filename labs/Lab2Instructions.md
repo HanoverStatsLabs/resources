@@ -1,20 +1,8 @@
----
-title: 'Lab 2: Categorical Data and Multi-Variable Investigations'
-output:
-  pdf_document: default
-  html_document:
-    default: yes
-    number_sections: yes
-  word_document: default
----
+# Lab 2: Categorical Data and Multi-Variable Investigations
 
-```{r, echo=FALSE, results="hide"}
-knitr::opts_chunk$set(results="hide", warning=FALSE, message=FALSE, fig.show="hide")
-```
+## Overall Goals
 
-# Overall Goals
-
-In [Lab 1](Lab1a.Rmd) we were introduced to the basic operations of RStudio. In this lab we expand on the ways R helps us analyze datasets. We will learn how to:
+In [Lab 1](Lab1Instructions.md) we were introduced to the basic operations of RStudio. In this lab we expand on the ways R helps us analyze datasets. We will learn how to:
 
 - aggregate data based on a categorical variable
 - work with individual variables (e.g. sorting, filtering)
@@ -35,7 +23,7 @@ We will continue working with the `counties` dataset introduced in Lab 1. If the
 data(counties)
 ```
 
-# Working with Categorical Variables
+## Working with Categorical Variables
 
 Recall that categorical variables take values from a limited set of options, one value for each individual case. In our `counties` data set the "individual cases" are the U.S. counties.
 
@@ -89,7 +77,7 @@ There is similarly a `head` command that would show us a number of entries from 
 \vfill
 
 \newpage
-# Working with Two Variables of a Dataset
+## Working with Two Variables of a Dataset
 
 In most situations in statistics we deal with more than one variable at a time, and more specifically we are interested in the relationships between variables. For example, we may look at the percent of female population for each county as a variable on its own (one variable analysis), or we may look at how these percents vary across states (two variable analysis).
 
@@ -142,7 +130,7 @@ We should point out that the values in this table are NOT the percent of females
 
 \newpage
 
-#### Digging Deeper {-}
+##### Digging Deeper {-}
 
 We might be interested in a single state and the distribution of female percentages in its counties.
 
