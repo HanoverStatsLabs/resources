@@ -1,18 +1,6 @@
----
-title: 'Lab 3: Generating Reports with R Markdown'
-output:
-  html_document:
-    default: yes
-    number_sections: yes
-  pdf_document: default
-  word_document: default
----
+#Lab 3: Generating Reports with R Markdown
 
-```{r, echo=FALSE, results="hide"}
-knitr::opts_chunk$set(results="hide", warning=FALSE, message=FALSE, fig.show="hide")
-```
-
-# Introduction
+## Introduction
 
 In this lab we learn how to integrate R code and text into a single report. We use the RMarkdown file format for this (`.Rmd`), which has many advantages:
 
@@ -23,7 +11,7 @@ In this lab we learn how to integrate R code and text into a single report. We u
 
 You can learn more about RMarkdown at the following link: [http://rmarkdown.rstudio.com/](http://rmarkdown.rstudio.com/)
 
-# Overall Goals
+## Overall Goals
 
 In this lab we will learn how to:
 
@@ -34,7 +22,7 @@ In this lab we will learn how to:
 
 At the same time we will get a chance to practice the R commands we learned in the previous labs.
 
-# Creating an RStudio Project
+## Creating an RStudio Project
 
 RStudio projects allow us to organize our work. A project is essentially a folder/directory of related files. You can easily start a new project or download someone else's project to start.
 
@@ -52,13 +40,13 @@ If all has gone well, you should now see the project files in the **Files pane**
 
 The file we are interested in is called `Lab3Report.Rmd`. Click on it to open it up for editing. It should appear at the top left. We will work on this file in the subsequent sections.
 
-# Working with RMarkdown Documents
+## Working with RMarkdown Documents
 
 RMarkdown documents typically start with a "header" section. In it you get to specify title, author and date for the report, as well as some other technical settings that we will not worry about right now. Take a moment to add your own information in the header fields. Make sure to save your edits before proceeding.
 
 The rest of the document contains the actual contents of your report.
 
-## Exporting RMarkdown documents
+### Exporting RMarkdown documents
 
 Exporting an RMarkdown into other formats is called **Knitting**. You will find a "Knit" pulldown at the top of the editing pane. Use the arrow to its right to select an output format. We will use "Knit to HTML" for now.
 
@@ -66,12 +54,12 @@ DO NOW: Use "Knit to HTML" to create a compiled version of the report. You will 
 
 If everything is in order you should see the output of your report so far. (Hint: You can customize where the output will be shown by changing the settings at `Tools > Global Options > R Markdown`.)
 
-## Completing the Lab
+### Completing the Lab
 
 The first section of the lab 3 report is designed to introduce the main structures used in RMarkdown. Take a few minutes to compare the text in the RMarkdown window with the corresponding HTML output to learn how to add these basic structures.
 
 The subsequent sections contain the actual assignment, where you will be prompted to make statistical investigations and to document those investigations in the report. Follow those prompts to complete the assignment.
 
-## Submissions
+### Submissions
 
 You should always submit the RMarkdown document, as well as the knitted HTML file. You **must** make sure before you submit that the RMarkdown document knits without any errors and produces the desired HTML/PDF document.
