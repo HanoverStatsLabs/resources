@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1 id="lab-1-getting-started-with-rstudio-and-descriptive-statistics">Lab 1: Getting Started with RStudio and Descriptive Statistics</h1>
+<h2 id="overall-goals">Overall Goals</h2>
+<p>R is an open source tool for statistical computing and graphics, supported by the R Foundation for Statistical Computing. RStudio is a Graphical User Interface for R that we will be using from our servers. In this lab we will learn how to:</p>
+<ul>
+<li>start RStudio and familiarize ourselves with the different screen areas in RStudio</li>
+<li>load a built-in dataset and access its help file</li>
+<li>obtain a tabular view of a dataset and access basic information about the data from that view (number of cases, sorting by column, searching)</li>
+<li>create simple graphs and numerical summaries for variables</li>
+<li>assign values to names for future use</li>
+</ul>
+<p>Specific R commands encountered: <code>data</code>, <code>help</code>, <code>View</code>, <code>nrow</code>, <code>favstats</code>, <code>histogram</code>, <code>%&gt;%</code></p>
+<h2 id="start-rstudio-and-get-your-bearings">Start RStudio and Get Your Bearings</h2>
+<p>To start RStudio in the lab environment, follow your professor’s instructions. You can also download R (cran.r-project.org) and RStudio (www.rstudio.com/products/rstudio/download/) onto your own computer so you will always have the power of R at your fingertips.</p>
+<p>Notice the <em>Console</em> pane (left side of the application window). This is where you type commands and see results.</p>
+<p>In RStudio you enter commands in two ways:</p>
+<ul>
+<li>type the command directly in the Console pane and hit <code>&lt;enter&gt;</code></li>
+<li>use the menus and buttons in the Files/Plots/etc. pane to generate the command automatically</li>
+</ul>
+<p>TODO: Clean this up, expand?</p>
+<p>Other components in the RStudio user interface:</p>
+<ul>
+<li><em>Workspace</em> pane shows all the active objects in your current session.</li>
+<li><em>Files</em> pane shows all the files and folders in your default workspace.</li>
+<li><em>Plots</em> pane shows all your graphs.</li>
+<li><em>Packages</em> pane lists packages or add-ons needed to run certain processes.</li>
+<li><p><em>Help</em> pane gives you access to R documentation for additional info on a command.</p>
+<p><strong>Help tip</strong>: In the Console, use a prepended `? to pull up the R documentation for any R command.</p></li>
+</ul>
+<p>TRY THIS (enter in Console) to pull up R documentation on the <code>print</code> command:</p>
+<pre class="{r}"><code>?print</code></pre>
+<h2 id="working-with-the-console">Working with the Console</h2>
+<p>The RStudio Console includes a variety of features intended to make working with R more productive and straightforward. Here we describe two of the most popular features.</p>
+<h3 id="tab-completion">Tab Completion</h3>
+<p>In the Console, you might begin typing a command and then be unsure if you’re spelling it correctly. Type the initial part of the command and then hit <code>&lt;tab&gt;</code>, and RStudio will show you all commands which begin in that way. Sometimes the completion list appears before you hit <code>&lt;tab&gt;</code>.</p>
+<p>For example, to see the commands which start with “set”, type “set” in the Console and hit <code>&lt;tab&gt;</code>. In the resulting popup, scroll through the “set” commands. When your cursor hovers over one of them, a helpful synopsis of the command appears.</p>
+<h3 id="command-history">Command History</h3>
+<p>As you work with R, you’ll often want to re-execute a command which you previously entered. The RStudio Console supports the ability to recall previous commands using the History pane and the arrow keys. The History pane is typically situated at the upper right of the window. Click the History pane to see all the commands you have entered in the current session. Double-clicking any of these will paste it into the Console.</p>
+<p>Alternatively, you can use the up/down arrow keys while in the Console, to scroll through the history.</p>
+<p>A common workflow is to incrementally build a task by starting with a simple command, then using the up arrow to recall it and extend it by adding more steps.</p>
+<h2 id="basic-r-syntax-and-commands">Basic R Syntax and Commands</h2>
+<h3 id="scientific-notation">Scientific Notation</h3>
+<p>To specify a large number such as 3.2 million, we generally use scientific notation. The multiplier goes first, then an <code>e</code> to separate the multipler from the exponent, then the actual exponent (desired power of 10). For example, since 1 million is <code>10^6</code>, we need <code>e6</code> to express the idea of 1 million.</p>
+<p>Scientific notation is also helpful for indicating small values, such as 0.000007 (7 millionths), using negative exponents.</p>
+<p>TODO: Talk about this package somewhere earlier.</p>
+<pre class="{r}"><code>library(hanoverbase)</code></pre>
+<p>Examples (try these yourself):</p>
+<pre class="{r}"><code>-8.7e9  #   -8.7 billion
+1e-1    #    0.1
+7e-6    #    0.000007</code></pre>
+<h3 id="variable-assignments">Variable Assignments</h3>
+<p>Variable assignments allow us to store the results of complicated commands so they can easily be recalled in the future. To assign a value to a name (or “variable”), use <code>&lt;-</code> or <code>=</code>. When you make an assignment, you do not see a result right away, but a value has been stored for future use.</p>
+<p>Try the following and observe the results:</p>
+<pre class="{r}"><code>x &lt;- 5
+y &lt;- 3
+x + y
+x &lt;- 10
+z &lt;- x + y
+z</code></pre>
+<p>If you have written the above correctly, the <em>Environment</em> pane will will show the current values of <code>x</code>, <code>y</code> and <code>z</code>.</p>
+<h3 id="formulas">Formulas</h3>
+<p>We will use “formulas” in our graphing commands, to specify the variable(s) to display and any conditioning variables. Here are some examples (these will make more sense in future sections):</p>
+<ul>
+<li>to display variable x alone we would use the formula: <code>~x</code></li>
+<li>to display the numeric variable x for each level of factor A: <code>~x | A</code></li>
+<li>to display the relationship between numeric variables y and x (treating y as the response): <code>y~x</code></li>
+</ul>
+<h3 id="the-piping-command">The Piping Command (<code>%&gt;%</code>)</h3>
+<p>You will see the “pipe” operator, %&gt;%, in some of the commands below. The pipe operator takes the left-hand side (LHS) of the pipe and uses it as the first argument of the function on the right-hand side (RHS) of the pipe. As a very basic example, <code>1:10</code> is the sequence of integers from 1 to 10 inclusive. What is the sum of this sequence? What is the median?</p>
+<p>TRY THIS:</p>
+<pre class="{r}"><code>1:10               # the sequence 1 to 10
+1:10 %&gt;% sum()     # sum of the sequence 1 to 10
+sum(1:10)          # The same thing
+1:10 %&gt;% median()  # median of the sequence 1 to 10</code></pre>
+<h2 id="data-investigations">Data Investigations</h2>
+<h3 id="load-data-and-start-your-investigation">Load Data and Start your Investigation</h3>
+<p>The U.S. 2010 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties.</p>
+<p>To load the data set, type:</p>
+<pre class="{r}"><code>data(counties)</code></pre>
+<p>In the Environment pane (upper right), you should now see a <code>counties</code> entry under Data. Click on that entry to view the data in its own pane. This the same as using the <code>View</code> command:</p>
+<pre class="{r}"><code>View(counties)</code></pre>
+<p>TODO: Add something about using the filtering in the table view.</p>
+<p>Notice that you can sort the data file according to any column by clicking the arrows which are just to the right of each column heading. <strong>Warning</strong>: The <code>NA</code> (not available) answers will always sort at the bottom, whether you sort ascending or descending. Use scrolling and sorting to answer the following questions:</p>
+
+<ol style="list-style-type: decimal">
+<li>How many counties are there in the U.S.?</li>
+</ol>
+
+<ol start="2" style="list-style-type: decimal">
+<li>Name the top 3 counties by population (2010); give the county name, the state name and the population. For each of these three counties, explain why the county has such a large population. (Use internet search as needed.)</li>
+</ol>
+<p></p>
+<ol start="3" style="list-style-type: decimal">
+<li>List the 3 counties with the least population (2010), including their populations. Use the internet to find an interesting fact about each county.</li>
+</ol>
+<p></p>
+
+<h3 id="histogram-and-summary-statistics-one-quantitative-variable">Histogram and Summary Statistics, One Quantitative Variable</h3>
+<p>The most popular graph for showing the distribution of a single quantitative variable is the histogram. The following will draw the default histogram for pop2010:</p>
+<pre class="{r}"><code>histogram(~pop2010, data = counties)</code></pre>
+<p>You can get a bigger version of the graph by clicking the Zoom button in the <strong>Plots</strong> pane.</p>
+<p>We can enhance our understanding of the distribution by producing summary statistics. The command <code>favstats</code> will give us the five-number summary and the mean for the distribution:</p>
+<pre class="{r}"><code>favstats(~pop2010, data = counties)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>What are the mean and median populations for counties? Which one is larger? Does that make sense based on the shape of the distribution?</li>
+</ol>
+
+<ol start="5" style="list-style-type: decimal">
+<li>Even though the precise shape of the distribution cannot be fully seen in this histogram, we can definitely note that the distribution is extremely skewed to the right. Explain how this makes sense given what you know about counties in the U.S.</li>
+</ol>
+
+<p>In the above histogram, almost all of the counties are thrown into a single bin, and not much can be said about the distribution (e.g. number and location of modes). We can filter the data to exclude counties with large population e.g. (require pop2010 &lt;= 2e6). We can use the “piping” command for this to pipe the counties through a <code>filter</code>. The command for this is:</p>
+<pre class="{r}"><code>histogram(~pop2010, data = counties %&gt;% filter(pop2010 &lt;= 2e6))</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>This histogram is still lacking in detail, and we should filter out even more values. Adjust the histogram command to use a lower cutoff point than 2 million. Use your judgment to find a cutoff so that the main pattern of the distribution is clearly shown. How many modes does the distribution have and what are their approximate values (these modes represent “typical” county populations)?</li>
+</ol>
+</body>
+</html>

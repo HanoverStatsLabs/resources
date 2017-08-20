@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1 id="lab-4">Lab 4:</h1>
+<h2 id="introduction">Introduction</h2>
+<p>In this lab we learn how to import new data from Excel or other sources into RStudio. Along the way we will also get more practice with RMarkdown reports and statistical analysis commands.</p>
+<ul>
+<li></li>
+</ul>
+<p>TODO</p>
+<h2 id="overall-goals">Overall Goals</h2>
+<p>TODO</p>
+<h2 id="creating-an-rstudio-project">Creating an RStudio Project</h2>
+<p>We start similar to the last lab. We will start a new project based on a prepared repository.</p>
+<ul>
+<li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>.</li>
+<li>Paste this URL in: <code>https://github.com/HanoverStatsLabs/Lab-Data-Import.git</code></li>
+<li>Press Tab go to the next field — it should auto-complete the directory name.</li>
+<li>Make sure the parent directory is the correct one.</li>
+<li>Click <code>Create Project</code>.</li>
+<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab4Report.Rmd</code>. Click the file name to edit the file.</li>
+<li>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</li>
+</ul>
+<h2 id="importing-data">Importing Data</h2>
+<p>In the previous labs we have prepared the data for you in R’s built-in system. But data you find in the real world is not typically in this form. It may be an Excel file, a comma-separated-format file (CSV) or many other formats. RStudio has built-in ways to read CSV and Excel files. Some other more obscure formats may need more work and specific instructions.</p>
+<p>For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.</p>
+<ul>
+<li>Go to <code>File &gt; Import Dataset &gt; From CSV ...</code></li>
+<li>Paste in the following URL: <code>https://hanoverstatslabs.github.io/datasets/driving.csv</code></li>
+<li>Click on Update and you should see the data in the Preview Window. We will need to now make sure it is being read correctly before doing the actual import.</li>
+</ul>
+<p>This data contains information recorded over the Fall 2007-2008 when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.</p>
+<ul>
+<li>Checking for misalignments:
+<ul>
+<li>Sometimes programs misidentify the column separators and may misalign some columns.</li>
+<li>Scroll through the file to make sure that what shows up in each column makes sense for that column.</li>
+<li>You should find at least some unusual values in the time column. We will worry about them later.</li>
+</ul></li>
+<li>Setting column types:
+<ul>
+<li>Especially in this data, many columns have “non-standard” types. For example the first column (Day) is supposed to be a date. The system is smart enough to do the right thing in most cases, but if after importing you find that a column has been misidentified, then you can go back to the Import Dataset dialog and choose a type for each column by clicking at the pulldown in the column heading.</li>
+<li>In that same pulldown you can also tell it to skip a column.</li>
+<li>For now we will let RStudio guess the types.</li>
+</ul></li>
+<li>Copying the appropriate code:
+<ul>
+<li>The code for importing the dataset must be part of our final report. For that reason we need the code that does the importing added to our report file.</li>
+<li>However RStudio will instead run that code in the console. So, before you click the Import button, copy the text in the “Code Preview” window, excluding the last (“View”) command.</li>
+<li>Click Import, and you should see the dataset. If it looks OK, then go to your report and add a code chunk containing the code your copied. You should set your code chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
+<li>This will ensure that when anyone compiles the report, the dataset will be loaded.</li>
+<li>Take a moment to look at these two lines of code. The first loads a new package (“library”) called <code>readr</code>. This contains useful functions for loading new data. The second line uses the <code>read_csv</code> method from this package to load the data and stores it in the name <code>driving</code>. You can access this data in the rest of your report via this name.</li>
+</ul></li>
+</ul>
+<p>Before we move on, there is one more step we must take with the data. The <code>WeekDay</code> column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative. For that you would need to run the following commands (make sure to include them in the code chunk you created earlier).</p>
+<pre class="{r}"><code>dayNames &lt;- c(&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;)
+weekdaysFactor &lt;- ordered(driving$WeekDay, labels=dayNames)
+driving$WeekDay &lt;- weekdaysFactor</code></pre>
+<h3 id="sidebar-workflow-practices">Sidebar: Workflow practices</h3>
+<p>Working in the reports as opposed to the console can get confusing. And complicated commands have many steps and many places where things can go wrong. A simple workflow to follow is the following:</p>
+<ol style="list-style-type: decimal">
+<li>Start a code chunk, using the Insert Pulldown.</li>
+<li>Enter a single line of code and execute it via the “Run &gt; Selected Line” from the pulldown. This will run just the current line, not the whole chunk.</li>
+<li>Make sure that line’s output is correct before proceeding to the next line. If that line was an assignment, there is no output by default, but you can use the Environment pane to look at the assigned value or a new line of code asking for that assigned value.</li>
+</ol>
+<p>For example, when trying the above commands, we may do the following:</p>
+<ol style="list-style-type: decimal">
+<li>Type the first command, (<code>dayNames &lt;- ...</code>) and run it.</li>
+<li>Add a second command saying just <code>dayNames</code> and run it. This will print out what <code>dayNames</code> is. You can then remove that second line.</li>
+<li>Alternatively you can look in the Environment pane, to make sure that the <code>dayNames</code> value looks correct.</li>
+<li>Repeat for each line.</li>
+</ol>
+<h3 id="explanation-of-the-three-lines">Explanation of the three lines</h3>
+<p>The three lines we used above introduced some new features.</p>
+<ul>
+<li>The first is the use of the <code>c</code> command, to “concatenate” items into a list. The result is technically called a “vector” in R.</li>
+<li>The second line used the <code>ordered</code> command to turn the WeekDay variable from the data into a categorical (ordinal) variable. We had to provide it the variable’s name (<code>driving$WeekDay</code>) and a list of the labels to use (<code>labels=dayNames</code>).</li>
+<li>This also introduced the “dollar sign” syntax. This has the general form <code>&lt;dataset&gt;$&lt;columnName&gt;</code> and it is used to access an individual column in a dataset. It is not needed when we use the <code>data=&lt;dataset&gt;</code> syntax, but not all commands can use that syntax.</li>
+<li>In general you only need this syntax when changing a variable in a dataset, or want to create a new variable in a dataset.</li>
+</ul>
+<h2 id="statistical-investigations">Statistical Investigations</h2>
+<pre><code>- While we will let RStudio guess the correct column types for most variables, the &quot;WeekDay&quot; variable needs manual work. It  Click the &quot;Weekday&quot; heading and choose `Factor`. In the popup type, **without any spaces**, the seven days of the week (3 letter abbreviations if you like, or full words) **separated by commas**. Click OK.</code></pre>
+</body>
+</html>

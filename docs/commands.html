@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1 id="commands.md">commands.md</h1>
+<ul>
+<li>tally (mosaic)</li>
+<li>head, tail (base)</li>
+<li>summary (base)</li>
+<li>names (base) MIGHT NOT NEED</li>
+<li>arrange (dplyr) MIGHT NOT NEED</li>
+<li>favstats (mosaic)</li>
+<li>sort (base)</li>
+<li>%&gt;% (dplyr)</li>
+<li>filter (dplyr)</li>
+<li>tally(~state, data=counties) %&gt;% sort()</li>
+<li>median et al from mosaic ( median(~pop2010|state, data=counties) )</li>
+<li>View (rstudio)</li>
+<li>pdist, xpnorm, xqnorm, xpbinom (mosaic) FOR VISUALIZING THEORETICAL DISTRIBUTIONS</li>
+</ul>
+<h1 id="plotting">Plotting</h1>
+<ul>
+<li>histogram (lattice)</li>
+<li>bargraph (mosaic) MIGHT NOT NEED?</li>
+<li>barchart (lattice) barchart better for Pareto charts…</li>
+<li>mosaicplot (mosaic)</li>
+<li>xyplot (lattice)</li>
+<li>ladd (mosaic)</li>
+<li>panel.abline (lattice)</li>
+<li>…</li>
+</ul>
+<h1 id="example-commands">Example commands</h1>
+<p>counties %&gt;% mutate(per_capita_spending=fed_spending/pop2010) %&gt;% filter(!is.na(per_capita_spending)) %&gt;% arrange(per_capita_spending) %&gt;% tail(10)</p>
+</body>
+</html>

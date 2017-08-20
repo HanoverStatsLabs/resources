@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1 id="lab-1-introduction-to-r-and-rstudio">Lab 1: Introduction to R and RStudio</h1>
+<h2 id="overall-goals">Overall Goals</h2>
+<ul>
+<li>Start RStudio.</li>
+<li>Learn the different screen areas in RStudio.</li>
+<li>Load a built-in dataset.</li>
+<li>Look at the help for the dataset.</li>
+<li>View the dataset in tabular form.</li>
+<li>Perform basic operations on dataset
+<ul>
+<li>Number of rows</li>
+<li>Sort rows based on column</li>
+<li>Simple graphs</li>
+<li>Simple numerical summaries</li>
+</ul></li>
+</ul>
+<h2 id="specific-r-commands-learned">Specific R commands learned</h2>
+<ul>
+<li><code>data</code> for loading built-in data.</li>
+<li><code>?</code> for asking for information on a function or data.</li>
+<li><code>View</code> for a tabular look at dataset.</li>
+<li><code>nrow</code> for number of rows.</li>
+<li>…</li>
+</ul>
+<h2 id="lab-1">Lab 1</h2>
+<ul>
+<li>Start RStudio (TODO: weblink)</li>
+<li>Panes:
+<ul>
+<li>Console</li>
+<li>Environment/History</li>
+<li>Outputs/Help/File</li>
+<li>Document (Later)</li>
+</ul></li>
+<li>Create new project for counties</li>
+<li>Use “library(…)”, “data(…)” to load the package that has the counties data (need to create it).</li>
+<li>(Not for student use: <code>read.table(&quot;https://skiadas.github.io/AppliedStatsCourse/site/datasets/countyComplete.txt&quot;, sep=&quot;\t&quot;, header=TRUE)</code> )</li>
+<li>See the counties set on the right, click on it</li>
+<li>Data view comes up -&gt; document pane (also View command)</li>
+<li>Sort view to find 3 most/least populous counties based on 2010</li>
+<li>How many counties? (3143, on left side)</li>
+<li>number of counties per state:
+<ul>
+<li>Numerically: <code>tally(~state, data=counties)</code>
+<ul>
+<li>Use upper arrow to repeat, then add: <code>%&gt;% sort()</code></li>
+<li>Then add: <code>%&gt;% barchart()</code></li>
+</ul></li>
+<li>Graphically: bargraph(~state, data=counties, horizontal = TRUE)
+<ul>
+<li>zoom graph</li>
+</ul></li>
+</ul></li>
+<li>Population of each state:
+<ul>
+<li><code>sum(~pop2010|state, data=counties) %&gt;% sort() %&gt;% barchart()</code></li>
+<li>Maybe skip for later?</li>
+</ul></li>
+<li>Histogram of population by county:
+<ul>
+<li><code>histogram(~pop2010, data=counties)</code></li>
+<li><code>histogram(~pop2010, data=counties %&gt;% filter(pop2010 &lt;= 2e6))</code></li>
+<li>Add “breaks = 40”</li>
+<li><code>favstats(~pop2010, data=counties)</code></li>
+</ul></li>
+<li>Histogram of percent of female population:
+<ul>
+<li><code>histogram(~female, data=counties, breaks=40)</code></li>
+<li><code>favstats(~female, data=counties)</code></li>
+<li><code>bwplot(state~female, data=counties)</code>
+<ul>
+<li>Find lowest median, highest median</li>
+<li>Find state with lowest outlier</li>
+</ul></li>
+<li>Work with black and/or asian states</li>
+</ul></li>
+<li>Compare populations 2000, 2010:
+<ul>
+<li><code>xyplot(pop2010~pop2000, data=counties)</code></li>
+<li><code>xyplot(pop2010~pop2000, data=counties %&gt;% filter(pop2000 &lt; 2e6))</code></li>
+<li><code>tally(~name, data=counties) %&gt;% sort() %&gt;% tail(10)</code></li>
+</ul></li>
+<li>County names:
+<ul>
+<li><code>tally(~name, data=counties) %&gt;% sort() %&gt;% tail(10)</code></li>
+</ul></li>
+<li>Union counties:
+<ul>
+<li><code>counties %&gt;% filter(name==&quot;Union County&quot;) %&gt;% select(state)</code></li>
+<li><code>summary</code></li>
+</ul></li>
+</ul>
+<p>Lab 3 or something: Introduce markdown</p>
+<p>TODO: Consider using the %in% operator somewhere</p>
+<p>To find percent of whites in state: - white count per county - add white counts across states - divide white count by state pop count</p>
+<p>counties %&gt;% transmute(state = state, pop = pop2010, whitepop = pop2010 * white / 100) %&gt;% group_by(state) %&gt;% summarize(pop = sum(pop), whitepop = sum(whitepop)) %&gt;% transmute(state = state, white = whitepop/pop * 100) %&gt;% arrange(white)</p>
+<p>Easier: sum(white<em>pop2010/100~state, data=counties)/sum(pop2010~state, data=counties) </em>100</p>
+<p>sum(~black*pop2010/100, data=counties %&gt;% filter(!is.na(black)))/sum(~pop2010, data=counties %&gt;% filter(!is.na(black)))</p>
+</body>
+</html>
