@@ -1,4 +1,4 @@
-Day,WeekDay,Direction,LeaveTime,LeaveMileage,ArrTime,ArrMileage,Events,LeaveMin,ArrMin,time,miles,speed
+day,weekDay,direction,leaveTime,leaveMileage,arrTime,arrMileage,events,leaveMin,arrMin,time,miles,speed
 2007/08/26,7,Work,11:33,146755.5,12:33,146802.5,Gas, 693, 753,  60,47.0, 47.000000
 2007/08/26,7,Home,15:53,146803.0,16:50,146850.4,, 953,1010,  57,47.4, 49.894737
 2007/08/27,1,Work, 6:26,146850.4, 7:28,146897.0,Schoolbus, 386, 448,  62,46.6, 45.096774
