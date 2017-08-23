@@ -13,7 +13,7 @@
 </script>
 </head>
 <body>
-<h1 id="lab-4">Lab 4:</h1>
+<h1 id="lab-4-importing-data">Lab 4: Importing Data</h1>
 <h2 id="introduction">Introduction</h2>
 <p>In this lab we learn how to import new data from Excel or other sources into RStudio. Along the way we will also get more practice with RMarkdown reports and statistical analysis commands.</p>
 <ul>
@@ -38,7 +38,7 @@
 <p>For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.</p>
 <ul>
 <li>Go to <code>File &gt; Import Dataset &gt; From CSV ...</code></li>
-<li>Paste in the following URL: <code>https://hanoverstatslabs.github.io/datasets/driving.csv</code></li>
+<li>Paste in the following URL: <code>https://hanoverstatslabs.github.io/resources/datasets/driving.csv</code></li>
 <li>Click on Update and you should see the data in the Preview Window. We will need to now make sure it is being read correctly before doing the actual import.</li>
 </ul>
 <p>This data contains information recorded over the Fall 2007-2008 when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.</p>
@@ -64,10 +64,10 @@
 <li>Take a moment to look at these two lines of code. The first loads a new package (“library”) called <code>readr</code>. This contains useful functions for loading new data. The second line uses the <code>read_csv</code> method from this package to load the data and stores it in the name <code>driving</code>. You can access this data in the rest of your report via this name.</li>
 </ul></li>
 </ul>
-<p>Before we move on, there is one more step we must take with the data. The <code>WeekDay</code> column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative. For that you would need to run the following commands (make sure to include them in the code chunk you created earlier).</p>
-<pre class="{r}"><code>dayNames &lt;- c(&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;)
-weekdaysFactor &lt;- ordered(driving$WeekDay, labels=dayNames)
-driving$WeekDay &lt;- weekdaysFactor</code></pre>
+<p>Before we move on, there is one more step we must take with the data. The <code>weekDay</code> column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative. For that you would need to run the following commands (make sure to include them in the code chunk you created earlier).</p>
+<pre class="{r}"><code>days &lt;- c(&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;)
+weekdayOrdered &lt;- ordered(driving$weekDay, labels=days)
+driving$weekDay &lt;- weekdayOrdered</code></pre>
 <h3 id="sidebar-workflow-practices">Sidebar: Workflow practices</h3>
 <p>Working in the reports as opposed to the console can get confusing. And complicated commands have many steps and many places where things can go wrong. A simple workflow to follow is the following:</p>
 <ol style="list-style-type: decimal">
@@ -86,11 +86,54 @@ driving$WeekDay &lt;- weekdaysFactor</code></pre>
 <p>The three lines we used above introduced some new features.</p>
 <ul>
 <li>The first is the use of the <code>c</code> command, to “concatenate” items into a list. The result is technically called a “vector” in R.</li>
-<li>The second line used the <code>ordered</code> command to turn the WeekDay variable from the data into a categorical (ordinal) variable. We had to provide it the variable’s name (<code>driving$WeekDay</code>) and a list of the labels to use (<code>labels=dayNames</code>).</li>
+<li>The second line used the <code>ordered</code> command to turn the weekDay variable from the data into a categorical (ordinal) variable. We had to provide it the variable’s name (<code>driving$weekDay</code>) and a list of the labels to use (<code>labels=dayNames</code>).</li>
 <li>This also introduced the “dollar sign” syntax. This has the general form <code>&lt;dataset&gt;$&lt;columnName&gt;</code> and it is used to access an individual column in a dataset. It is not needed when we use the <code>data=&lt;dataset&gt;</code> syntax, but not all commands can use that syntax.</li>
 <li>In general you only need this syntax when changing a variable in a dataset, or want to create a new variable in a dataset.</li>
 </ul>
 <h2 id="statistical-investigations">Statistical Investigations</h2>
-<pre><code>- While we will let RStudio guess the correct column types for most variables, the &quot;WeekDay&quot; variable needs manual work. It  Click the &quot;Weekday&quot; heading and choose `Factor`. In the popup type, **without any spaces**, the seven days of the week (3 letter abbreviations if you like, or full words) **separated by commas**. Click OK.</code></pre>
+<h3 id="week-days">Week Days</h3>
+<p>The first set of questions relates to the various days of the week present in the dataset. You should do both a frequency table (<code>tally</code>) and a barchart of the weekDay variable.</p>
+<ol style="list-style-type: decimal">
+<li>The instructor was teaching only four days a week. Determine the workday on which the instructor was not teaching.</li>
+<li>Looking at the weekday frequencies, explain why most of them are even. How do you explain those that are not?</li>
+<li>What would you expect the typical value for the workday frequencies to be, based on Hanover College calendar? How does that match the data? How do you explain the workday values that deviate from the expected typical?</li>
+</ol>
+<h3 id="distance-traveled">Distance Traveled</h3>
+<p>In this set of question we will investigate the distribution of the <code>miles</code> variable, which records the miles traveled per trip as a difference of the mileages recorded in the car’s odometer. You will likely need several outputs:</p>
+<ul>
+<li>a summary (<code>favstats</code>) of the <code>miles</code> variable,</li>
+<li>a histogram of the <code>miles</code> variable,</li>
+<li>a histogram of the <code>miles</code> variable, but where the dataset has been filtered to only contain the rows with <code>miles &lt;= 48</code>.</li>
+<li>a boxplot of <code>miles</code> against <code>direction</code> (possibly filtered as above), and</li>
+<li>a median or summary of the <code>miles</code> against <code>direction</code>.</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>What is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?</li>
+<li>The distribution should appear skewed to the right with a very sharp drop-off to the left, and some high outliers to the right. Explain why we might expect these three behaviors in this dataset.</li>
+<li>When focusing on the values below 48 miles, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for presence of these modes that would account for their similar frequencies.</li>
+</ol>
+<h3 id="driving-times">Driving Times</h3>
+<p>The (elapsed) <code>time</code> variable is calculated as the difference in minutes between the instructor’s departure time and arrival time. We should do the following summaries:</p>
+<ul>
+<li>A <code>favstats</code> summary and a histogram of the <code>time</code> variable.</li>
+<li><p>Two <code>xyplot</code>s (scatterplots) of the <code>time</code> variable against the <code>miles</code> variable. In the first plot we exclude three particularly unusual/incorrect time values, and in the second plot we restrict further to the “<code>miles &lt; 50</code>” region containing the typical distances. Use the following commands for this:</p>
+<pre class="{r}"><code>scatter1 &lt;- xyplot(time~miles, data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40))
+print(scatter1)
+scatter2 &lt;- xyplot(time~miles, data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50))
+print(scatter2)</code></pre>
+<p>Note that we actually “stored” the graphs in names, and referred to those names to display the graphs in the <code>print</code> commands. In general you can store graphs this way and process them further in later commands.</p></li>
+</ul>
+<p>Here are some questions to consider:</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Discuss the distribution of the time variable, including any unusual observations and plausible explanations for the various aspects of the distribution.</li>
+<li>Describe the relationship between the <code>time</code> variable and the <code>miles</code> variable. What is the overall pattern, how does it make sense? Are there deviations? How strong is the relationship?</li>
+<li><p>For this question, we are adding to the scatterplots from earlier straight lines at the 55 mph speed limit (60 minutes per 55 miles, which gives the value for the slope <code>b</code>):</p>
+<pre class="{r}"><code>ladd(panel.abline(a=0, b=60/55), plot=scatter1)
+ladd(panel.abline(a=0, b=60/55), plot=scatter2)</code></pre>
+How are the various points in the graph positioned relative to these lines? What does this tell you about the instructor’s driving habits?</li>
+<li><p>We will now color the points in the scatterplot based on the direction (we will learn more about the special graph settings used in a future lab):</p>
+<pre class="{r}"><code>xyplot(time~miles, data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50), groups=direction, pch=19, auto.key=TRUE)</code></pre>
+<p>What pattern do you see in the colors, how do you explain it?</p></li>
+</ol>
 </body>
 </html>
