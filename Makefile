@@ -26,9 +26,6 @@ $(DATASETS): docs/datasets/%: datasets/%
 	mkdir -p $(@D)
 	cp $< $@
 
-email:
-	open "mailto:`cat students.txt`"
-
 site: $(HTMLFILES) $(PDFS) $(IMGFILES) $(DATASETS)
 
 all: site
