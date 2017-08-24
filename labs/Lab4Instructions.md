@@ -4,13 +4,14 @@
 
 In this lab we learn how to import new data from Excel or other sources into RStudio. Along the way we will also get more practice with RMarkdown reports and statistical analysis commands.
 
--
-
-TODO
-
 ## Overall Goals
 
-TODO
+In this lab we will:
+
+- learn how to import new data from the common CSV data format,
+- practice creating a report in RMarkdown,
+- review the common analysis techniques we have seen in previous labs,
+- learn how to draw scatterplots.
 
 ## Creating an RStudio Project
 
@@ -18,7 +19,7 @@ We start similar to the last lab. We will start a new project based on a prepare
 
 - In RStudio, go to `File > New Project > Version Control > Git`.
 - Paste this URL in: `https://github.com/HanoverStatsLabs/Lab-Data-Import.git`
-- Press Tab go to the next field --- it should auto-complete the directory name.
+- Press Tab to go to the next field --- it should auto-complete the directory name.
 - Make sure the parent directory is the correct one.
 - Click `Create Project`.
 - Your Files pane should now show the provided files, in particular a file titled `Lab4Report.Rmd`. Click the file name to edit the file.
