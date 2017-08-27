@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1 id="lab-5-customizing-graphs-in-r">Lab 5: Customizing Graphs in R</h1>
+<h2 id="introduction">Introduction</h2>
+<p>TODO</p>
+<p>Introduce mosaic plots.</p>
+<h2 id="start-a-new-project-in-rstudio">Start a New Project in RStudio</h2>
+<p>We start similar to the last lab. We will start a new project based on a prepared repository.</p>
+<ul>
+<li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>.</li>
+<li>Paste this URL in: <code>https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git</code></li>
+<li>Press Tab to go to the next field — it should auto-complete the directory name.</li>
+<li>Make sure the parent directory is the folder where you want to keep your projects for this class.</li>
+<li>Click <code>Create Project</code>.</li>
+<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab5Report.Rmd</code>. Click the file name to edit the file, and then run all the R chunks.</li>
+<li>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</li>
+</ul>
+<h2 id="import-and-view-dataset">Import and View Dataset</h2>
+<ul>
+<li>Use the <code>data</code> command to load the dataset named <code>brfss</code>. Include this in an R chunk in your report.</li>
+<li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the <code>?</code> command should not be put into your report.</li>
+<li>You should see that the data has 23 variables and over 1.3 million rows.</li>
+<li>Use the <code>?</code> command <em>in the console</em> to view information about the brfss data file (the “codebook”): <code>?brfss</code></li>
+</ul>
+<h2 id="general-health-genhealth">General Health (<code>genhealth</code>)</h2>
+<ol style="list-style-type: decimal">
+<li>Make a tally and a barchart (as you did for WeekDays in a previous lab) for the <code>genhealth</code> variable. Which category of the variable is most frequent?</li>
+<li><p>It would be useful to have <strong>percentages</strong> rather than raw counts in our tally. Add a <em>command option</em> by inserting the code <code>, format=&quot;percent&quot;</code> before the closing parentheses of the tally command, like this:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;)</code></pre>
+What percent of respondents report being in either “Very good” or “Excellent” health? What percent of respondents did not answer the question (NA)?</li>
+<li><p>In the barchart, we like to have control of the <strong>bar colors</strong>. This is controlled with the <code>col=</code> option. For example, add the option <code>, col=&quot;green&quot;</code> to redraw the <code>genhealth</code> barchart with green bars.</p>
+<p>To see all the named colors, use the command <code>colors()</code>. (Do this in the console, or hide the output if you put it into a code chunk – it’s a <em>long</em> list.) Experiment with some of the named colors to find one you like, and include that plotting command in your report.</p>
+<p>To make gradations or use colors from other sorts of palettes, you can use the RColorBrewer package. To learn more details of working with color palettes, and colors in general, see the Colors section of the <a href="../commands.html">commands documentation</a>. For instance, try the following:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss) %&gt;% barchart(col=brewer.pal(5, &quot;YlGnBu&quot;))</code></pre></li>
+<li><p>Up to this point, we have been uncritical of the default <strong>chart labeling</strong>. Let’s see how to take control of this in R. In particular, for our barchart, we should improve the x-axis label and add an overall title.</p>
+<p>A correct label for the x-axis is “Percent of Respondents”. To add an x-axis label, use the `xlab= option, as follows:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;% barchart(col=brewer.pal(5, &quot;YlGnBu&quot;), xlab=&quot;Percent of Respondents&quot;)</code></pre>
+<p>To add a main title, like “Distribution of General Health”, use the `main= option:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;%
+    barchart(col=brewer.pal(5, &quot;YlGnBu&quot;), xlab=&quot;Percent of Respondents&quot;,
+        main=&quot;Distribution of General Health&quot;)</code></pre></li>
+<li><p><strong>Pie charts</strong> are popular, but also tend to be over-used. Once in a while it’s nice to have one, as long as “proportion of the whole” is the item of interest. To show the <code>genhealth</code> responses in a pie chart, try the following:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;%
+    pie(col=brewer.pal(5, &quot;YlGnBu&quot;))</code></pre></li>
+</ol>
+<h2 id="general-health-vs.exercise">General Health vs. Exercise</h2>
+<p><strong>Stacked bar graphs</strong> are nice for visualizing the relationship between two categorical variables. Unfortunately, this is one of the tricker plots to make in R. Suppose we’re interested in the relationship between <code>genhealth</code> and <code>exerciseany</code>. We expect to see that those respondents who never exercise have worse general health.</p>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Make a tally of percentages for <code>genhealth</code> against <code>exerciseany</code>, and store the result:</p>
+<pre class="{r}"><code>healthVsExercise &lt;- tally(~genhealth|exerciseany, data=brfss,
+    format=&quot;percent&quot;, useNA=&quot;no&quot;)
+healthVsExercise</code></pre></li>
+</ol>
+<p>You should see a table with column-wise percentages. Does it look like the “exercisers” tend to have better general health than the “non-exercisers”? Explain.</p>
+<ol start="7" style="list-style-type: decimal">
+<li><p>Because of the limitations of the <code>barchart</code> command, we have to transpose the table (swap the rows and columns) before piping into the barchart. We use the <code>t()</code> command to transpose. <code>auto.key</code> is used to make a legend for the barchart. The whole thing looks like this (try the various versions below):</p>
+<pre class="{r}"><code>healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(columns=3))
+healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;top&quot;))
+healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;right&quot;),
+    main=&quot;General Health vs. Does the Respondent Ever Exercise&quot;)</code></pre></li>
+<li><p>If you want to specify a color palette, you really have to dig deep. Let’s give it a try. The <code>Brewer</code> palette which ranges from red to purple will make an attractive spectrum. Let’s store it with 5 color values:</p>
+<pre class="{r}"><code>myColors &lt;- Brewer.pal(5, RdPu)</code></pre>
+<p>Store the levels of the <code>genhealth</code> variable:</p>
+<pre class="{r}"><code>healthLevels &lt;- list(levels(brfss$genhealth))</code></pre>
+<p>Build the legend <code>myKey</code> using the levels for <code>genhealth</code> and the colors in <code>myColors</code>:</p>
+<pre class="{r}"><code>myKey &lt;- list(text=healthLevels, rectangles=list(col=myColors))</code></pre>
+<p>Draw the stacked barchart with the new palette in both the bars and the legend, and give it a main title:</p>
+<pre class="{r}"><code>healthVsExercise %&gt;% t() %&gt;% barchart(col=myColors, key=myKey,
+    main=&quot;General Health vs. Does the Respondent Ever Exercise&quot;)</code></pre>
+<p>Does the relationship between <code>genhealth</code> and <code>exerciseany</code> prove that if a person exercises they will improve their health? Explain.</p></li>
+</ol>
+<h2 id="general-health-vs.income-and-age-group">General Health vs. Income and Age Group</h2>
+<p>Now let’s see how income level and age group might be related to general health for this group of respondents.</p>
+<ol start="9" style="list-style-type: decimal">
+<li><p><strong>Before looking at any relevant graphs</strong>, make some predictions. Do you think there is any relationship between income level and health? Between age and health? Explain.</p></li>
+<li><p>Using what you learned previously in this lab, make a nice stacked bar graph for general health vs. income level (<code>income</code>). What do you learn from the graph? Compare with your prediction above.</p></li>
+<li><p>Also make a stacked bar graph for general health vs. age. What do you learn from the graph? Compare with your prediction above.</p></li>
+</ol>
+<p>Let’s investigate the 3-way relationship among general health, income, and age. In particular, is the relationship between general health and income constant across all ages, or does it vary with each age group? This calls for a 3-way graph, plotting general health against income and using <code>age</code> as a “panel” variable. The formula syntax for this is <code>~genhealth|income+age</code>. Store the tally and take a look at it:</p>
+<pre class="{r}"><code>healthVsIncomeAndAge &lt;- tally(~genhealth|income+age, data=brfss,
+    format=&quot;percent&quot;, useNA=&quot;no&quot;)
+healthVsIncomeAndAge</code></pre>
+<p>This makes a rather overwhelming table of numbers! To help the average human make sense of this, we will make a paneled stacked barchart. There is a “magic” bit of code here, <code>aperm(c(2,3,1))</code>, taking the place of <code>t()</code> for 3-way graphs.</p>
+<pre class="{r}"><code>healthVsIncomeAndAge %&gt;% aperm(c(2,3,1)) %&gt;%
+    barchart(col=myColors, key=myKey)</code></pre>
+<ol start="12" style="list-style-type: decimal">
+<li><p>For each age group, is it the case that those with higher income level report better general health? Explain how you see this in the graph.</p></li>
+<li><p>Is the nature of the relationship between general health and income exactly the same across all ages, or do you notice it being weaker for some age groups? Explain what you see and how that makes sense.</p></li>
+</ol>
+</body>
+</html>
