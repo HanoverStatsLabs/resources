@@ -7,13 +7,214 @@
   <meta name="generator" content="pandoc" />
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
-<script type="text/javascript"
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
-<h1 id="commands.md">commands.md</h1>
+<h1 id="guide-to-r-commands">Guide to R Commands</h1>
+<p>This list is meant to be used as a reference. Seeing all the commands at once can be overwhelming. You should follow the <a href="labs.html">labs</a> for a more smooth introduction to programming in R.</p>
+<p>The main use of this guide is to find out the common options that can be added to these commands. Throughout the guide, sections enclosed in angle brackets like this: <code>&lt;dataset&gt;</code> are placeholders meant to be replaced by the appropriate text for your data.</p>
+<ul>
+<li><a href="#data-preparation">Data Preparation</a>
+<ul>
+<li>read_csv</li>
+<li>data</li>
+<li>View</li>
+<li>head</li>
+<li>tail</li>
+<li>filter</li>
+</ul></li>
+<li><a href="#summaries">Summaries</a>
+<ul>
+<li>The formula interface</li>
+<li><a href="#summary">summary</a></li>
+<li><a href="#tally">tally</a></li>
+<li><a href="#aggregating-functions">aggregating functions (mean, median, sd, cor, var, favstats, range, iqr, sum, prod, min, max)</a></li>
+</ul></li>
+<li><a href="#plotting">Plotting</a>
+<ul>
+<li><a href="#common-graph-options">Common graph options</a></li>
+<li><a href="#color-specifications">Color specifications</a></li>
+<li><a href="#histogram">histogram</a></li>
+<li><a href="#barchart">barchart</a></li>
+</ul></li>
+</ul>
+<h2 id="data-preparation">Data Preparation</h2>
+<p>Commands in this section involve data preparations, for instance loading new data.</p>
+<h2 id="summaries">Summaries</h2>
+<p>Commands in this section produce numerical summaries.</p>
+<h3 id="summary"><code>summary</code></h3>
+<p><code>summary</code> can be used on the whole dataset, to get a quick overview of the various variables and their summaries.</p>
+<h4 id="options">Options</h4>
+<p>Typically you do not need to add any options to this method.</p>
+<ul>
+<li><code>digits</code>: You can control how many digits are shown by adding the <code>digits=...</code> option.</li>
+<li><code>maxsum</code>: You can determine how many categories (including the missing values category) will show from factors by adding the <code>maxsum=...</code> option.</li>
+</ul>
+<h4 id="examples">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(brfss, <span class="dt">digits=</span><span class="dv">3</span>, <span class="dt">maxsum=</span><span class="dv">6</span>)</code></pre></div>
+<h3 id="tally"><code>tally</code></h3>
+<p><code>tally</code> is used to produce frequency tables and cross-tabulation tables for categorical variables. The first argument should be a formula involving the variables to use, and it should be followed by a <code>data=&lt;dataset&gt;</code> option specifying which dataset to use.</p>
+<h4 id="options-1">Options</h4>
+<p>By default <code>tally</code> will create a table of frequencies for the various combinations of values.</p>
+<ul>
+<li><code>sort</code>: You can specify <code>sort=TRUE</code> if you want to options to be sorted in order of frequency. By default they will be ordered in the order specified in the variable.</li>
+<li><code>format</code>: By default <code>tally</code> will produce frequency counts. You can change that behavior with the <code>format</code> option. Most common values are <code>&quot;count&quot;</code> (the default), <code>&quot;percent&quot;</code>, <code>&quot;proportion&quot;</code> and <code>&quot;data.frame&quot;</code> (produces a dataset of the results, useful for further processing).</li>
+<li><code>margins</code>: You can add the option <code>margins=TRUE</code> if you would like to see marginal probabilities (totals) added to the table.</li>
+<li><code>useNA</code>: You can add <code>useNA=&quot;no&quot;</code> to remove the missing values from the computations and the result.</li>
+</ul>
+<h4 id="examples-1">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># There is a higher percent of Very Good/Excellent health people amongst those</span>
+<span class="co"># that exercise vs those that do not.</span>
+<span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
+<h3 id="aggregating-functions">Aggregating Functions</h3>
+<p>There is a long list of commands that all follow a similar syntax, and all aggregate values of some variable, possibly broken down by other categorical variables. They all have the syntax:</p>
+<pre><code>&lt;command&gt;(&lt;formula&gt;, ...options)</code></pre>
+<p>The formula has the form <code>&lt;aggregatingVariable&gt;~&lt;breakDown1&gt;+&lt;breakDown2&gt;...</code> where the variable on the LHS is the scalar variable to be aggregated, and the variables in the RHS are the categorical variables by which to break the groups down.</p>
+<p>The usual commands are:</p>
+<ul>
+<li><code>mean</code> for the variable’s mean</li>
+<li><code>median</code> for the variable’s median</li>
+<li><code>sd</code> for the standard deviation</li>
+<li><code>var</code> for the variance (square of standard deviation)</li>
+<li><code>iqr</code> for the interquartile range</li>
+<li><code>favstats</code> for the five-number summary, mean, median and count</li>
+<li><code>range</code> for the range of the values (maximum minus minimum)</li>
+<li><code>max</code> for the maximum of the values</li>
+<li><code>min</code> for the minimum of the values</li>
+<li><code>sum</code> for the sum of the values</li>
+<li><code>prod</code> for the product of the values</li>
+</ul>
+<h4 id="options-2">Options</h4>
+<p>All commands accept the same options:</p>
+<ul>
+<li><code>data</code>: add it to specify the dataset to use</li>
+<li><code>na.rm</code>: add <code>na.rm=TRUE</code> to remove the missing values before computing. Most of the functions above will simply return <code>NA</code>, represeting missing value, if there are any missing values present and <code>na.rm=TRUE</code> was not added.</li>
+</ul>
+<h4 id="examples-2">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Stats on number of days per month with physical/mental health problems,</span>
+<span class="co"># broken down by general health</span>
+<span class="kw">mean</span>(physhealth<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="kw">mean</span>(menthealth<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="kw">favstats</span>(menthealth<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="co"># Total state population by adding the county populations</span>
+<span class="kw">sum</span>(pop2010<span class="op">~</span>state, <span class="dt">data=</span>counties, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="co"># Stats for percent of blacks in county, broken down by state</span>
+<span class="kw">favstats</span>(black<span class="op">~</span>state, <span class="dt">data=</span>counties, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</code></pre></div>
+<h2 id="plotting">Plotting</h2>
+<p>Commands in this section produce graphical summaries. Before we look at individual commands, we discuss options common to most graphs.</p>
+<h3 id="common-graph-options">Common Graph Options</h3>
+<p>These options can be added to most graph commands:</p>
+<ul>
+<li><code>xlab=&quot;...&quot;</code> specifies the label for the x axis.</li>
+<li><code>ylab=&quot;...&quot;</code> specifies the label for the y axis.</li>
+<li><code>main=&quot;...&quot;</code> specifies the main graph title, which appears at the top.</li>
+<li><code>col=...</code> specifies what colors to use for the various elements. Look at the <a href="#color-specifications">Color Specifications</a> section for more details.</li>
+<li><p><code>pch=...</code> can be used on graphs with points to choose what point-style to use. The options are summarized in this image:</p>
+<div class="figure">
+<img src="images/symbols.png" alt="pch and lty options" />
+<p class="caption">pch and lty options</p>
+</div>
+The icons 21-25 can use a fill-in color, via the <code>bg=...</code> command. Use <code>c(..., ...)</code> for multiple values.</li>
+<li><code>lty=...</code> can be used on graphs with lines to choose the line style to use. The graph above shows the options for line types. Use <code>c(..., ...)</code> for multiple values.</li>
+<li><code>lwd=...</code> can be used on graphs with lines to specify the thickness of the lines, 1 being the standard size. For instance <code>lwd=1.4</code> will draw the lines 40% thicker.</li>
+<li><code>cex=...</code> can be used to change the size of the objects in the graph, 1 being the standard size. For instance <code>cex=1.2</code> will draw the objects 20% bigger.</li>
+<li><code>xlim=c(a, b)</code> sets the range on the x axis to be from <code>a</code> to <code>b</code>.</li>
+<li><code>ylim=c(a, b)</code> sets the range on the y axis to be from <code>a</code> to <code>b</code>.</li>
+<li><p><code>auto.key</code>: TODO</p></li>
+</ul>
+<h3 id="color-specifications">Color Specifications</h3>
+<p>Graph colors can be specified in a variety of different ways. We outline these different ways here. They are to be used with the <code>col=...</code> graph option.</p>
+<dl>
+<dt>By name</dt>
+<dd><p>R has over 650 built-in color names that you can use. Run the command <code>colors()</code> to see the different options. An example use would be: <code>col=c(&quot;grey5&quot;, &quot;skyblue3&quot;)</code></p>
+</dd>
+<dt>By grayscale</dt>
+<dd><p>You can specify a degree of grayness by using the <code>gray(...)</code> function and specifying numbers between 0 (black) to 1 (white). An example use for 4 colors would be: <code>col=grey(0, 0.2, 0.5, 0.8)</code></p>
+</dd>
+<dt>By palette</dt>
+<dd><p>The <a href="http://colorbrewer2.org/">colorBrewer</a> library contains custom palettes designed for various uses. You can see all the different palettes and their names by using the command <code>display.brewer.all()</code>. They fall into three categories: - <em>sequential palettes</em>, starting from a fairly white color and getting progressively darker. Good for ordered categorical data. - <em>diverging palettes</em>, with a middle neutral color and diverging in two directions. Good for ordered categorical data with a middle neutral value and negative/positive sides. - <em>qualitative palettes</em>, with easy to distinguish colors, useful for nominal (unordered) categorical variables.</p>
+<p>In order to use a palette, you would use the command <code>brewer.pal(&lt;n&gt;, &lt;name&gt;)</code> where <code>&lt;n&gt;</code> is the number of colors to choose, and <code>&lt;name&gt;</code> is the palette’s name, in quotes. For instance to use four colors from the “Accent” palette we would do: <code>col=brewer.pal(4, &quot;Accent&quot;)</code></p>
+</dd>
+</dl>
+<h3 id="histogram"><code>histogram</code></h3>
+<p><code>histogram</code> is used to produce histograms. The typical syntax would use a formula <code>~&lt;variable&gt;</code> as the first argument, followed by a <code>data=&lt;dataset&gt;</code> option to specify the dataset to use.</p>
+<p>You can also create multiple panels based on the values of a categorical variable, with a formula <code>~&lt;variable&gt;|&lt;factorVariable&gt;</code>.</p>
+<h4 id="options-3">Options</h4>
+<ul>
+<li><code>breaks</code> can be used in two ways, but the simplest one is to set it equal to a single number, specifying the number of breakpoints to be used for the histogram bars.</li>
+<li><code>type</code> must equal one of <code>&quot;percent&quot;</code>, <code>&quot;count&quot;</code> or <code>&quot;density&quot;</code> and determines what the heights of the bars correspond to:
+<ul>
+<li><code>&quot;count&quot;</code> means the height of each bar corresponds to the number of cases in that range. If you were to change the default type, this is probably what you would choose instead.</li>
+<li><code>&quot;percent&quot;</code> (the default) means that the height of each bar corresponds to the percent of cases in that range.</li>
+<li><code>&quot;density&quot;</code> means that the <em>area</em> of each bar corresponds to the percent of cases in that range.</li>
+</ul></li>
+</ul>
+<h4 id="examples-3">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>black, <span class="dt">data=</span>counties, <span class="dt">breaks=</span><span class="dv">40</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)
+<span class="kw">histogram</span>(<span class="op">~</span>physhealth<span class="op">|</span>genhealth, <span class="dt">data=</span>brfss)</code></pre></div>
+<h3 id="barchart"><code>barchart</code></h3>
+<p><code>barchart</code> is used to produce bar charts. It is typically used by first doing a <code>tally</code> an then piping the result into <code>barchart</code>.</p>
+<h4 id="options-4">Options</h4>
+<ul>
+<li><code>horizontal</code>: By default the bars will be horizontal. If you would prefer vertical bars, add the option <code>horizontal=FALSE</code>.</li>
+</ul>
+<h4 id="stacked-bar-charts">100% Stacked Bar Charts</h4>
+<p>100% stacked bar charts are somewhat tricky to make. We start with a <code>tally</code> with the two variables separated by a vertical line (not plus!), then set the format to <code>percent</code>. Before piping that into a barchart however, we have to pipe it through the <code>t</code> command, which transposes columns and rows. The main syntax would look like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
+<p>You may have to swap the two variables to get them in the desired order.</p>
+<h4 id="examples-4">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
+<ul>
+<li>bargraph (mosaic) MIGHT NOT NEED?</li>
+<li>barchart (lattice) barchart better for Pareto charts…</li>
+<li>mosaicplot (mosaic)</li>
+<li>xyplot (lattice)</li>
+<li>ladd (mosaic)</li>
+<li>panel.abline (lattice)</li>
+<li>…</li>
+</ul>
+<h2 id="cleanup">Cleanup</h2>
 <ul>
 <li>tally (mosaic)</li>
 <li>head, tail (base)</li>
@@ -29,18 +230,5 @@
 <li>View (rstudio)</li>
 <li>pdist, xpnorm, xqnorm, xpbinom (mosaic) FOR VISUALIZING THEORETICAL DISTRIBUTIONS</li>
 </ul>
-<h1 id="plotting">Plotting</h1>
-<ul>
-<li>histogram (lattice)</li>
-<li>bargraph (mosaic) MIGHT NOT NEED?</li>
-<li>barchart (lattice) barchart better for Pareto charts…</li>
-<li>mosaicplot (mosaic)</li>
-<li>xyplot (lattice)</li>
-<li>ladd (mosaic)</li>
-<li>panel.abline (lattice)</li>
-<li>…</li>
-</ul>
-<h1 id="example-commands">Example commands</h1>
-<p>counties %&gt;% mutate(per_capita_spending=fed_spending/pop2010) %&gt;% filter(!is.na(per_capita_spending)) %&gt;% arrange(per_capita_spending) %&gt;% tail(10)</p>
 </body>
 </html>
