@@ -232,13 +232,13 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <ul>
 <li><code>horizontal</code>: By default the bars will be horizontal. If you would prefer vertical bars, add the option <code>horizontal=FALSE</code>.</li>
 </ul>
+<h4 id="examples-5">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
 <h4 id="stacked-bar-charts">100% Stacked Bar Charts</h4>
 <p>100% stacked bar charts are somewhat tricky to make. We start with a <code>tally</code> with the two variables separated by a vertical line (not plus!), then set the format to <code>percent</code>. Before piping that into a barchart, however, we have to pipe it through the <code>t</code> command, which transposes columns and rows. The main syntax would look like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
 <p>You may have to swap the two variables to get them in the desired order.</p>
-<h4 id="examples-5">Examples</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
 <ul>
 <li>bargraph (mosaic) MIGHT NOT NEED?</li>
 <li>barchart (lattice) barchart better for Pareto charts…</li>

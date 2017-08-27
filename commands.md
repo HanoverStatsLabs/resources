@@ -220,6 +220,12 @@ histogram(~physhealth|genhealth, data=brfss)
 
 - `horizontal`: By default the bars will be horizontal. If you would prefer vertical bars, add the option `horizontal=FALSE`.
 
+#### Examples
+
+```r
+tally(~genhealth, data=brfss) %>% barchart(horizontal=FALSE)
+```
+
 #### 100% Stacked Bar Charts
 
 100% stacked bar charts are somewhat tricky to make. We start with a `tally` with the two variables separated by a vertical line (not plus!), then set the format to `percent`. Before piping that into a barchart, however, we have to pipe it through the `t` command, which transposes columns and rows. The main syntax would look like this:
@@ -228,12 +234,6 @@ tally(~genhealth|exerciseany, data=brfss, format="percent") %>% t() %>%
     barchart(auto.key=list(space="right"))
 ```
 You may have to swap the two variables to get them in the desired order.
-
-#### Examples
-
-```r
-tally(~genhealth, data=brfss) %>% barchart(horizontal=FALSE)
-```
 
 
 
