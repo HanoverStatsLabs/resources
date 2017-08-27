@@ -65,7 +65,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><a href="#summaries">Summaries</a>
 <ul>
-<li>The formula interface</li>
+<li><a href="#the-formula-interface">The formula interface</a></li>
+<li>piping (%&gt;%)</li>
 <li><a href="#summary">summary</a></li>
 <li><a href="#tally">tally</a></li>
 <li><a href="#aggregating-functions">aggregating functions (mean, median, sd, cor, var, favstats, range, iqr, sum, prod, min, max)</a></li>
@@ -79,18 +80,42 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul>
 <h2 id="data-preparation">Data Preparation</h2>
-<p>Commands in this section involve data preparations, for instance loading new data.</p>
+<p>Commands in this section involve data preparation, for instance loading new data.</p>
+<p>TODO</p>
 <h2 id="summaries">Summaries</h2>
 <p>Commands in this section produce numerical summaries.</p>
+<h3 id="the-formula-interface">The Formula Interface</h3>
+<p>Most of the commands we are using expect the variables to be specified via a formula interface. A formula in general looks as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&lt;</span>lhs<span class="op">&gt;</span><span class="er">~&lt;</span>rhs<span class="op">&gt;</span><span class="er">|&lt;</span>groups<span class="op">&gt;</span></code></pre></div>
+<p>Here the left-hand-side may be completely absent and the vertical line and <code>groups</code> part may also be absent. Both sides contain the variables to be considered, and multiple variables can be separated by a plus sign.</p>
+<dl>
+<dt>lhs</dt>
+<dd>The variables on the left-hand-side are the target variables and we are interested in how they are influenced by the other variables. When doing a scatterplot, <code>lhs</code> corresponds to the y axis.
+</dd>
+<dt>rhs</dt>
+<dd>The variables on the right-hand-side are the source variables and we are interested in themselves if there is no left-hand-side, or how they influence the variables in the left-hand-side if there are any.
+</dd>
+<dt>groups</dt>
+<dd>The variables in the groups section are meant to be variables used to break down the results. If used in a graph situation for example, the graph would have a different panel for each value of the group variables.
+</dd>
+</dl>
+<h4 id="examples">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Looking at general health on its own</span>
+<span class="op">~</span>genhealth
+<span class="co"># Compare physical health against mental health,</span>
+<span class="co"># break down by general health category</span>
+physhealth<span class="op">~</span>menthealth<span class="op">|</span>genhealth
+<span class="co"># Look at both physical health and mental health</span>
+<span class="op">~</span>physhealth<span class="op">+</span>menthhealth</code></pre></div>
 <h3 id="summary"><code>summary</code></h3>
 <p><code>summary</code> can be used on the whole dataset, to get a quick overview of the various variables and their summaries.</p>
 <h4 id="options">Options</h4>
 <p>Typically you do not need to add any options to this method.</p>
 <ul>
 <li><code>digits</code>: You can control how many digits are shown by adding the <code>digits=...</code> option.</li>
-<li><code>maxsum</code>: You can determine how many categories (including the missing values category) will show from factors by adding the <code>maxsum=...</code> option.</li>
+<li><code>maxsum</code>: You can determine how many categories (including the missing values category) will show from factors by adding the <code>maxsum=...</code> option. The most frequent categories are shown first.</li>
 </ul>
-<h4 id="examples">Examples</h4>
+<h4 id="examples-1">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(brfss, <span class="dt">digits=</span><span class="dv">3</span>, <span class="dt">maxsum=</span><span class="dv">6</span>)</code></pre></div>
 <h3 id="tally"><code>tally</code></h3>
 <p><code>tally</code> is used to produce frequency tables and cross-tabulation tables for categorical variables. The first argument should be a formula involving the variables to use, and it should be followed by a <code>data=&lt;dataset&gt;</code> option specifying which dataset to use.</p>
@@ -102,7 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>margins</code>: You can add the option <code>margins=TRUE</code> if you would like to see marginal probabilities (totals) added to the table.</li>
 <li><code>useNA</code>: You can add <code>useNA=&quot;no&quot;</code> to remove the missing values from the computations and the result.</li>
 </ul>
-<h4 id="examples-1">Examples</h4>
+<h4 id="examples-2">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># There is a higher percent of Very Good/Excellent health people amongst those</span>
 <span class="co"># that exercise vs those that do not.</span>
 <span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
@@ -127,10 +152,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h4 id="options-2">Options</h4>
 <p>All commands accept the same options:</p>
 <ul>
-<li><code>data</code>: add it to specify the dataset to use</li>
-<li><code>na.rm</code>: add <code>na.rm=TRUE</code> to remove the missing values before computing. Most of the functions above will simply return <code>NA</code>, represeting missing value, if there are any missing values present and <code>na.rm=TRUE</code> was not added.</li>
+<li><code>data</code>: add <code>data=&lt;dataset&gt;</code> to specify the dataset to use</li>
+<li><code>na.rm</code>: add <code>na.rm=TRUE</code> to remove the missing values before computing. Most of the functions above will simply return <code>NA</code>, representing missing value, if there are any missing values present and <code>na.rm=TRUE</code> was not added.</li>
 </ul>
-<h4 id="examples-2">Examples</h4>
+<h4 id="examples-3">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Stats on number of days per month with physical/mental health problems,</span>
 <span class="co"># broken down by general health</span>
 <span class="kw">mean</span>(physhealth<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
@@ -154,13 +179,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <img src="images/symbols.png" alt="pch and lty options" />
 <p class="caption">pch and lty options</p>
 </div>
-The icons 21-25 can use a fill-in color, via the <code>bg=...</code> command. Use <code>c(..., ...)</code> for multiple values.</li>
+The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code> command. Use <code>c(..., ...)</code> for multiple values.</li>
 <li><code>lty=...</code> can be used on graphs with lines to choose the line style to use. The graph above shows the options for line types. Use <code>c(..., ...)</code> for multiple values.</li>
 <li><code>lwd=...</code> can be used on graphs with lines to specify the thickness of the lines, 1 being the standard size. For instance <code>lwd=1.4</code> will draw the lines 40% thicker.</li>
 <li><code>cex=...</code> can be used to change the size of the objects in the graph, 1 being the standard size. For instance <code>cex=1.2</code> will draw the objects 20% bigger.</li>
 <li><code>xlim=c(a, b)</code> sets the range on the x axis to be from <code>a</code> to <code>b</code>.</li>
 <li><code>ylim=c(a, b)</code> sets the range on the y axis to be from <code>a</code> to <code>b</code>.</li>
-<li><p><code>auto.key</code>: TODO</p></li>
+<li><code>auto.key</code>: This option is used to insert a legend based on the grouping variable. Its form is <code>auto.key=list(...)</code> where the dotted area may be empty or contain any of the following options:
+<ul>
+<li><code>space=&quot;...&quot;</code> will specify which side the legend goes in (top, bottom, left, right). The default is top.</li>
+<li><code>columns=...</code> will specify in how many columns to split the legend.</li>
+</ul></li>
 </ul>
 <h3 id="color-specifications">Color Specifications</h3>
 <p>Graph colors can be specified in a variety of different ways. We outline these different ways here. They are to be used with the <code>col=...</code> graph option.</p>
@@ -172,7 +201,12 @@ The icons 21-25 can use a fill-in color, via the <code>bg=...</code> command. Us
 <dd><p>You can specify a degree of grayness by using the <code>gray(...)</code> function and specifying numbers between 0 (black) to 1 (white). An example use for 4 colors would be: <code>col=grey(0, 0.2, 0.5, 0.8)</code></p>
 </dd>
 <dt>By palette</dt>
-<dd><p>The <a href="http://colorbrewer2.org/">colorBrewer</a> library contains custom palettes designed for various uses. You can see all the different palettes and their names by using the command <code>display.brewer.all()</code>. They fall into three categories: - <em>sequential palettes</em>, starting from a fairly white color and getting progressively darker. Good for ordered categorical data. - <em>diverging palettes</em>, with a middle neutral color and diverging in two directions. Good for ordered categorical data with a middle neutral value and negative/positive sides. - <em>qualitative palettes</em>, with easy to distinguish colors, useful for nominal (unordered) categorical variables.</p>
+<dd><p>The <a href="http://colorbrewer2.org/">colorBrewer</a> library contains custom palettes designed for various uses. You can see all the different palettes and their names by using the command <code>display.brewer.all()</code>. They fall into three categories:</p>
+<ul>
+<li><em>sequential palettes</em>, starting from a fairly white color and getting progressively darker. Good for ordered categorical data.</li>
+<li><em>diverging palettes</em>, with a middle neutral color and diverging in two directions. Good for ordered categorical data with a middle neutral value and negative/positive sides.</li>
+<li><em>qualitative palettes</em>, with easy to distinguish colors, useful for nominal (unordered) categorical variables.</li>
+</ul>
 <p>In order to use a palette, you would use the command <code>brewer.pal(&lt;n&gt;, &lt;name&gt;)</code> where <code>&lt;n&gt;</code> is the number of colors to choose, and <code>&lt;name&gt;</code> is the palette’s name, in quotes. For instance to use four colors from the “Accent” palette we would do: <code>col=brewer.pal(4, &quot;Accent&quot;)</code></p>
 </dd>
 </dl>
@@ -189,21 +223,21 @@ The icons 21-25 can use a fill-in color, via the <code>bg=...</code> command. Us
 <li><code>&quot;density&quot;</code> means that the <em>area</em> of each bar corresponds to the percent of cases in that range.</li>
 </ul></li>
 </ul>
-<h4 id="examples-3">Examples</h4>
+<h4 id="examples-4">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>black, <span class="dt">data=</span>counties, <span class="dt">breaks=</span><span class="dv">40</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)
 <span class="kw">histogram</span>(<span class="op">~</span>physhealth<span class="op">|</span>genhealth, <span class="dt">data=</span>brfss)</code></pre></div>
 <h3 id="barchart"><code>barchart</code></h3>
-<p><code>barchart</code> is used to produce bar charts. It is typically used by first doing a <code>tally</code> an then piping the result into <code>barchart</code>.</p>
+<p><code>barchart</code> is used to produce bar charts. It is typically used by first doing a <code>tally</code> and then piping the result into <code>barchart</code>.</p>
 <h4 id="options-4">Options</h4>
 <ul>
 <li><code>horizontal</code>: By default the bars will be horizontal. If you would prefer vertical bars, add the option <code>horizontal=FALSE</code>.</li>
 </ul>
 <h4 id="stacked-bar-charts">100% Stacked Bar Charts</h4>
-<p>100% stacked bar charts are somewhat tricky to make. We start with a <code>tally</code> with the two variables separated by a vertical line (not plus!), then set the format to <code>percent</code>. Before piping that into a barchart however, we have to pipe it through the <code>t</code> command, which transposes columns and rows. The main syntax would look like this:</p>
+<p>100% stacked bar charts are somewhat tricky to make. We start with a <code>tally</code> with the two variables separated by a vertical line (not plus!), then set the format to <code>percent</code>. Before piping that into a barchart, however, we have to pipe it through the <code>t</code> command, which transposes columns and rows. The main syntax would look like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
 <p>You may have to swap the two variables to get them in the desired order.</p>
-<h4 id="examples-4">Examples</h4>
+<h4 id="examples-5">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
 <ul>
 <li>bargraph (mosaic) MIGHT NOT NEED?</li>
