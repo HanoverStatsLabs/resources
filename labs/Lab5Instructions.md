@@ -83,7 +83,7 @@ You should see a table with column-wise percentages.  Does it look like the "exe
     healthVsExercise %>% t() %>% barchart(auto.key=list(space="right"),
     	main="General Health vs. Does the Respondent Ever Exercise")
     ```
-8. If you want to specify a color palette, you really have to dig deep.  Let's give it a try.  The `Brewer` palette which ranges from red to purple will make an attractive spectrum.  Let's store it with 5 color values:
+8. If you want to specify a color palette, you really have to dig deep.  Let's give it a try.  The `brewer` palette which ranges from red to purple will make an attractive spectrum.  Let's store it with 5 color values:
     ```{r}
     myColors <- Brewer.pal(5, RdPu)
     ```
@@ -106,7 +106,7 @@ You should see a table with column-wise percentages.  Does it look like the "exe
 
 Now let's see how income level and age group might be related to general health for this group of respondents.
 
-9. **Before looking at any relevant graphs**, make some predictions. Do you think there is any relationship between income level and health?  Between age and health? Explain.
+9. **Before looking at any relevant graphs**, make some predictions. Do you think there is any relationship between income level and health?  What about the relationship between age and health? Explain.
 
 10. Using what you learned previously in this lab, make a nice stacked bar graph for general health vs. income level (`income`).  What do you learn from the graph?  Compare with your prediction above.
 
@@ -130,8 +130,4 @@ healthVsIncomeAndAge %>% aperm(c(2,3,1)) %>%
 12. For each age group, is it the case that those with higher income level report better general health?  Explain how you see this in the graph.
 
 13. Is the nature of the relationship between general health and income exactly the same across all ages, or do you notice it being weaker for some age groups?  Explain what you see and how that makes sense.
-
-
-
-
 

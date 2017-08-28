@@ -71,7 +71,7 @@ healthVsExercise</code></pre></li>
 healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;top&quot;))
 healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;right&quot;),
     main=&quot;General Health vs. Does the Respondent Ever Exercise&quot;)</code></pre></li>
-<li><p>If you want to specify a color palette, you really have to dig deep. Let’s give it a try. The <code>Brewer</code> palette which ranges from red to purple will make an attractive spectrum. Let’s store it with 5 color values:</p>
+<li><p>If you want to specify a color palette, you really have to dig deep. Let’s give it a try. The <code>brewer</code> palette which ranges from red to purple will make an attractive spectrum. Let’s store it with 5 color values:</p>
 <pre class="{r}"><code>myColors &lt;- Brewer.pal(5, RdPu)</code></pre>
 <p>Store the levels of the <code>genhealth</code> variable:</p>
 <pre class="{r}"><code>healthLevels &lt;- list(levels(brfss$genhealth))</code></pre>
@@ -85,7 +85,7 @@ healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;right&quot
 <h2 id="general-health-vs.income-and-age-group">General Health vs. Income and Age Group</h2>
 <p>Now let’s see how income level and age group might be related to general health for this group of respondents.</p>
 <ol start="9" style="list-style-type: decimal">
-<li><p><strong>Before looking at any relevant graphs</strong>, make some predictions. Do you think there is any relationship between income level and health? Between age and health? Explain.</p></li>
+<li><p><strong>Before looking at any relevant graphs</strong>, make some predictions. Do you think there is any relationship between income level and health? What about the relationship between age and health? Explain.</p></li>
 <li><p>Using what you learned previously in this lab, make a nice stacked bar graph for general health vs. income level (<code>income</code>). What do you learn from the graph? Compare with your prediction above.</p></li>
 <li><p>Also make a stacked bar graph for general health vs. age. What do you learn from the graph? Compare with your prediction above.</p></li>
 </ol>
