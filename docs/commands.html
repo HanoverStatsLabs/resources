@@ -56,17 +56,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="#data-preparation">Data Preparation</a>
 <ul>
-<li>read_csv</li>
-<li>data</li>
-<li>View</li>
-<li>head</li>
-<li>tail</li>
-<li>filter</li>
+<li><a href="#read-csv">read_csv</a></li>
+<li><a href="#data">data</a></li>
+<li><a href="#view">View</a></li>
+<li><a href="#head-tail">head and tail</a></li>
+<li><a href="#filter">filter</a></li>
 </ul></li>
 <li><a href="#summaries">Summaries</a>
 <ul>
 <li><a href="#the-formula-interface">The formula interface</a></li>
-<li>piping (%&gt;%)</li>
+<li><a href="#piping">piping (%&gt;%)</a></li>
 <li><a href="#summary">summary</a></li>
 <li><a href="#tally">tally</a></li>
 <li><a href="#aggregating-functions">aggregating functions (mean, median, sd, cor, var, favstats, range, iqr, sum, prod, min, max)</a></li>
@@ -74,13 +73,64 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#plotting">Plotting</a>
 <ul>
 <li><a href="#common-graph-options">Common graph options</a></li>
+<li><a href="#legend-specifications">Legend specifications</a></li>
 <li><a href="#color-specifications">Color specifications</a></li>
 <li><a href="#histogram">histogram</a></li>
 <li><a href="#barchart">barchart</a></li>
 </ul></li>
 </ul>
 <h2 id="data-preparation">Data Preparation</h2>
-<p>Commands in this section involve data preparation, for instance loading new data.</p>
+<p>Commands in this section involve data preparation, for instance loading new data or filtering a data set.</p>
+<h3 id="read_csv"><code>read_csv</code></h3>
+<p><code>read_csv</code> is used for loading comma-separated-format (CSV) files. This is a popular format for transmitting data, and works well with spreadsheet programs like Excel. Excel can read CSV files and can also export/save to CSV format.</p>
+<p>In RStudio you can use the <code>Import Dataset &gt; From CSV</code> menu option, and it will create the appropriate <code>read_csv</code> command for you.</p>
+<h4 id="options">Options</h4>
+<ul>
+<li><code>file=&quot;...&quot;</code> is the first option, and you can omit the <code>file=</code> part for it. The quoted expression specifies which file to load. If the file is online, all you need to use is the web link to the file. If it is on your computer, it should hopefully be in the “working directory”. In that case you just need to provide the filename.</li>
+</ul>
+<p>There are many other more specialized options, for situations when the initial dataset is not properly formatted. We will not discuss them here, but you can read more on the documentation page <code>?read_csv</code>.</p>
+<h4 id="examples">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># A local file:</span>
+myData &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;myDatafile.csv&quot;</span>)
+<span class="co"># A file from the internet</span>
+myData &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;http://hanoverstatslabs.github.io/resources/datasets/driving.csv&quot;</span>)</code></pre></div>
+<h3 id="data">data</h3>
+<p><code>data</code> is used to load data that was saved in an R package. It is typically followed by the <a href="#view"><code>View</code></a> command.</p>
+<p>If used with no arguments, as <code>data()</code>, it will list all datasets available in all loaded packages.</p>
+<h4 id="options-1">Options</h4>
+<p>The data command has a simple syntax. It expects simply the name of the dataset. The only option worth mentioning as an addition is <code>package=&quot;...&quot;</code> where you can specify which package the data comes from. It is usually not needed.</p>
+<h4 id="examples-1">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See all available datasets</span>
+<span class="kw">data</span>()
+<span class="co"># Load a dataset with a specific name</span>
+<span class="kw">data</span>(brfss)
+<span class="co"># Load a dataset with a specific name</span>
+<span class="kw">data</span>(brfss, <span class="dt">package=</span><span class="st">&quot;hanoverbase&quot;</span>)
+<span class="co"># Follow it with the `View` command</span>
+<span class="kw">View</span>(brfss)</code></pre></div>
+<h3 id="view">View</h3>
+<p><code>View</code> is used to bring up a spreadsheet view of a dataset. The dataset must have been previously created, by <a href="#read_csv"><code>read_csv</code></a>, <a href="#data"><code>data</code></a> or some other method.</p>
+<h4 id="examples-2">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First load a dataset</span>
+<span class="kw">load</span>(brfss)
+<span class="co"># Then view it</span>
+<span class="kw">View</span>(brfss)</code></pre></div>
+<h3 id="head-tail">head, tail</h3>
+<p><code>head</code> and <code>tail</code> can be used in order to extract the first few, or the last few, cases from a dataset. They can often be used as the last step in a piping sequence in order to see the top results from our operation.</p>
+<p>Both functions take two arguments: The name of the object (often provided via piping) and the number of cases to show, which defaults to around 6.</p>
+<h4 id="examples-3">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show only the first few cases from the dataset</span>
+<span class="kw">data</span>(brfss)
+<span class="kw">head</span>(brfss)
+<span class="co"># Same thing using piping</span>
+brfss <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()
+<span class="co"># Showing 10 cases</span>
+<span class="kw">head</span>(brfss, <span class="dv">10</span>)
+brfss <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)
+<span class="co"># State populations, top 6</span>
+<span class="kw">data</span>(counties)
+<span class="kw">sum</span>(<span class="op">~</span>pop2010<span class="op">|</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tail</span>()</code></pre></div>
+<h3 id="filter">filter</h3>
 <p>TODO</p>
 <h2 id="summaries">Summaries</h2>
 <p>Commands in this section produce numerical summaries.</p>
@@ -99,7 +149,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <dd>The variables in the groups section are meant to be variables used to break down the results. If used in a graph situation for example, the graph would have a different panel for each value of the group variables.
 </dd>
 </dl>
-<h4 id="examples">Examples</h4>
+<h4 id="examples-4">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Looking at general health on its own</span>
 <span class="op">~</span>genhealth
 <span class="co"># Compare physical health against mental health,</span>
@@ -107,19 +157,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 physhealth<span class="op">~</span>menthealth<span class="op">|</span>genhealth
 <span class="co"># Look at both physical health and mental health</span>
 <span class="op">~</span>physhealth<span class="op">+</span>menthhealth</code></pre></div>
+<h3 id="piping">Piping</h3>
+<p>The <strong>piping</strong> operatior, <code>%&gt;%</code>, is a very useful operator that allows us to simplify the writing of complex steps. The operator takes the value on its left side, and uses it as the first argument in the function on its right side. Here is one example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsExercise &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss)
+healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>()</code></pre></div>
+<p>The first line creates a new table, <code>healthVsExercise</code>, with the tallies. The second line takes that table, and feeds it into the <code>t</code> function, and then feeds the result into the <code>barchart</code> function. That line is exactly the same as the following much harder to read expression:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barchart</span>(<span class="kw">t</span>(healthVsExercise))</code></pre></div>
 <h3 id="summary"><code>summary</code></h3>
 <p><code>summary</code> can be used on the whole dataset, to get a quick overview of the various variables and their summaries.</p>
-<h4 id="options">Options</h4>
+<h4 id="options-2">Options</h4>
 <p>Typically you do not need to add any options to this method.</p>
 <ul>
 <li><code>digits</code>: You can control how many digits are shown by adding the <code>digits=...</code> option.</li>
 <li><code>maxsum</code>: You can determine how many categories (including the missing values category) will show from factors by adding the <code>maxsum=...</code> option. The most frequent categories are shown first.</li>
 </ul>
-<h4 id="examples-1">Examples</h4>
+<h4 id="examples-5">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(brfss, <span class="dt">digits=</span><span class="dv">3</span>, <span class="dt">maxsum=</span><span class="dv">6</span>)</code></pre></div>
 <h3 id="tally"><code>tally</code></h3>
 <p><code>tally</code> is used to produce frequency tables and cross-tabulation tables for categorical variables. The first argument should be a formula involving the variables to use, and it should be followed by a <code>data=&lt;dataset&gt;</code> option specifying which dataset to use.</p>
-<h4 id="options-1">Options</h4>
+<h4 id="options-3">Options</h4>
 <p>By default <code>tally</code> will create a table of frequencies for the various combinations of values.</p>
 <ul>
 <li><code>sort</code>: You can specify <code>sort=TRUE</code> if you want to options to be sorted in order of frequency. By default they will be ordered in the order specified in the variable.</li>
@@ -127,7 +183,7 @@ physhealth<span class="op">~</span>menthealth<span class="op">|</span>genhealth
 <li><code>margins</code>: You can add the option <code>margins=TRUE</code> if you would like to see marginal probabilities (totals) added to the table.</li>
 <li><code>useNA</code>: You can add <code>useNA=&quot;no&quot;</code> to remove the missing values from the computations and the result.</li>
 </ul>
-<h4 id="examples-2">Examples</h4>
+<h4 id="examples-6">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># There is a higher percent of Very Good/Excellent health people amongst those</span>
 <span class="co"># that exercise vs those that do not.</span>
 <span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
@@ -149,13 +205,13 @@ physhealth<span class="op">~</span>menthealth<span class="op">|</span>genhealth
 <li><code>sum</code> for the sum of the values</li>
 <li><code>prod</code> for the product of the values</li>
 </ul>
-<h4 id="options-2">Options</h4>
+<h4 id="options-4">Options</h4>
 <p>All commands accept the same options:</p>
 <ul>
 <li><code>data</code>: add <code>data=&lt;dataset&gt;</code> to specify the dataset to use</li>
 <li><code>na.rm</code>: add <code>na.rm=TRUE</code> to remove the missing values before computing. Most of the functions above will simply return <code>NA</code>, representing missing value, if there are any missing values present and <code>na.rm=TRUE</code> was not added.</li>
 </ul>
-<h4 id="examples-3">Examples</h4>
+<h4 id="examples-7">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Stats on number of days per month with physical/mental health problems,</span>
 <span class="co"># broken down by general health</span>
 <span class="kw">mean</span>(physhealth<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
@@ -185,12 +241,31 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <li><code>cex=...</code> can be used to change the size of the objects in the graph, 1 being the standard size. For instance <code>cex=1.2</code> will draw the objects 20% bigger.</li>
 <li><code>xlim=c(a, b)</code> sets the range on the x axis to be from <code>a</code> to <code>b</code>.</li>
 <li><code>ylim=c(a, b)</code> sets the range on the y axis to be from <code>a</code> to <code>b</code>.</li>
-<li><code>auto.key</code>: This option is used to insert a legend based on the grouping variable. Its form is <code>auto.key=list(...)</code> where the dotted area may be empty or contain any of the following options:
-<ul>
-<li><code>space=&quot;...&quot;</code> will specify which side the legend goes in (top, bottom, left, right). The default is top.</li>
-<li><code>columns=...</code> will specify in how many columns to split the legend.</li>
-</ul></li>
+<li><p><code>auto.key</code> and <code>key</code>: These options are used for to add <a href="#legend-specifications">legends</a> to graphs that need them. For details look at the corresponding section.</p></li>
 </ul>
+<h3 id="legend-specifications">Legend Specifications</h3>
+<p>Legends are needed when we use a grouping variable, to identify the different colors and symbols used. Adding a default legend is easy to do. However, customizing the legend and the graph in general becomes trickier.</p>
+<p>To specify the legend you have two options you can add to graphs:</p>
+<dl>
+<dt>auto.key</dt>
+<dd><p>The <code>auto.key</code> option is a convenient way to add a legend, but it will only work if you don’t set custom colors to your graph. Its form is <code>auto.key=list(...)</code> where the dotted area may be empty or contain any of the following options: - <code>space=&quot;...&quot;</code> will specify which side the legend goes in (top, bottom, left, right). The default is top. - <code>columns=...</code> will specify in how many columns to split the legend. The default is one column, so all values form a single column.</p>
+</dd>
+<dt>key</dt>
+<dd><p>The <code>key</code> option allows for more fine-tuned legends, but it is also more complex to write. This is definitely an advanced feature. With this option you have to manually specify everything that goes into the graph, including the various labels for the grouping variable. It would typically be constructed in steps, like in this example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First we specify the colors we will use. We use 5 keys here.</span>
+myColors &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;RdPu&quot;</span>)
+<span class="co"># Next we create the levels</span>
+myLabels =<span class="st"> </span><span class="kw">list</span>(<span class="kw">levels</span>(brfss<span class="op">$</span>genhealth))
+<span class="co"># Now we create a list of key components. We use &quot;text&quot; to set the labels,</span>
+<span class="co"># &quot;columns&quot; to specify how many columns to show, and &quot;rectangles&quot; to</span>
+<span class="co"># tell the legend to draw colored rectangles with our colors in.</span>
+myKey =<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span>myLabels, <span class="dt">columns=</span><span class="dv">4</span>, <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))
+<span class="co"># Finally, we use the key in a graph We must specify the colors again</span>
+healthVsExercise &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
+healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">col=</span>myColors, <span class="dt">key=</span>myKey)</code></pre></div>
+<p>Instead of, or in addition to, <code>rectangles</code>, we could also use <code>lines</code> and <code>points</code> to add those symbols. You can use most of the <a href="#common-graph-options">common graph options</a> to specify these lines and symbols, just like we used <code>col</code> above.</p>
+</dd>
+</dl>
 <h3 id="color-specifications">Color Specifications</h3>
 <p>Graph colors can be specified in a variety of different ways. We outline these different ways here. They are to be used with the <code>col=...</code> graph option.</p>
 <dl>
@@ -213,7 +288,7 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <h3 id="histogram"><code>histogram</code></h3>
 <p><code>histogram</code> is used to produce histograms. The typical syntax would use a formula <code>~&lt;variable&gt;</code> as the first argument, followed by a <code>data=&lt;dataset&gt;</code> option to specify the dataset to use.</p>
 <p>You can also create multiple panels based on the values of a categorical variable, with a formula <code>~&lt;variable&gt;|&lt;factorVariable&gt;</code>.</p>
-<h4 id="options-3">Options</h4>
+<h4 id="options-5">Options</h4>
 <ul>
 <li><code>breaks</code> can be used in two ways, but the simplest one is to set it equal to a single number, specifying the number of breakpoints to be used for the histogram bars.</li>
 <li><code>type</code> must equal one of <code>&quot;percent&quot;</code>, <code>&quot;count&quot;</code> or <code>&quot;density&quot;</code> and determines what the heights of the bars correspond to:
@@ -223,22 +298,23 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <li><code>&quot;density&quot;</code> means that the <em>area</em> of each bar corresponds to the percent of cases in that range.</li>
 </ul></li>
 </ul>
-<h4 id="examples-4">Examples</h4>
+<h4 id="examples-8">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>black, <span class="dt">data=</span>counties, <span class="dt">breaks=</span><span class="dv">40</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)
 <span class="kw">histogram</span>(<span class="op">~</span>physhealth<span class="op">|</span>genhealth, <span class="dt">data=</span>brfss)</code></pre></div>
 <h3 id="barchart"><code>barchart</code></h3>
 <p><code>barchart</code> is used to produce bar charts. It is typically used by first doing a <code>tally</code> and then piping the result into <code>barchart</code>.</p>
-<h4 id="options-4">Options</h4>
+<h4 id="options-6">Options</h4>
 <ul>
 <li><code>horizontal</code>: By default the bars will be horizontal. If you would prefer vertical bars, add the option <code>horizontal=FALSE</code>.</li>
 </ul>
-<h4 id="examples-5">Examples</h4>
+<h4 id="examples-9">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
 <h4 id="stacked-bar-charts">100% Stacked Bar Charts</h4>
 <p>100% stacked bar charts are somewhat tricky to make. We start with a <code>tally</code> with the two variables separated by a vertical line (not plus!), then set the format to <code>percent</code>. Before piping that into a barchart, however, we have to pipe it through the <code>t</code> command, which transposes columns and rows. The main syntax would look like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
 <p>You may have to swap the two variables to get them in the desired order.</p>
+<h2 id="cleanup">Cleanup</h2>
 <ul>
 <li>bargraph (mosaic) MIGHT NOT NEED?</li>
 <li>barchart (lattice) barchart better for Pareto charts…</li>
@@ -246,10 +322,7 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <li>xyplot (lattice)</li>
 <li>ladd (mosaic)</li>
 <li>panel.abline (lattice)</li>
-<li>…</li>
-</ul>
-<h2 id="cleanup">Cleanup</h2>
-<ul>
+<li><p>…</p></li>
 <li>tally (mosaic)</li>
 <li>head, tail (base)</li>
 <li>summary (base)</li>
@@ -262,7 +335,7 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <li>tally(~state, data=counties) %&gt;% sort()</li>
 <li>median et al from mosaic ( median(~pop2010|state, data=counties) )</li>
 <li>View (rstudio)</li>
-<li>pdist, xpnorm, xqnorm, xpbinom (mosaic) FOR VISUALIZING THEORETICAL DISTRIBUTIONS</li>
+<li><p>pdist, xpnorm, xqnorm, xpbinom (mosaic) FOR VISUALIZING THEORETICAL DISTRIBUTIONS</p></li>
 </ul>
 </body>
 </html>

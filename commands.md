@@ -5,20 +5,20 @@ This list is meant to be used as a reference. Seeing all the commands at once ca
 The main use of this guide is to find out the common options that can be added to these commands. Throughout the guide, sections enclosed in angle brackets like this: `<dataset>` are placeholders meant to be replaced by the appropriate text for your data.
 
 - [Data Preparation](#data-preparation)
-    - read_csv
-    - data
-    - View
-    - head
-    - tail
-    - filter
+    - [read_csv](#read-csv)
+    - [data](#data)
+    - [View](#view)
+    - [head and tail](#head-tail)
+    - [filter](#filter)
 - [Summaries](#summaries)
     - [The formula interface](#the-formula-interface)
-    - piping (%>%)
+    - [piping (%>%)](#piping)
     - [summary](#summary)
     - [tally](#tally)
     - [aggregating functions (mean, median, sd, cor, var, favstats, range, iqr, sum, prod, min, max)](#aggregating-functions)
 - [Plotting](#plotting)
     - [Common graph options](#common-graph-options)
+    - [Legend specifications](#legend-specifications)
     - [Color specifications](#color-specifications)
     - [histogram](#histogram)
     - [barchart](#barchart)
@@ -26,7 +26,88 @@ The main use of this guide is to find out the common options that can be added t
 
 ## Data Preparation
 
-Commands in this section involve data preparation, for instance loading new data.
+Commands in this section involve data preparation, for instance loading new data or filtering a data set.
+
+### `read_csv`
+
+`read_csv` is used for loading comma-separated-format (CSV) files. This is a popular format for transmitting data, and works well with spreadsheet programs like Excel. Excel can read CSV files and can also export/save to CSV format.
+
+In RStudio you can use the `Import Dataset > From CSV` menu option, and it will create the appropriate `read_csv` command for you.
+
+#### Options
+
+- `file="..."` is the first option, and you can omit the `file=` part for it. The quoted expression specifies which file to load. If the file is online, all you need to use is the web link to the file. If it is on your computer, it should hopefully be in the "working directory". In that case you just need to provide the filename.
+
+There are many other more specialized options, for situations when the initial dataset is not properly formatted. We will not discuss them here, but you can read more on the documentation page `?read_csv`.
+
+#### Examples
+
+```r
+# A local file:
+myData <- read_csv("myDatafile.csv")
+# A file from the internet
+myData <- read_csv("http://hanoverstatslabs.github.io/resources/datasets/driving.csv")
+```
+
+### data
+
+`data` is used to load data that was saved in an R package. It is typically followed by the [`View`](#view) command.
+
+If used with no arguments, as `data()`, it will list all datasets available in all loaded packages.
+
+#### Options
+
+The data command has a simple syntax. It expects simply the name of the dataset. The only option worth mentioning as an addition is `package="..."` where you can specify which package the data comes from. It is usually not needed.
+
+#### Examples
+
+```r
+# See all available datasets
+data()
+# Load a dataset with a specific name
+data(brfss)
+# Load a dataset with a specific name
+data(brfss, package="hanoverbase")
+# Follow it with the `View` command
+View(brfss)
+```
+
+### View
+
+`View` is used to bring up a spreadsheet view of a dataset. The dataset must have been previously created, by [`read_csv`](#read_csv), [`data`](#data) or some other method.
+
+#### Examples
+
+```r
+# First load a dataset
+load(brfss)
+# Then view it
+View(brfss)
+```
+
+### head, tail
+
+`head` and `tail` can be used in order to extract the first few, or the last few, cases from a dataset. They can often be used as the last step in a piping sequence in order to see the top results from our operation.
+
+Both functions take two arguments: The name of the object (often provided via piping) and the number of cases to show, which defaults to around 6.
+
+#### Examples
+
+```r
+# Show only the first few cases from the dataset
+data(brfss)
+head(brfss)
+# Same thing using piping
+brfss %>% head()
+# Showing 10 cases
+head(brfss, 10)
+brfss %>% head(10)
+# State populations, top 6
+data(counties)
+sum(~pop2010|state, data=counties) %>% sort() %>% tail()
+```
+
+### filter
 
 TODO
 
@@ -61,6 +142,18 @@ groups
 physhealth~menthealth|genhealth
 # Look at both physical health and mental health
 ~physhealth+menthhealth
+```
+
+### Piping
+
+The **piping** operatior, `%>%`, is a very useful operator that allows us to simplify the writing of complex steps. The operator takes the value on its left side, and uses it as the first argument in the function on its right side. Here is one example:
+```r
+healthVsExercise <- tally(~genhealth|exerciseany, data=brfss)
+healthVsExercise %>% t() %>% barchart()
+```
+The first line creates a new table, `healthVsExercise`, with the tallies. The second line takes that table, and feeds it into the `t` function, and then feeds the result into the `barchart` function. That line is exactly the same as the following much harder to read expression:
+```r
+barchart(t(healthVsExercise))
 ```
 
 ### `summary`
@@ -165,9 +258,38 @@ These options can be added to most graph commands:
 - `cex=...` can be used to change the size of the objects in the graph, 1 being the standard size. For instance `cex=1.2` will draw the objects 20% bigger.
 - `xlim=c(a, b)` sets the range on the x axis to be from `a` to `b`.
 - `ylim=c(a, b)` sets the range on the y axis to be from `a` to `b`.
-- `auto.key`: This option is used to insert a legend based on the grouping variable. Its form is `auto.key=list(...)` where the dotted area may be empty or contain any of the following options:
+- `auto.key` and `key`: These options are used for to add [legends](#legend-specifications) to graphs that need them. For details look at the corresponding section.
+
+
+### Legend Specifications
+
+Legends are needed when we use a grouping variable, to identify the different colors and symbols used. Adding a default legend is easy to do. However, customizing the legend and the graph in general becomes trickier.
+
+To specify the legend you have two options you can add to graphs:
+
+auto.key
+
+: The `auto.key` option is a convenient way to add a legend, but it will only work if you don't set custom colors to your graph. Its form is `auto.key=list(...)` where the dotted area may be empty or contain any of the following options:
     - `space="..."` will specify which side the legend goes in (top, bottom, left, right). The default is top.
-    - `columns=...` will specify in how many columns to split the legend.
+    - `columns=...` will specify in how many columns to split the legend. The default is one column, so all values form a single column.
+
+key
+
+: The `key` option allows for more fine-tuned legends, but it is also more complex to write. This is definitely an advanced feature. With this option you have to manually specify everything that goes into the graph, including the various labels for the grouping variable. It would typically be constructed in steps, like in this example:
+    ```r
+    # First we specify the colors we will use. We use 5 keys here.
+    myColors <- brewer.pal(5, "RdPu")
+    # Next we create the levels
+    myLabels = list(levels(brfss$genhealth))
+    # Now we create a list of key components. We use "text" to set the labels,
+    # "columns" to specify how many columns to show, and "rectangles" to
+    # tell the legend to draw colored rectangles with our colors in.
+    myKey = list(text=myLabels, columns=4, rectangles=list(col=myColors))
+    # Finally, we use the key in a graph We must specify the colors again
+    healthVsExercise <- tally(~genhealth|exerciseany, data=brfss, format="percent", useNA="no")
+    healthVsExercise %>% t() %>% barchart(col=myColors, key=myKey)
+    ```
+    Instead of, or in addition to, `rectangles`, we could also use `lines` and `points` to add those symbols. You can use most of the [common graph options](#common-graph-options) to specify these lines and symbols, just like we used `col` above.
 
 ### Color Specifications
 
@@ -238,6 +360,9 @@ You may have to swap the two variables to get them in the desired order.
 
 
 
+
+## Cleanup
+
 - bargraph (mosaic)  MIGHT NOT NEED?
 - barchart (lattice)  barchart better for Pareto charts...
 - mosaicplot (mosaic)
@@ -246,8 +371,6 @@ You may have to swap the two variables to get them in the desired order.
 - panel.abline (lattice)
 - ...
 
-
-## Cleanup
 
 - tally (mosaic)
 - head, tail (base)
