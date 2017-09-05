@@ -259,7 +259,7 @@ These options can be added to most graph commands:
 - `xlim=c(a, b)` sets the range on the x axis to be from `a` to `b`.
 - `ylim=c(a, b)` sets the range on the y axis to be from `a` to `b`.
 - `auto.key` and `key`: These options are used for to add [legends](#legend-specifications) to graphs that need them. For details look at the corresponding section.
-
+- `layout`: TODO
 
 ### Legend Specifications
 
@@ -341,6 +341,7 @@ histogram(~physhealth|genhealth, data=brfss)
 #### Options
 
 - `horizontal`: By default the bars will be horizontal. If you would prefer vertical bars, add the option `horizontal=FALSE`.
+- `origin`: Barcharts should start at 0, but sometimes the default setting does not force that behavior. Set `origin=0` to achieve that.
 
 #### Examples
 
@@ -360,6 +361,10 @@ You may have to swap the two variables to get them in the desired order.
 
 
 
+
+seq
+quantile
+Histogram: breaks (both forms),
 
 ## Cleanup
 

@@ -60,7 +60,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>create simple graphs and numerical summaries for variables</li>
 <li>assign values to names for future use</li>
 </ul>
-<p>Specific R commands encountered: <code>data</code>, <code>help</code>, <code>View</code>, <code>nrow</code>, <code>favstats</code>, <code>histogram</code>, <code>%&gt;%</code></p>
+<p>Specific R commands introduced: <code>data</code>, <code>help</code>, <code>View</code>, <code>favstats</code>, <code>histogram</code>, <code>%&gt;%</code>, <code>filter</code></p>
 <h2 id="start-rstudio-and-get-your-bearings">Start RStudio and Get Your Bearings</h2>
 <p>To start RStudio from any computer on the campus network:</p>
 <ul>
@@ -133,7 +133,7 @@ z</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(counties)</code></pre></div>
 <p>In the Environment pane (upper right), you should now see a <code>counties</code> entry under Data. Click on that entry to view the data in its own pane. This the same as using the <code>View</code> command in the Console:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">View</span>(counties)</code></pre></div>
-<p>You can also bring up the documentation page for the dataset by running <code>?counties</code> in the Console.</p>
+<p>You should also bring up the documentation page for the dataset by running <code>?counties</code> or <code>help(counties)</code> in the Console.</p>
 <p>You can use the search box at the top right of the data view to filter the rows. For instance typing <code>Indiana</code> will show only the rows that have the word Indiana in one of their fields.</p>
 <p>Notice that you can sort the data file according to any column by clicking the column headings (click again to change the sort direction).</p>
 <p><strong>Warning</strong>: The <code>NA</code> (not available) answers will always sort at the bottom, whether you sort ascending or descending.</p>

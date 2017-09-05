@@ -23,11 +23,12 @@
 <li>visualize “labeled” quantitative information via dotplots</li>
 <li>visualize categorical-quantitative relationships via boxplots</li>
 </ul>
-<p>Specific R commands encountered: <code>tally</code>, <code>sort</code>, <code>barchart</code>, <code>dotplot</code>, <code>tail</code>, <code>head</code>, <code>bwplot</code>, <code>median</code></p>
+<p>Specific R commands introduced: <code>tally</code>, <code>sort</code>, <code>barchart</code>, <code>dotplot</code>, <code>tail</code>, <code>head</code>, <code>bwplot</code>, <code>median</code></p>
 <p>Recall that before we start any work, we need to load our main functions package:</p>
 <pre class="{r}"><code>library(hanoverbase)</code></pre>
 <p>We will continue working with the <code>counties</code> dataset introduced in Lab 1. If the <code>counties</code> set is not visible in the Environment pane, you will need to “reload” it by running:</p>
-<pre class="{r}"><code>data(counties)</code></pre>
+<pre class="{r}"><code>data(counties)
+View(counties)</code></pre>
 <h2 id="working-with-categorical-variables">Working with Categorical Variables</h2>
 <p>Recall that categorical variables take values from a limited set of options, one value for each individual case. In our <code>counties</code> data set the “individual cases” are the U.S. counties.</p>
 <ol style="list-style-type: decimal">
@@ -36,30 +37,33 @@
 
 <p>We start by asking for the number of counties in each state. This is what we would commonly call the <em>frequencies</em> of the “state” variable. The <code>tally</code> command is used to compute frequencies:</p>
 <pre class="{r}"><code>tally(~state, data=counties)</code></pre>
-<p>It would be nice to have these values ordered. Use the UP arrow to recall your last command, and add a “<code>%&gt;%</code>” pipe step to sort the values calling the sort command:</p>
+
+<p>It would be nice to have these values sorted. Use the UP arrow to recall your last command, and add a “<code>%&gt;%</code>” pipe step to sort the values, calling the sort command:</p>
 <pre class="{r}"><code>tally(~state, data=counties) %&gt;% sort()</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>List the five states with the highest number of counties, including how many counties they each have.</li>
 </ol>
 <p>We can get a visual representation of these counts using a barchart:</p>
 <pre class="{r}"><code>tally(~state, data=counties) %&gt;% barchart()</code></pre>
+<p>Click the <strong>Zoom</strong> button to get a longer view of the barchart.</p>
 <p>The default barchart makes no attempt to order the categories, which can make the barchart hard to read. We can combine <code>tally</code>, <code>sort</code> and <code>barchart</code> to achieve a barchart ordered by the frequencies. This is typically called a <strong>Pareto chart</strong>:</p>
 <pre class="{r}"><code>tally(~state, data=counties) %&gt;% sort() %&gt;% barchart()</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li>Which states have fewer than 10 counties?</li>
+<li>Which states have fewer than 10 counties? Can you see this directly from the barchart?</li>
 </ol>
 
-<p>On a lighter note, let us use the county name as a categorical variable, and determine for instance what are the most popular county names. We will combine <code>tally</code> and <code>sort</code> as above but using the <code>name</code> variable instead of the <code>state</code> variable.</p>
+<p>On a lighter note, let us use the county name as a categorical variable, and determine the most popular county names are. We will combine <code>tally</code> and <code>sort</code> as above but using the <code>name</code> variable instead of the <code>state</code> variable.</p>
 <pre class="{r}"><code>tally(~name, data=counties) %&gt;% sort()</code></pre>
-<p>The result of that command is not very helpful. Since there are so many counties whose names only appear once, we do not get to see the end of the list. To do that, we can use the <code>tail</code> command, which shows a number of entries from the end:</p>
+<p>The result of that command is pretty overwhelming. Since there are so many counties whose names only appear once, we do not get to see the end of the list. To do that, we can use the <code>tail</code> command, which shows a number of entries from the end:</p>
 <pre class="{r}"><code>tally(~name, data=counties) %&gt;% sort() %&gt;% tail(10)</code></pre>
-<p>There is similarly a <code>head</code> command that would show us a number of entries from the top. This is not useful in this particular instance.</p>
+
+<p>There is similarly a <code>head</code> command that would show us a number of entries from the top. It is not useful in this particular instance.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>What are the top 5 most frequent county names? Why does it make sense that these are popular county names?</li>
 </ol>
 
 <ol start="5" style="list-style-type: decimal">
-<li>We are curious to find out which states have a “Union County”. We will use the data table on the top left of the screen for this. If the county data is not visible there, double-click it in the Environment pane to bring up the data table. Use the filter option at the top right of the data table to only show the rows that contain the name “Union County”. How many of the original 13 colonies have a “Union” County?</li>
+<li>We are curious to find out which states have a “Union County”. We will use the data table on the top left of the screen for this. If the county data is not visible there, double-click it in the Environment pane to bring up the data table. Use the filter option at the top right of the data table to only show the rows that contain the name “Union County”. Which of the original confederate states (South Carolina, Mississippi, Florida, Alabama, Georgia, Louisiana and Texas) have a “Lincoln” County?</li>
 </ol>
 
 
@@ -77,11 +81,11 @@ favstats(~female, data=counties)</code></pre>
 </ol>
 
 <ol start="8" style="list-style-type: decimal">
-<li>Why does it make sense that the distribution is unimodal? Does the mode’s value make sense?</li>
+<li>Does the mode’s value make sense? Why does it make sense that the distribution is unimodal?</li>
 </ol>
 <p></p>
 <ol start="9" style="list-style-type: decimal">
-<li>Using the data table and sorting the female column, identify the 3 counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a larger male prison or military base compared to the county population. Does this explanation seem to apply to the 3 counties (Hint: Wikipedia or Google search)?</li>
+<li>Using the data table and sorting the <code>female</code> column, identify the 3 counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base compared to the county population. Does this explanation seem to apply to the 3 counties (Hint: Wikipedia or Google search)?</li>
 </ol>
 
 <ol start="10" style="list-style-type: decimal">
@@ -94,23 +98,23 @@ favstats(~female, data=counties)</code></pre>
 <li>Which state stands out as having counties which tend to have a low percentage of females? Why does that make sense?</li>
 </ol>
 
-<p>It is difficult from this boxplot to identify anything more than the most extreme cases. We can provide “less” information per state to enable us to compare the states more easily. For instance we can ask what the median is for each state of the female percentage by county:</p>
+<p>It is difficult from this boxplot to identify anything more than the most extreme cases. We can provide “less” information per state to enable us to compare the states more easily. For instance we can ask what the median is, for each state, of the female percentage by county:</p>
 <pre class="{r}"><code>median(~female|state, data=counties) %&gt;% sort()</code></pre>
 <p>For a visual depiction of this table, we can use a <strong>dotplot</strong>:</p>
 <pre class="{r}"><code>median(~female|state, data=counties) %&gt;% sort() %&gt;% dotplot()</code></pre>
-<p>We should point out that the values in this table are NOT the percent of females in the state. They are instead the median of the percentages of the various counties in the state. We will see a bit later how to compute the state-wide percentages by <em>aggregating</em> the data.</p>
+<p>We should point out that the values in this table are NOT the percent of females in the state. They are instead the medians of the percentages of the various counties in the state. We will see a bit later how to compute the state-wide percentages by <em>aggregating</em> the data.</p>
 
 <h5 id="digging-deeper" class="unnumbered">Digging Deeper</h5>
 <p>We might be interested in a single state and the distribution of female percentages in its counties.</p>
-<p>We can get a quick listing of these counties for a single state by typing the state name in the “filter” of the data table.</p>
+<p>We can get a quick listing of the counties for a single state by typing the state name in the “filter” box at the top right of the data table.</p>
 <ol start="12" style="list-style-type: decimal">
 <li>Use this method to find which county in Indiana has the highest female percentage. Is there a good explanation for why this county has such a high percentage?</li>
 </ol>
 
-<p>Alternatively, we can make a visual display by using a filter and dotplot:</p>
+<p>Alternatively, we can make a visual display by using a filter and dotplot. We will try this for the counties in Alaska. The first line below stores the Alaska county data under the name <code>alaskaCounties</code>:</p>
 <pre class="{r}"><code>alaskaCounties &lt;- counties %&gt;% filter(state==&quot;Alaska&quot;)
 dotplot(name~female, data = alaskaCounties)</code></pre>
-<p>You should also use the following two commands for alternative views of the same distribution:</p>
+<p>You should also use the following two commands for alternative views of the same distribution (don’t forget that you can use the arrow buttons in the <strong>plots</strong> pane to scroll back and forth through the graphs you have made):</p>
 <pre class="{r}"><code> bwplot(~female, data=alaskaCounties)
  histogram(~female, data=alaskaCounties, breaks=20, type=&quot;count&quot;)</code></pre>
 <ol start="13" style="list-style-type: decimal">

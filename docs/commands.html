@@ -241,7 +241,8 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <li><code>cex=...</code> can be used to change the size of the objects in the graph, 1 being the standard size. For instance <code>cex=1.2</code> will draw the objects 20% bigger.</li>
 <li><code>xlim=c(a, b)</code> sets the range on the x axis to be from <code>a</code> to <code>b</code>.</li>
 <li><code>ylim=c(a, b)</code> sets the range on the y axis to be from <code>a</code> to <code>b</code>.</li>
-<li><p><code>auto.key</code> and <code>key</code>: These options are used for to add <a href="#legend-specifications">legends</a> to graphs that need them. For details look at the corresponding section.</p></li>
+<li><code>auto.key</code> and <code>key</code>: These options are used for to add <a href="#legend-specifications">legends</a> to graphs that need them. For details look at the corresponding section.</li>
+<li><p><code>layout</code>: TODO</p></li>
 </ul>
 <h3 id="legend-specifications">Legend Specifications</h3>
 <p>Legends are needed when we use a grouping variable, to identify the different colors and symbols used. Adding a default legend is easy to do. However, customizing the legend and the graph in general becomes trickier.</p>
@@ -306,6 +307,7 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <h4 id="options-6">Options</h4>
 <ul>
 <li><code>horizontal</code>: By default the bars will be horizontal. If you would prefer vertical bars, add the option <code>horizontal=FALSE</code>.</li>
+<li><code>origin</code>: Barcharts should start at 0, but sometimes the default setting does not force that behavior. Set <code>origin=0</code> to achieve that.</li>
 </ul>
 <h4 id="examples-9">Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
@@ -314,6 +316,7 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
 <p>You may have to swap the two variables to get them in the desired order.</p>
+<p>seq quantile Histogram: breaks (both forms),</p>
 <h2 id="cleanup">Cleanup</h2>
 <ul>
 <li>bargraph (mosaic) MIGHT NOT NEED?</li>

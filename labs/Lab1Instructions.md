@@ -11,7 +11,7 @@ R is an open source tool for statistical computing and graphics, supported by th
 - create simple graphs and numerical summaries for variables
 - assign values to names for future use
 
-Specific R commands encountered: `data`, `help`, `View`, `nrow`, `favstats`, `histogram`, `%>%`
+Specific R commands introduced: `data`, `help`, `View`, `favstats`, `histogram`, `%>%`, `filter`
 
 ## Start RStudio and Get Your Bearings
 
@@ -129,7 +129,7 @@ In the Environment pane (upper right), you should now see a `counties` entry und
 View(counties)
 ```
 
-You can also bring up the documentation page for the dataset by running `?counties` in the Console.
+You should also bring up the documentation page for the dataset by running `?counties` or `help(counties)` in the Console.
 
 You can use the search box at the top right of the data view to filter the rows. For instance typing `Indiana` will show only the rows that have the word Indiana in one of their fields.
 
