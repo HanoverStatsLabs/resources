@@ -104,7 +104,7 @@ favstats(~female, data=counties)
 \vfill
 \newpage
 
-9. Using the data table and sorting the `female` column, identify the 3 counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base compared to the county population. Does this explanation seem to apply to the 3 counties (Hint: Wikipedia or Google search)?
+9. Using the data table and sorting the `female` column, identify the 3 counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base, relative to the overall county population. Does this explanation seem to apply to the 3 counties (Hint: Wikipedia or Google search)?
 
 \vfill
 
