@@ -27,7 +27,7 @@ We start similar to the last lab. We will start a new project based on a prepare
 - You should see that the data has 23 variables and over 1.3 million rows.
 - Use the `?` command *in the console* to view information about the brfss data file (the "codebook"):  `?brfss`
 
-## General Health (`genhealth`)
+## General Health
 
 1. Make a tally and a barchart (as you did for WeekDays in a previous lab) for the `genhealth` variable.  Which category of the variable is most frequent?
 2. It would be useful to have **percentages** rather than raw counts in our tally.  Add a *command option* by inserting the code `, format="percent"` before the closing parentheses of the tally command, like this:
@@ -53,14 +53,14 @@ We start similar to the last lab. We will start a new project based on a prepare
     To add a main title, like "Distribution of General Health", use the `main= option:
     ```{r}
     tally(~genhealth, data=brfss, format="percent", useNA="no") %>%
-    	barchart(col=brewer.pal(5, "YlGnBu"), xlab="Percent of Respondents",
-    		main="Distribution of General Health")
+        barchart(col=brewer.pal(5, "YlGnBu"), xlab="Percent of Respondents",
+            main="Distribution of General Health")
     ```
 
 5. **Pie charts** are popular, but also tend to be over-used.  Once in a while it's nice to have one, as long as "proportion of the whole" is the item of interest.  To show the `genhealth` responses in a pie chart, try the following:
     ```{r}
     tally(~genhealth, data=brfss, format="percent", useNA="no") %>%
-    	pie(col=brewer.pal(5, "YlGnBu"))
+        pie(col=brewer.pal(5, "YlGnBu"))
     ```
 
 ## General Health vs. Exercise
@@ -70,7 +70,7 @@ We start similar to the last lab. We will start a new project based on a prepare
 6. Make a tally of percentages for `genhealth` against `exerciseany`, and store the result:
     ```{r}
     healthVsExercise <- tally(~genhealth|exerciseany, data=brfss,
-    	format="percent", useNA="no")
+        format="percent", useNA="no")
     healthVsExercise
     ```
 
@@ -81,7 +81,7 @@ You should see a table with column-wise percentages.  Does it look like the "exe
     healthVsExercise %>% t() %>% barchart(auto.key=list(columns=3))
     healthVsExercise %>% t() %>% barchart(auto.key=list(space="top"))
     healthVsExercise %>% t() %>% barchart(auto.key=list(space="right"),
-    	main="General Health vs. Does the Respondent Ever Exercise")
+        main="General Health vs. Does the Respondent Ever Exercise")
     ```
 8. If you want to specify a color palette, you really have to dig deep.  Let's give it a try.  The `brewer` palette which ranges from red to purple will make an attractive spectrum.  Let's store it with 5 color values:
     ```{r}
@@ -98,7 +98,7 @@ You should see a table with column-wise percentages.  Does it look like the "exe
     Draw the stacked barchart with the new palette in both the bars and the legend, and give it a main title:
     ```{r}
     healthVsExercise %>% t() %>% barchart(col=myColors, key=myKey,
-    	main="General Health vs. Does the Respondent Ever Exercise")
+        main="General Health vs. Does the Respondent Ever Exercise")
     ```
     Does the relationship between `genhealth` and `exerciseany` prove that if a person exercises they will improve their health?  Explain.
 
@@ -116,7 +116,7 @@ Let's investigate the 3-way relationship among general health, income, and age. 
 
 ```{r}
 healthVsIncomeAndAge <- tally(~genhealth|income+age, data=brfss,
-	format="percent", useNA="no")
+    format="percent", useNA="no")
 healthVsIncomeAndAge
 ```
 
@@ -124,10 +124,68 @@ This makes a rather overwhelming table of numbers!  To help the average human ma
 
 ```{r}
 healthVsIncomeAndAge %>% aperm(c(2,3,1)) %>%
-	barchart(col=myColors, key=myKey)
+    barchart(col=myColors, key=myKey)
 ```
 
 12. For each age group, is it the case that those with higher income level report better general health?  Explain how you see this in the graph.
 
 13. Is the nature of the relationship between general health and income exactly the same across all ages, or do you notice it being weaker for some age groups?  Explain what you see and how that makes sense.
 
+## Height
+
+14. Draw a basic histogram of the `height` variable using the `brfss` data.  Is this a good view of the data?  Explain.
+
+15. In order to focus in on the typical values for the `height` variable, we can pipe the data through a filter to remove the tails.  Let's keep the middle 99% of the values.  First find the quantiles for 0.005 (the lowest 1/2-percent) and 0.995 (the highest 1/2-percent) and then them to form a subset of the heights:
+```{r}
+lowCutoff <- quantile(~height, data=brfss, na.rm=TRUE, probs=.005)
+highCutoff <- quantile(~height, data=brfss, na.rm=TRUE, probs=.995)
+heightSubset <- brfss %>%
+    filter(height >= lowCutoff & height <= highCutoff)
+```
+Now draw the filtered histogram:
+```{r}
+histogram(~height, data=heightSubset)
+```
+Describe what you see.  Can you explain why it looks like that?
+
+16. There is not *really* a gap in the middle of the data.  The appearance of a break is coming from integer data interacting badly with the breakpoints for creating the histogram bins.  One way to fix this is to put breaks specifically at all the ".5" marks on the horizonatal axis:
+```{r}
+myBreaks <- seq(from=lowCutoff - 0.5, to=highCutoff + 0.5, by=1)
+myBreaks
+histogram(~height, data=heightSubset, breaks=myBreaks)
+```
+Describe the height distribution.  Be sure to discuss, what are the typical heights for these respondents.
+
+## Height and Sex
+
+17. Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal.  Indeed, with a boxplot we can see this difference (include a `bwplot` of `sex~height` in your response to this question).  Can you explain why the histogram does not show a clear bimodal pattern?
+
+    As a companion to the `bwplot`, let's also make a histogram which is paneled by sex.  Notice the use of the formula `~height|sex` for height versus sex, and the `layout=c(1,2)` option for forcing the panels to line up vertically (1 column, 2 rows):
+    ```{r}
+    histogram(~height|sex, data=heightSubset, breaks=myBreaks, layout=c(1,2))
+    ```
+
+## Height and Weight
+
+In this section we investigate the relationship between `height` and `weight` for our respondents.  Because the data file is huge (over 1.3 million rows), we can save computing time by working with a random sample of the rows.
+
+18. Use the following commands to make a scatterplot of weight versus height for a sample of 30,000 rows from the `brfss` dataset (notice the use of the `slice` command to use a subset of the rows):
+
+```{r}
+mySample <- sample(1:nrow(brfss), 30000)
+summary(mySample)
+brfssSample <- brfss %>% slice(mySample)
+xyplot(weight~height, data=brfssSample)
+```
+
+Describe the overall pattern in the data.  Is there a relationship between height and weight for these subjects?
+
+19. One way to summarize the data in a scatterplot is to add a smooth fit line (notice that the "line" in this context might be curved).  Add the fit line with the `panel.loess` command (`lwd=` is an option for setting line width):
+```{r}
+ladd(panel.loess(x, y, col="darkgreen", lwd=2))
+```
+The smooth fit line is almost straight.  Does this mean there is a "strong" linear relationship between the two variables?  Explain.
+
+********************
+
+TODO: more options: pch, cex
