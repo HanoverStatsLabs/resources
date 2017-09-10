@@ -1,11 +1,12 @@
 \documentclass[12pt,letter]{article}
-\usepackage{bookman}
+\usepackage{lmodern}
+\usepackage{stix}
 \usepackage{amssymb,amsmath}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[vmargin=2cm,hmargin=2cm]{geometry}
 \usepackage{listings}
-\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily,showstringspaces=false,frame=single}}{}
 \usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -48,7 +49,7 @@ $endif$
 \begin{document}
 
 \newcommand{\makespace}{\vspace*{2.8cm}}
-\lstset{basicstyle=\footnotesize}
+\lstset{basicstyle=\footnotesize,showstringspaces=false,frame=single}
 
 $if(title)$
 \maketitle
