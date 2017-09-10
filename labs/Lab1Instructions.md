@@ -28,6 +28,12 @@ You interact with RStudio in two basic ways:
 - type the command directly in the Console pane and hit `<enter>`.
 - use the menus and buttons in various panes to perform some standard actions.
 
+We have prepared a package that puts together a number of useful commands and datasets. You should **always start your RStudio session by typing the following in the Console**, in order to load this package. Type this into the console now:
+```r
+library(hanoverbase)
+```
+Ignore the resulting output warnings.
+
 In addition to the Console pane, the RStudio user interface has many other components:
 
 - The *Environment* pane shows all the active objects in your current session.
@@ -37,12 +43,6 @@ In addition to the Console pane, the RStudio user interface has many other compo
 - The *Help* pane gives you access to R documentation for additional info on a command. The information provided by some documentation pages may be somewhat overwhelming and confusing. The [commands list page](../commands.md) on the website offers a more easily digestible amount of information, more suitable for beginners.
 
     **Help tip**: In the Console, use a prepended `?` to pull up the R documentation for any R command. For instance, typing `?print` in the console will bring up the documentation for the `print` command.
-
-We have prepared a package that puts together a number of useful commands and datasets. You should always start your RStudio session by typing the following in the Console, in order to load this package.
-```r
-library(hanoverbase)
-```
-Ignore the resulting output warnings.
 
 ## Working with the Console
 
@@ -62,16 +62,9 @@ You can see a list of all previously entered commands in the History pane, situa
 
 ### Scientific Notation
 
-To specify a large number such as 3.2 million, we generally use scientific notation. The multiplier goes first, then an `e` to separate the multipler from the exponent, then the actual exponent (desired power of 10). For example, since 1 million is `10^6`, we need `e6` to express the idea of 1 million.
+To specify a large number such as 3.2 million, we generally use scientific notation. The multiplier goes first, then an `e` to separate the multipler from the exponent, then the actual exponent (desired power of 10). For example, since 2 million is $3.2 \times 10^6$, we need `3.2e6` to express the idea of 3.2 million.
 
-Scientific notation is also helpful for indicating small values, such as 0.000007 (7 millionths), using negative exponents.
-
-Examples (try these yourself):
-```r
--8.7e9  #   -8.7 billion
-1e-1    #    0.1
-7e-6    #    0.000007
-```
+Scientific notation is also helpful for indicating small values, such as 0.007 (7 thousands), using negative exponents:  `7e-3`. Try these for yourself in the console.
 
 ### Variable Assignments
 
@@ -88,17 +81,7 @@ z <- x * y
 z
 ```
 
-If you have written the above correctly, the *Environment* pane will will show the current values of `x`, `y` and `z`.
-
-### Formulas
-
-We will use "formulas" in our graphing commands, to specify the variable(s) to display and any conditioning variables. Here are some examples (these will make more sense in future sections):
-
-- to display variable x alone we would use the formula:  `~x`
-- to display the numeric variable x for each level of factor A: `~x | A`
-- to display the relationship between numeric variables y and x (treating y as the response): `y~x`
-
-More explanation of formulas can be found at the [commands list page](../commands.md#the-formula-interface).
+If you have written the above correctly, the *Environment* pane will show the current values of `x`, `y` and `z`.
 
 ### The Piping Command
 
@@ -106,40 +89,55 @@ You will see the "pipe" operator, `%>%`, in some of the commands below. The pipe
 
 TRY THIS:
 ```r
-1:10               # the sequence 1 to 10
-1:10 %>% sum()     # sum of the sequence 1 to 10
-sum(1:10)          # The same thing
-1:10 %>% median()  # median of the sequence 1 to 10
+# Everything in a line following a pound sign (#) is a comment (R ignores it).
+# You don't need to type in the comments below.
+# We use comments to explain the meaning of the commands.
+1:10               # the sequence of all integers from 1 to 10
+sum(1:10)          # sum of the sequence 1 to 10
+1:10 %>% sum()     # the same thing, using a pipe
+median(1:10)       # median of the sequence 1 to 10
+1:10 %>% median()  # the same thing, using a pipe
 ```
+
+## Detecting Typing Errors in the Console
+Once the `hanoverbase` packase is loaded with the `library(hanoverbase)` command, any red messages in the console window indicate errors.  The most common error you may make is a "typo".  For example, you meant to type `View` but it came out as `view` or `Vview`. TRY THIS and notice the resulting error messages:
+```r
+summmm(1:10)
+mEdian(1:5)    # notice how the case (lower/upper) matters!
+```
+
+Another type of error, which will **not** give you a red error message, is entering a command which is incomplete.  For example, if you enter `sum(1:10`, and press `<enter>` without the closing parenthesis, R responds with a plus sign (+) reminding you to finish up the command. Your console will look like this:
+```r
+> sum(1:10
++
+```
+Notice that the "prompt" changed from the usual `>` to a plus sign `+`.  R is waiting for you to *continue* the previous line to properly finish the command.  Just type the closing parenthesis and hit `<enter>` (don't repeat the previous line). Alternatively, you can hit the `<escape>` key to cancel the last command and try again.
 
 ## Data Investigations
 
 ### Load Data and Start your Investigation
 
-The U.S. 2010 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties.
+The U.S. 2010 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties. (Always `View` the data when you load it. Notice that `View` starts with a *capital* `V`.)
 
 To load the data set, type:
 ```r
 data(counties)
-```
-
-In the Environment pane (upper right), you should now see a `counties` entry under Data. Click on that entry to view the data in its own pane. This the same as using the `View` command in the Console:
-
-```r
 View(counties)
 ```
+
+If this worked correctly, you now see the data view in the upper-left portion of the application.  **Stop and figure out the problem if this is not the case.**
+
+In the Environment pane (upper right), you should now see a `counties` entry under Data. It should tell you the number of observations (rows) and the number of variables (columns) in the data.
 
 You should also bring up the documentation page for the dataset by running `?counties` or `help(counties)` in the Console.
 
 You can use the search box at the top right of the data view to filter the rows. For instance typing `Indiana` will show only the rows that have the word Indiana in one of their fields.
 
-Notice that you can sort the data file according to any column by clicking the column headings (click again to change the sort direction).
-
-**Warning**: The `NA` (not available) answers will always sort at the bottom, whether you sort ascending or descending.
-
-Use scrolling and sorting to answer the following questions:
+Notice that you can **sort** the data file according to any column by clicking the column heading. Click a second time to sort in the opposite direction.  For example, try this out (using the `pop2010` column) to discover which U.S. county has the smallest population (2010) and which has the largest.
 
 \newpage
+
+Don't forget that you can use scrolling and sorting to answer some of the following questions.
 
 1. How many counties are there in the U.S.?
 
@@ -168,7 +166,7 @@ The most popular graph for showing the distribution of a single quantitative var
 ```r
 histogram(~pop2010, data=counties)
 ```
-You can get a bigger version of the graph by clicking the Zoom button in the *Plots* pane.
+**You may need to wait several seconds for the results.**  You can get a bigger version of the graph by clicking the Zoom button in the *Plots* pane.
 
 We can enhance our understanding of the distribution by producing summary statistics. The command `favstats` will give us the five-number summary and the mean for the distribution:
 ```r
@@ -194,7 +192,7 @@ histogram(~pop2010, data=counties %>% filter(pop2010 <= 2e6))
 
 \vfill
 
-7. The following command shows the percent of residents of each county that are foreign-born, broken down by state.
+7. The following command shows the percent of residents of each county that are foreign-born, broken down by state. You can enter the whole thing in a single line, or create line breaks with the `<enter>` key.
 
     ```r
     histogram(~foreign_born|state,
@@ -206,3 +204,5 @@ histogram(~pop2010, data=counties %>% filter(pop2010 <= 2e6))
 
 \vfill
 \vfill
+
+To end your RStudio session, simply click the red button at the top right and close the window.  If you're leaving the lab, log out of Windows.
