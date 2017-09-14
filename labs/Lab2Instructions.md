@@ -28,7 +28,7 @@ View(counties)
 
 Recall that categorical variables take values from a limited set of options, one value for each individual case. In our `counties` data set the "individual cases" are the U.S. counties.
 
-1. What are the categorical variables in the `counties` dataset? You may need to bring up the help file for `counties`.
+1. What are the categorical variables in the `counties` dataset? You may need to bring up the help file for `counties` using the `help(counties)` command.
 
 \vfill
 
@@ -76,7 +76,9 @@ There is similarly a `head` command that would show us a number of entries from 
 
 \vfill
 
-5. We are curious to find out which states have a "Union County". We will use the data table on the top left of the screen for this. If the county data is not visible there, double-click it in the Environment pane to bring up the data table. Use the filter option at the top right of the data table to only show the rows that contain the name "Union County". Which of the original confederate states (South Carolina, Mississippi, Florida, Alabama, Georgia, Louisiana and Texas) have a "Lincoln" County?
+5. We are curious to find out which states have a "Lincoln County". We will use the data table on the top left of the screen for this. If the county data is not visible there, double-click it in the Environment pane to bring up the data table. Use the filter option at the top right of the data table to only show the rows that contain the name "Lincoln County".
+
+    Which of the original confederate states (South Carolina, Mississippi, Florida, Alabama, Georgia, Louisiana and Texas) have a "Lincoln" County? Which of these are actually named in honor of Abraham Lincoln? (Hint: include the word "namesake" in your internet search string.)
 
 \vfill
 
@@ -95,7 +97,7 @@ histogram(~female, data=counties, breaks=40)
 favstats(~female, data=counties)
 ```
 
-7. Describe the distribution in plain English. Include a discussion of the range, shape and center.
+7. Describe the distribution in plain English. Include a discussion of the range, shape (number of modes, skewness) and center.
 
 \vfill
 
@@ -104,7 +106,7 @@ favstats(~female, data=counties)
 \vfill
 \newpage
 
-9. Using the data table and sorting the `female` column, identify the 3 counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base, relative to the overall county population. Does this explanation seem to apply to the 3 counties (Hint: Wikipedia or Google search)?
+9. Using the data table and sorting the `female` column, identify the three counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base, relative to the overall county population. Does this explanation seem to apply to the three counties (Hint: Wikipedia or Google search)?
 
 \vfill
 
@@ -144,7 +146,7 @@ We can get a quick listing of the counties for a single state by typing the stat
 
 \vfill
 
-Alternatively, we can make a visual display by using a filter and dotplot. We will try this for the counties in Alaska. The first line below stores the Alaska county data under the name `alaskaCounties`:
+Alternatively, we can make a visual display by using a filter and dotplot. We will try this for the counties in Alaska. The first line below stores the Alaska county data under the name `alaskaCounties`. **Note**: The two lines are two different commands. Be sure to press `enter` on the first before typing the second.
 ```{r}
 alaskaCounties <- counties %>% filter(state=="Alaska")
 dotplot(name~female, data = alaskaCounties)
@@ -156,7 +158,7 @@ You should also use the following two commands for alternative views of the same
  histogram(~female, data=alaskaCounties, breaks=20, type="count")
 ```
 
-13. Describe the pattern of the distribution of female percentages on the various counties in Alaska (typical values, outliers).
+13. Describe the pattern of the distribution of female percentages on the various counties in Alaska (typical values, outliers).  Also provide the county name for each outlier and its percent female population (2010).
 
 \vfill
 
