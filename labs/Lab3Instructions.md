@@ -22,6 +22,8 @@ In this lab we will learn how to:
 
 At the same time we will get a chance to practice the R commands we learned in the previous labs.
 
+New R commands introduced in this lab: `sum`, `panel.abline`, `ladd`.
+
 ## Creating an RStudio Project
 
 RStudio projects allow us to organize our work. A project is essentially a folder/directory of related files. You can easily start a new project or download someone else's project to start.
@@ -31,35 +33,42 @@ We have created a starting project for you. In order to set it up:
 - In RStudio, go to `File > New Project`. Choose "Version Control" from the "Create Project" dialog.
 - Choose "Git" and then paste the following URL into the "Repository URL" field:
 
-    `https://github.com/HanoverStatsLabs/Lab-Intro-RMarkdown`
-- Enter a name for the project directory. `Lab3_yourname` might be a reasonable choice.
-- Use the Browse button to choose the parent directory in which to save this project. You may want to create a new parent directory for this class, to hold all your projects for the class.
-- Click on "Create Project" to finalize the setup process.
+    ```
+    https://github.com/HanoverStatsLabs/Lab-Intro-RMarkdown
+    ```
+
+- Enter a name for the project directory. `Lab_3_yourname` might be a reasonable choice.
+- Click the **Browse** button to display a list of all the folders in your home directory on vault.
+- We will now create a parent folder to hold all of your lab assignments for this class. Click the **New Folder** button (lower left) and name your new folder something appropriate like, Math217Labs.  Click **Choose** (lower right) to make this the parent folder for Lab 3.
+- Click on **Create Project** to finalize the setup process.
+- In future labs, of course, you don't need to create a new parent folder, just use the Browse button to select Math217Labs as the parent folder.
 
 If all has gone well, you should now see the project files in the **Files pane** at the bottom right.
 
-The file we are interested in is called `Lab3Report.Rmd`. Click on it to open it up for editing. It should appear at the top left. We will work on this file in the subsequent sections.
+The file we are interested in is called `Lab3Report.Rmd`. Click on it to open it up for editing. It should appear at the top left of the application window. We will work on this file in the subsequent sections.
 
 ## Working with RMarkdown Documents
 
-RMarkdown documents typically start with a "header" section. In it you get to specify title, author and date for the report, as well as some other technical settings that we will not worry about right now. Take a moment to add your own information in the header fields. Make sure to save your edits before proceeding.
+RMarkdown documents typically start with a "header" section. In it you get to specify title, author and date for the report, as well as some other technical settings that we will not worry about right now. Take a moment to add your own information in the header fields. Make sure to save your edits (File > Save) before proceeding.
 
-The rest of the document contains the actual contents of your report.
+The rest of the RMarkdown document will contain the actual contents of your report.
 
 ### Exporting RMarkdown documents
 
 Exporting an RMarkdown into other formats is called **Knitting**. You will find a "Knit" pulldown at the top of the editing pane. Use the arrow to its right to select an output format. We will use "Knit to HTML" for now.
 
-DO NOW: Use "Knit to HTML" to create a compiled version of the report. You will need to do this frequently as you work on your report.
+DO NOW: Use "Knit to HTML" to create a compiled version of the report. You will need to do this frequently as you work on your report. If you get a popup blocker dialog, just click "Try again", and it should display your HTML file in its own window.
 
-If everything is in order you should see the output of your report so far. (Hint: You can customize where the output will be shown by changing the settings at `Tools > Global Options > R Markdown`.)
+If everything is in order you should see the output of your report so far. (Hint: You can customize where the output will be shown by changing the settings at `Tools > Global Options > R Markdown`.) Make sure you remembered to add your own title, name and date information to the header.
 
 ### Completing the Lab
 
-The first section of the lab 3 report is designed to introduce the main structures used in RMarkdown. Take a few minutes to compare the text in the RMarkdown window with the corresponding HTML output to learn how to add these basic structures.
+The first section of the Lab 3 report is designed to introduce the main structures used in RMarkdown. For example, you learn how to make boldfaced text, section headings, numbered lists, bulleted lists, and so on.
+
+DO NOW: Take a few minutes to compare the text in the RMarkdown window with the corresponding HTML output to learn how to make these basic structures.
 
 The subsequent sections contain the actual assignment, where you will be prompted to make statistical investigations and to document those investigations in the report. Follow those prompts to complete the assignment.
 
 ### Submissions
 
-You should always submit the RMarkdown document, as well as the knitted HTML file. You **must** make sure before you submit that the RMarkdown document knits without any errors and produces the desired HTML/PDF document.
+You should always submit the RMarkdown document as well as the knitted HTML file. You **must** make sure before you submit that the RMarkdown document knits without any errors and produces the desired HTML/PDF document.
