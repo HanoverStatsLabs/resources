@@ -162,4 +162,4 @@ You should also use the following two commands for alternative views of the same
 
 \vfill
 
-\newpage
+Please **click the red button (upper right)** to close your RStudio session when you are getting ready to leave the lab.
