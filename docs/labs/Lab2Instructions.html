@@ -71,10 +71,10 @@ View(counties)</code></pre>
 <h2 id="working-with-two-variables-of-a-dataset">Working with Two Variables of a Dataset</h2>
 <p>In most situations in statistics we deal with more than one variable at a time, and more specifically we are interested in the relationships between variables. For example, we may look at the percent of female population for each county as a variable on its own (one variable analysis), or we may look at how these percents vary across states (two variable analysis).</p>
 <ol start="6" style="list-style-type: decimal">
-<li>Let us start by looking at the <code>female</code> variable. Look at the help file for the <code>counties</code> dataset. What is the meaning of the <code>female</code> variable’s values?</li>
+<li>Let us start by looking at the <code>female</code> variable. Look at the help file for the <code>counties</code> dataset. Exactly what is being measured by the <code>female</code> variable?</li>
 </ol>
 
-<p>We can start our investigation by making a histogram and a five-number summary for the <code>female</code> variable:</p>
+<p>We can start our investigation by making a histogram and a five-number summary for the <code>female</code> variable. <strong>Note</strong>: The two lines are two different commands. Be sure to press <code>enter</code> on the first before typing the second.</p>
 <pre class="{r}"><code>histogram(~female, data=counties, breaks=40)
 favstats(~female, data=counties)</code></pre>
 <ol start="7" style="list-style-type: decimal">
@@ -88,15 +88,15 @@ favstats(~female, data=counties)</code></pre>
 <ol start="9" style="list-style-type: decimal">
 <li>Using the data table and sorting the <code>female</code> column, identify the three counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base, relative to the overall county population. Does this explanation seem to apply to the three counties (Hint: Wikipedia or Google search)?</li>
 </ol>
-
+<p></p>
 <ol start="10" style="list-style-type: decimal">
 <li>Which county has the highest female percentage? Can you explain the probable reason for that?</li>
 </ol>
-
+<p></p>
 <p>We would like to compare these female percentages across states. Are there states whose counties tend to have unusual gender disparity? Or is the gender distribution quite uniform across states? A first step to answering this would be a boxplot of the female percentage against the states:</p>
 <pre class="{r}"><code>bwplot(state~female, data=counties)</code></pre>
 <ol start="11" style="list-style-type: decimal">
-<li>Which state stands out as having counties which tend to have a low percentage of females? Why does that make sense?</li>
+<li>Which state stands out in that most of its counties have a relatively low percentage of females?</li>
 </ol>
 
 <p>It is difficult from this boxplot to identify anything more than the most extreme cases. We can provide “less” information per state to enable us to compare the states more easily. For instance we can ask what the median is, for each state, of the female percentage by county:</p>

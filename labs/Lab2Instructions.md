@@ -87,11 +87,12 @@ There is similarly a `head` command that would show us a number of entries from 
 
 In most situations in statistics we deal with more than one variable at a time, and more specifically we are interested in the relationships between variables. For example, we may look at the percent of female population for each county as a variable on its own (one variable analysis), or we may look at how these percents vary across states (two variable analysis).
 
-6. Let us start by looking at the `female` variable. Look at the help file for the `counties` dataset. What is the meaning of the `female` variable's values?
+6. Let us start by looking at the `female` variable. Look at the help file for the `counties` dataset. Exactly what is being measured by the `female` variable?
 
 \vfill
 
-We can start our investigation by making a histogram and a five-number summary for the `female` variable:
+We can start our investigation by making a histogram and a five-number summary for the `female` variable. **Note**: The two lines are two different commands. Be sure to press `enter` on the first before typing the second.
+
 ```{r}
 histogram(~female, data=counties, breaks=40)
 favstats(~female, data=counties)
@@ -109,9 +110,11 @@ favstats(~female, data=counties)
 9. Using the data table and sorting the `female` column, identify the three counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base, relative to the overall county population. Does this explanation seem to apply to the three counties (Hint: Wikipedia or Google search)?
 
 \vfill
+\vfill
 
 10. Which county has the highest female percentage? Can you explain the probable reason for that?
 
+\vfill
 \vfill
 
 We would like to compare these female percentages across states. Are there states whose counties tend to have unusual gender disparity? Or is the gender distribution quite uniform across states? A first step to answering this would be a boxplot of the female percentage against the states:
@@ -119,7 +122,7 @@ We would like to compare these female percentages across states. Are there state
 bwplot(state~female, data=counties)
 ```
 
-11. Which state stands out as having counties which tend to have a low percentage of females? Why does that make sense?
+11. Which state stands out in that most of its counties have a relatively low percentage of females?
 
 \vfill
 
