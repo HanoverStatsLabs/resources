@@ -71,5 +71,5 @@ The subsequent sections of the Lab 3 report contain the actual assignment, where
 
 When you are ready to submit:
 
-  - Knit and print the HTML document.  **Sumbit in class**.
+  - Knit and print the HTML document.  **Submit in class**.
   - Download the Lab3Report.Rmd file as follows.  In the **Files** pane, click the checkbox for the file, then choose `More > Export... > Download`. **Submit via Moodle**.

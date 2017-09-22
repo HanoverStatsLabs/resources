@@ -2,6 +2,8 @@
 
 This page contains links to the individual lab instructions for Math 217.
 
+**NOTE**: All these links take you to HTML versions of the labs. But if you change the link extension to ".pdf", you will get a more print-friendly version, with spacing for student answers to each question.
+
 - [Lab 1](labs/Lab1Instructions.md) introduces you to the RStudio environment and shows you how to carry out basic descriptive statistics.
 - [Lab 2](labs/Lab2Instructions.md) shows you how to create graphs and carry out basic one-variable and two-variable analyses.
 - [Lab 3](labs/Lab3Instructions.md) shows you how to use RMarkdown to structure your work and create your report all in one document.
