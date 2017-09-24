@@ -29,17 +29,18 @@ RStudio projects allow us to organize our work. A project is essentially a folde
 We have created a starting project for you. In order to set it up:
 
 - In RStudio, go to `File > New Project`. Choose "Version Control" from the "Create Project" dialog.
-- Choose "Git" and then enter the following URL into the "Repository URL" field. Either type the URL by hand (no spaces) or copy it from the HTML version.
+- Choose "Git".  You will then see three textboxes.
+- Click the **Browse** button to display a list of all the folders in your home directory on vault.
+- We will now create a parent folder to hold all of your lab assignments for this class. Click the **New Folder** button (lower left) and name your new folder something appropriate, like `Math217Labs`.  Click **Choose** (lower right) to make this the parent folder for Lab 3.
+- In future labs, of course, you don't need to create a new parent folder, just use the Browse button to select Math217Labs as the parent folder.
+- Enter the following URL into the "Repository URL" field but **DO NOT** press `<enter>` right away. Either type the URL by hand (no spaces) or copy it from the HTML version.
 
     ```
     https://github.com/HanoverStatsLabs/Lab-Intro-RMarkdown
     ```
 
-- Enter a name for the project directory. `Lab_3_yourname` might be a reasonable choice.
-- Click the **Browse** button to display a list of all the folders in your home directory on vault.
-- We will now create a parent folder to hold all of your lab assignments for this class. Click the **New Folder** button (lower left) and name your new folder something appropriate, like `Math217Labs`.  Click **Choose** (lower right) to make this the parent folder for Lab 3.
+- Move to the middle textbox and enter a name for the project directory. `Lab_3_yourname` might be a reasonable choice.
 - Click on **Create Project** to finalize the setup process.
-- In future labs, of course, you don't need to create a new parent folder, just use the Browse button to select Math217Labs as the parent folder.
 
 If all has gone well, you should now see the project files in the **Files pane** at the bottom right of RStudio.
 
@@ -72,4 +73,4 @@ The subsequent sections of the Lab 3 report contain the actual assignment, where
 When you are ready to submit:
 
   - Knit and print the HTML document.  **Submit in class**.
-  - Download the Lab3Report.Rmd file as follows.  In the **Files** pane, click the checkbox for the file, then choose `More > Export... > Download`. **Submit via Moodle**.
+  - Download the Lab3Report.Rmd file as follows.  In the **Files** pane, which is at the lower right of the application window, click the checkbox for the RMD file, then choose `More > Export... > Download`. **Submit via Moodle**.
