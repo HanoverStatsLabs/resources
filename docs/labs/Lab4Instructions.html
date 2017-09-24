@@ -24,84 +24,91 @@
 <li>review the common analysis techniques we have seen in previous labs,</li>
 <li>learn how to draw scatterplots.</li>
 </ul>
+<p>New R commands introduced in this lab: <code>$</code>, <code>c</code>, <code>ordered</code>, <code>print</code></p>
 <h2 id="creating-an-rstudio-project">Creating an RStudio Project</h2>
-<p>We start similar to the last lab. We will start a new project based on a prepared repository.</p>
+<p>We start similarly to the last lab. We will start a new project based on a prepared repository.</p>
 <ul>
-<li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>.</li>
-<li>Paste this URL in: <code>https://github.com/HanoverStatsLabs/Lab-Data-Import.git</code></li>
-<li>Press Tab to go to the next field — it should auto-complete the directory name.</li>
-<li>Make sure the parent directory is the correct one.</li>
-<li>Click <code>Create Project</code>.</li>
+<li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>. You will then see three textboxes.</li>
+<li>Verify that the directory listed in the third textbox is the one you created for your labs. If not, then click the <strong>Browse</strong> button to display a list of all the folders in your home directory on vault and choose the correct one.</li>
+<li><p>Enter the following URL into the “Repository URL” field but <strong>DO NOT</strong> press <code>&lt;enter&gt;</code> right away. Either type the URL by hand (no spaces) or copy it from the HTML version.</p>
+<pre><code>https://github.com/HanoverStatsLabs/Lab-Data-Import.git</code></pre></li>
+<li>Move to the middle textbox and enter a name for the project directory. <code>Lab_4_yourname</code> might be a reasonable choice.</li>
+<li>Click on <strong>Create Project</strong> to finalize the setup process.</li>
 <li>Your Files pane should now show the provided files, in particular a file titled <code>Lab4Report.Rmd</code>. Click the file name to edit the file.</li>
 <li>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</li>
+<li><strong>DO NOW</strong>: Edit the header section to add your own title, name, and date.</li>
+<li><p>Before moving on, make sure to <strong>run the chunk</strong> which contains the instruction <code>library(hanoverbase)</code>.</p></li>
 </ul>
 <h2 id="importing-data">Importing Data</h2>
-<p>In the previous labs we have prepared the data for you in R’s built-in system. But data you find in the real world is not typically in this form. It may be an Excel file, a comma-separated-format file (CSV) or many other formats. RStudio has built-in ways to read CSV and Excel files. Some other more obscure formats may need more work and specific instructions.</p>
+<p>In the previous labs we have prepared the data for you in R’s built-in system. But data you find in the real world is not typically in this form. It may be an Excel file, a comma-separated-format file (CSV) or one of many other formats. RStudio has built-in ways to read CSV and Excel files. Some other more obscure formats may need more work and specific instructions.</p>
 <p>For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.</p>
 <ul>
 <li>Go to <code>File &gt; Import Dataset &gt; From CSV ...</code></li>
 <li>Paste in the following URL: <code>https://hanoverstatslabs.github.io/resources/datasets/driving.csv</code></li>
-<li>Click on Update and you should see the data in the Preview Window. We will need to now make sure it is being read correctly before doing the actual import.</li>
+<li>Click the <strong>Update</strong> button to the right of the URL and you should see the data in the Preview Window. We now need to make sure the data is being read correctly before doing the actual import.</li>
 </ul>
-<p>This data contains information recorded over the Fall 2007-2008 when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.</p>
+<p>This data contains information recorded over the Fall 2007-2008 term when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.</p>
 <ul>
 <li>Checking for misalignments:
 <ul>
 <li>Sometimes programs misidentify the column separators and may misalign some columns.</li>
-<li>Scroll through the file to make sure that what shows up in each column makes sense for that column.</li>
-<li>You should find at least some unusual values in the time column. We will worry about them later.</li>
+<li>Scroll through the file to make sure that what shows up in each column makes sense for that column. <strong>HINT</strong> If you can only see one row of data at a time, make the font smaller in the Import window.</li>
 </ul></li>
-<li>Setting column types:
+<li>Setting the column types:
 <ul>
-<li>Especially in this data, many columns have “non-standard” types. For example the first column (Day) is supposed to be a date. The system is smart enough to do the right thing in most cases, but if after importing you find that a column has been misidentified, then you can go back to the Import Dataset dialog and choose a type for each column by clicking at the pulldown in the column heading.</li>
-<li>In that same pulldown you can also tell it to skip a column.</li>
-<li>For now we will let RStudio guess the types.</li>
+<li>For each column in the data, RStudio needs to know the type of values for that column (integer, character, date, etc.). The system is usually smart enough to do the right thing.</li>
+<li>For this data set, we will let RStudio “guess” the types as best it can.</li>
+<li>If you ever find that RStudio did not guess the type correctly, you can use the column heading in the import dialog to specify a type (or have RStudio skip a column entirely if you don’t really need it).</li>
+<li>Click the <strong>Import</strong> button.</li>
 </ul></li>
 <li>Copying the appropriate code:
 <ul>
-<li>The code for importing the dataset must be part of our final report. For that reason we need the code that does the importing added to our report file.</li>
-<li>However RStudio will instead run that code in the console. So, before you click the Import button, copy the text in the “Code Preview” window, excluding the last (“View”) command.</li>
-<li>Click Import, and you should see the dataset. If it looks OK, then go to your report and add a code chunk containing the code your copied. You should set your code chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
-<li>This will ensure that when anyone compiles the report, the dataset will be loaded.</li>
-<li>Take a moment to look at these two lines of code. The first loads a new package (“library”) called <code>readr</code>. This contains useful functions for loading new data. The second line uses the <code>read_csv</code> method from this package to load the data and stores it in the name <code>driving</code>. You can access this data in the rest of your report via this name.</li>
+<li>If the import went okay, you should now see the dataset in the data view. If it looks OK, then go to your report and add a new code chunk below the existing code chunks.</li>
+<li>Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
+<li>From the Console, one at a time, copy the two lines that were run in the console (from clicking the Import button). Do not copy the <code>&gt;</code> prompt. The first line to be copied is <code>library(readr)</code>. The second starts with <code>driving &lt;-</code>.</li>
+<li>This code chunk will ensure that when anyone compiles the report, the dataset will be loaded and ready to use.</li>
 </ul></li>
 </ul>
-<p>Before we move on, there is one more step we must take with the data. The <code>weekDay</code> column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative. For that you would need to run the following commands (make sure to include them in the code chunk you created earlier).</p>
+<p>Take a moment to look at the two lines of code in your new chunk. The first line loads a new package (“library”) called <code>readr</code>. This package contains useful functions for loading new data. The second line uses the <code>read_csv</code> method from this package to load the data and stores it in the name <code>driving</code>. You can access this data in the rest of your report via this name.</p>
+<p>Before we move on, there is one more step we must take with the data. The <code>weekDay</code> column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative. For that you will need to run the following commands (make sure to include them in the code chunk you created earlier and to run the chunk).</p>
 <pre class="{r}"><code>days &lt;- c(&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;)
-weekdayOrdered &lt;- ordered(driving$weekDay, labels=days)
+weekdayOrdered &lt;- driving$weekDay %&gt;% ordered(labels=days)
 driving$weekDay &lt;- weekdayOrdered</code></pre>
+<p>If you look at the data table after running the chunk, you should see the 3-letter abbreviations in the weekDay column instead of number codes.</p>
 <h3 id="sidebar-workflow-practices">Sidebar: Workflow practices</h3>
-<p>Working in the reports as opposed to the console can get confusing. And complicated commands have many steps and many places where things can go wrong. A simple workflow to follow is the following:</p>
+<p>Working in the R Markdown document as opposed to working in the console can get confusing. And complicated commands have many steps and many places where things can go wrong. A simple workflow to follow is the following:</p>
 <ol style="list-style-type: decimal">
-<li>Start a code chunk, using the Insert Pulldown.</li>
-<li>Enter a single line of code and execute it via the “Run &gt; Selected Line” from the pulldown. This will run just the current line, not the whole chunk.</li>
-<li>Make sure that line’s output is correct before proceeding to the next line. If that line was an assignment, there is no output by default, but you can use the Environment pane to look at the assigned value or a new line of code asking for that assigned value.</li>
+<li>Make a code chunk using the <strong>Insert</strong> pulldown.</li>
+<li>Enter a single line of code into the chunk and execute it via the “Run &gt; Selected Line” from the <strong>Run</strong> pulldown. This will run just the current line in the console.</li>
+<li>Make sure that line’s output is correct before proceeding to the next line. If that line was an assignment then there is no output by default, but you can use the Environment pane to look at the assigned value or add a new line of code asking for that assigned value.</li>
 </ol>
-<p>For example, when trying the above commands, we may do the following:</p>
+<p>For example, when trying the above commands, we may do the following (<strong>DO NOT</strong> really do this now, since we’ve already run these commands; just think about it):</p>
 <ol style="list-style-type: decimal">
-<li>Type the first command, (<code>dayNames &lt;- ...</code>) and run it.</li>
-<li>Add a second command saying just <code>dayNames</code> and run it. This will print out what <code>dayNames</code> is. You can then remove that second line.</li>
-<li>Alternatively you can look in the Environment pane, to make sure that the <code>dayNames</code> value looks correct.</li>
+<li>Type the first command, (<code>days &lt;- ...</code>) and run it.</li>
+<li>Add a second command saying just <code>days</code> and run it. This will print out what <code>days</code> is. You can then remove that second line. Alternatively you can look in the Environment pane, to make sure that the <code>days</code> value looks correct.</li>
 <li>Repeat for each line.</li>
 </ol>
 <h3 id="explanation-of-the-three-lines">Explanation of the three lines</h3>
 <p>The three lines we used above introduced some new features.</p>
 <ul>
 <li>The first is the use of the <code>c</code> command, to “concatenate” items into a list. The result is technically called a “vector” in R.</li>
-<li>The second line used the <code>ordered</code> command to turn the weekDay variable from the data into a categorical (ordinal) variable. We had to provide it the variable’s name (<code>driving$weekDay</code>) and a list of the labels to use (<code>labels=dayNames</code>).</li>
-<li>This also introduced the “dollar sign” syntax. This has the general form <code>&lt;dataset&gt;$&lt;columnName&gt;</code> and it is used to access an individual column in a dataset. It is not needed when we use the <code>data=&lt;dataset&gt;</code> syntax, but not all commands can use that syntax.</li>
+<li>The second line used the <code>ordered</code> command to turn the weekDay variable from the data into a categorical (ordinal) variable. We had to provide it the variable’s name (<code>driving$weekDay</code>) and a list of the labels to use (<code>labels=days</code>).</li>
+<li>This also introduced the “dollar sign” syntax, which has the general form <code>&lt;dataset&gt;$&lt;columnName&gt;</code> and it is used to access an individual column in a dataset. It is not needed when we use the <code>data=&lt;dataset&gt;</code> syntax, but not all commands can use that syntax.</li>
 <li>In general you only need this syntax when changing a variable in a dataset, or want to create a new variable in a dataset.</li>
 </ul>
 <h2 id="statistical-investigations">Statistical Investigations</h2>
+<p><strong>Important formatting note</strong>: As you work through this lab assignment, you should use section headings, subsection headings, numbered lists, unnumbered lists, etc. to organize your work and make it easy for your reader to follow. You can refer to the <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a> for help with creating these effects.</p>
+<p><strong>R Chunks</strong>: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.</p>
+<p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?</p>
 <h3 id="week-days">Week Days</h3>
 <p>The first set of questions relates to the various days of the week present in the dataset. You should do both a frequency table (<code>tally</code>) and a barchart of the weekDay variable.</p>
 <ol style="list-style-type: decimal">
-<li>The instructor was teaching only four days a week. Determine the workday on which the instructor was not teaching.</li>
-<li>Looking at the weekday frequencies, explain why most of them are even. How do you explain those that are not?</li>
-<li>What would you expect the typical value for the workday frequencies to be, based on Hanover College calendar? How does that match the data? How do you explain the workday values that deviate from the expected typical?</li>
+<li>The instructor was teaching only four days a week. Determine the workday on which the instructor was not teaching. Explain.</li>
+<li>Looking at the weekday frequencies, explain why most of the frequencies are even. How do you explain those that are not?</li>
+<li>What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?</li>
 </ol>
 <h3 id="distance-traveled">Distance Traveled</h3>
-<p>In this set of question we will investigate the distribution of the <code>miles</code> variable, which records the miles traveled per trip as a difference of the mileages recorded in the car’s odometer. You will likely need several outputs:</p>
+<p>In this set of questions we will investigate the distribution of the <code>miles</code> variable, which records the miles traveled per trip as a difference of the mileages recorded by the car’s odometer. You will likely need several outputs:</p>
 <ul>
 <li>a summary (<code>favstats</code>) of the <code>miles</code> variable,</li>
 <li>a histogram of the <code>miles</code> variable,</li>
@@ -109,13 +116,14 @@ driving$weekDay &lt;- weekdayOrdered</code></pre>
 <li>a boxplot of <code>miles</code> against <code>direction</code> (possibly filtered as above), and</li>
 <li>a median or summary of the <code>miles</code> against <code>direction</code>.</li>
 </ul>
+<p>Here are the questions for you to answer.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>What is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?</li>
 <li>The distribution should appear skewed to the right with a very sharp drop-off to the left, and some high outliers to the right. Explain why we might expect these three behaviors in this dataset.</li>
-<li>When focusing on the values below 48 miles, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for presence of these modes that would account for their similar frequencies.</li>
+<li>When focusing on the values below 48 miles, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for the presence of these modes that would account for their similar frequencies.</li>
 </ol>
 <h3 id="driving-times">Driving Times</h3>
-<p>The (elapsed) <code>time</code> variable is calculated as the difference in minutes between the instructor’s departure time and arrival time. We should do the following summaries:</p>
+<p>The (elapsed) <code>time</code> variable is calculated as the difference in minutes between the instructor’s departure time and arrival time. We should create the following summaries:</p>
 <ul>
 <li>A <code>favstats</code> summary and a histogram of the <code>time</code> variable.</li>
 <li><p>Two <code>xyplot</code>s (scatterplots) of the <code>time</code> variable against the <code>miles</code> variable. In the first plot we exclude three particularly unusual/incorrect time values, and in the second plot we restrict further to the “<code>miles &lt; 50</code>” region containing the typical distances. Use the following commands for this:</p>
@@ -123,19 +131,21 @@ driving$weekDay &lt;- weekdayOrdered</code></pre>
 print(scatter1)
 scatter2 &lt;- xyplot(time~miles, data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50))
 print(scatter2)</code></pre>
-<p>Note that we actually “stored” the graphs in names, and referred to those names to display the graphs in the <code>print</code> commands. In general you can store graphs this way and process them further in later commands.</p></li>
+<p>Note that we actually “stored” the graphs in names, and referred to those names to display the graphs with the <code>print</code> commands. In general, you can store graphs this way and process them further in later commands.</p></li>
 </ul>
-<p>Here are some questions to consider:</p>
+<p>Here are the questions for you to answer.</p>
 <ol start="7" style="list-style-type: decimal">
 <li>Discuss the distribution of the time variable, including any unusual observations and plausible explanations for the various aspects of the distribution.</li>
 <li>Describe the relationship between the <code>time</code> variable and the <code>miles</code> variable. What is the overall pattern, how does it make sense? Are there deviations? How strong is the relationship?</li>
-<li><p>For this question, we are adding to the scatterplots from earlier straight lines at the 55 mph speed limit (60 minutes per 55 miles, which gives the value for the slope <code>b</code>):</p>
+<li><p>For this question, we are enhancing the scatterplots from above by adding straight lines at the 55 mph speed limit. Note that 55 mph corresponds to 60 minutes per 55 miles, making the slope of the line (<code>b</code>) equal to <code>60/55</code>):</p>
 <pre class="{r}"><code>ladd(panel.abline(a=0, b=60/55), plot=scatter1)
 ladd(panel.abline(a=0, b=60/55), plot=scatter2)</code></pre>
 How are the various points in the graph positioned relative to these lines? What does this tell you about the instructor’s driving habits?</li>
-<li><p>We will now color the points in the scatterplot based on the direction (we will learn more about the special graph settings used in a future lab):</p>
-<pre class="{r}"><code>xyplot(time~miles, data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50), groups=direction, pch=19, auto.key=TRUE)</code></pre>
-<p>What pattern do you see in the colors, how do you explain it?</p></li>
+<li><p>We will now color the points in the scatterplot based on the direction of travel (we will learn more about the special graph settings used in a future lab):</p>
+<pre class="{r}"><code>xyplot(time~miles, data=driving %&gt;%
+    filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50),
+    groups=direction, pch=19, auto.key=TRUE)</code></pre>
+<p>What pattern do you see in the colors? How do you explain it?</p></li>
 </ol>
 </body>
 </html>
