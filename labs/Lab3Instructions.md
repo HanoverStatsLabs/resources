@@ -58,15 +58,13 @@ Exporting an RMarkdown document into other formats is called **Knitting**. You w
 
 DO NOW: Use **Knit to HTML** to create a compiled version of the report. You will need to do this frequently as you work on your report.
 
-If everything is in order you should see the output of your report so far. Make sure you have added your own title, name and date information to the header.
+You will likely see a pop-up blocker dialog, click **Try Again** to have the output report show up on a new browser window. Make sure you have added your own title, name and date information to the header.
+
+As this pop-up can get quite annoying after a while, you may wish to tell RStudio to instead show the output in the bottom right **Viewer** pane. To set that as the default behavior, go to `Tools > Global Options ... > R Markdown > Show output preview in:`, change that to "Viewer Pane" and click **Apply** and **OK**.
 
 ### Completing the Lab
 
-The first section of the Lab 3 report is designed to introduce the main structures used in RMarkdown. For example, you learn how to make boldfaced text, section headings, numbered lists, bulleted lists, and so on.
-
-DO NOW: Take a few minutes to compare the text in the RMarkdown window with the corresponding HTML output to learn how to make these basic structures.
-
-The subsequent sections of the Lab 3 report contain the actual assignment, where you will be prompted to make statistical investigations and to document those investigations in the report. Follow those prompts to complete the assignment.
+The first section of the Lab 3 report introduces R Code chunks, which are the way to combine our code with the report text. The subsequent sections contain the actual assignment, where you will be prompted to make statistical investigations and to document those investigations in the report. Follow those prompts to complete the assignment.
 
 ### Submissions
 
