@@ -70,5 +70,6 @@ The first section of the Lab 3 report introduces R Code chunks, which are the wa
 
 When you are ready to submit:
 
-  - Knit and print the HTML document.  **Submit in class**.
-  - Download the Lab3Report.Rmd file as follows.  In the **Files** pane, which is at the lower right of the application window, click the checkbox for the RMD file, then choose `More > Export... > Download`. **Submit via Moodle**.
+- Make sure to knit the final report before downloading.
+- Download the Lab3Report.Rmd file as follows.  In the **Files** pane, which is at the lower right of the application window, click the checkbox for the RMD file, then choose `More > Export... > Download`. Do the same for Lab3Report.html.
+- **Submit both files via Moodle**.
