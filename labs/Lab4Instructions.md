@@ -91,9 +91,9 @@ The two lines we used above introduced some new features:
 
 The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (`tally`) and a barchart of the weekDay variable.
 
-1. The instructor was teaching only four days a week. Determine the workday on which the instructor was not teaching. Explain.
-2. Looking at the weekday frequencies, explain why most of the frequencies are even numbers. How do you explain those that are odd numbers?
-3. What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar (13 full weeks of Fall classes plus an exam week)? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?
+1. The instructor was teaching only four days a week. Which do you think is the workday on which the instructor was not teaching? Explain.
+2. Looking at the weekday frequencies, explain why most of the frequencies are even. How do you explain those that are not?
+3. What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?
 
 ### Distance Traveled
 
