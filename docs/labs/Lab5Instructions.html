@@ -15,130 +15,127 @@
 <body>
 <h1 id="lab-5-customizing-graphs-in-r">Lab 5: Customizing Graphs in R</h1>
 <h2 id="introduction">Introduction</h2>
-<p>TODO</p>
-<p>Introduce mosaic plots.</p>
+<p>In this lab we learn how to</p>
+<h2 id="overall-goals">Overall Goals</h2>
+<p>In this lab we will:</p>
+<p>New R commands introduced in this lab:</p>
 <h2 id="start-a-new-project-in-rstudio">Start a New Project in RStudio</h2>
 <p>We start similar to the last lab. We will start a new project based on a prepared repository.</p>
 <ul>
+<li>In your web browser, open this Lab 5 assignment from the HanoverStatsLabs website. You will need to copy-paste a link from it in a few steps.</li>
 <li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>.</li>
-<li>Paste this URL in: <code>https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git</code></li>
-<li>Press Tab to go to the next field — it should auto-complete the directory name.</li>
+<li><p>Paste this URL in but <strong>DO NOT</strong> press <code>&lt;enter&gt;</code> right away:</p>
+<pre><code>https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git</code></pre></li>
+<li>Press Tab to go to the next field — it should auto-complete the directory name. Change it, if you want, to <code>lab_5_yourname</code>.</li>
 <li>Make sure the parent directory is the folder where you want to keep your projects for this class.</li>
 <li>Click <code>Create Project</code>.</li>
 <li>Your Files pane should now show the provided files, in particular a file titled <code>Lab5Report.Rmd</code>. Click the file name to edit the file, and then run all the R chunks.</li>
+<li><p>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</p></li>
+</ul>
+<h2 id="creating-an-rstudio-project">Creating an RStudio Project</h2>
+<p>We start similarly to the last lab. We will start a new project based on a prepared repository.</p>
+<ul>
+<li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>. You will then see three textboxes.</li>
+<li>Verify that the directory listed in the third textbox is the one you created for your labs. If not, then click the <strong>Browse</strong> button to display a list of all the folders in your home directory on vault and choose the correct one.</li>
+<li><p>Copy the following URL from the HTML page and paste it into the “Repository URL” field but <strong>DO NOT</strong> press <code>&lt;enter&gt;</code> right away.</p>
+<pre><code>https://github.com/HanoverStatsLabs/Lab-Data-Import.git</code></pre></li>
+<li>Click on <strong>Create Project</strong> to finalize the setup process.</li>
+<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab5Report.Rmd</code>. Click the file name to edit the file.</li>
 <li>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</li>
+<li><strong>DO NOW</strong>: Edit the header section to add your own title, name, and date.</li>
+<li><p>Before moving on, make sure to <strong>run the chunk</strong> which contains the instruction <code>library(hanoverbase)</code>.</p></li>
 </ul>
 <h2 id="import-and-view-dataset">Import and View Dataset</h2>
 <ul>
-<li>Use the <code>data</code> command to load the dataset named <code>brfss</code>. Include this in an R chunk in your report.</li>
-<li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the <code>?</code> command should not be put into your report.</li>
-<li>You should see that the data has 23 variables and over 1.3 million rows.</li>
+<li>In your R Markdown report, make a new R code chunk. In the new chunk, use the <code>data</code> command to load the dataset named <code>brfss</code>; <strong>run this chunk</strong>.</li>
+<li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the <code>?</code> command should not be put into your R Markdown report.</li>
+<li>You should see that the data has 24 variables and over 1.3 million rows.</li>
 <li>Use the <code>?</code> command <em>in the console</em> to view information about the brfss data file (the “codebook”): <code>?brfss</code></li>
 </ul>
+<h2 id="statistical-investigations">Statistical Investigations</h2>
+<p><strong>Important formatting note</strong>: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report. You should use section headings, subsection headings, numbered lists, unnumbered lists, etc. to organize your work and make it easy for your reader to follow. You can refer to the <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a> for help with creating these effects.</p>
+<p><strong>R Chunks</strong>: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.</p>
+<p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?</p>
 <h2 id="general-health">General Health</h2>
 <ol style="list-style-type: decimal">
-<li>Make a tally and a barchart (as you did for WeekDays in a previous lab) for the <code>genhealth</code> variable. Which category of the variable is most frequent?</li>
+<li>Make a tally and a barchart (as you did for WeekDays in a previous lab) for the <code>genhealth</code> variable. Which category of the variable is the most frequent?</li>
 <li><p>It would be useful to have <strong>percentages</strong> rather than raw counts in our tally. Add a <em>command option</em> by inserting the code <code>, format=&quot;percent&quot;</code> before the closing parentheses of the tally command, like this:</p>
-<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;)</code></pre>
-What percent of respondents report being in either “Very good” or “Excellent” health? What percent of respondents did not answer the question (NA)?</li>
-<li><p>In the barchart, we like to have control of the <strong>bar colors</strong>. This is controlled with the <code>col=</code> option. For example, add the option <code>, col=&quot;green&quot;</code> to redraw the <code>genhealth</code> barchart with green bars.</p>
-<p>To see all the named colors, use the command <code>colors()</code>. (Do this in the console, or hide the output if you put it into a code chunk – it’s a <em>long</em> list.) Experiment with some of the named colors to find one you like, and include that plotting command in your report.</p>
-<p>To make gradations or use colors from other sorts of palettes, you can use the RColorBrewer package. To learn more details of working with color palettes, and colors in general, see the Colors section of the <a href="../commands.html">commands documentation</a>. For instance, try the following:</p>
-<pre class="{r}"><code>tally(~genhealth, data=brfss) %&gt;% barchart(col=brewer.pal(5, &quot;YlGnBu&quot;))</code></pre></li>
-<li><p>Up to this point, we have been uncritical of the default <strong>chart labeling</strong>. Let’s see how to take control of this in R. In particular, for our barchart, we should improve the x-axis label and add an overall title.</p>
-<p>A correct label for the x-axis is “Percent of Respondents”. To add an x-axis label, use the `xlab= option, as follows:</p>
-<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;% barchart(col=brewer.pal(5, &quot;YlGnBu&quot;), xlab=&quot;Percent of Respondents&quot;)</code></pre>
-<p>To add a main title, like “Distribution of General Health”, use the `main= option:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;)</code></pre>
+<p>What percent of respondents report being in either “Very good” or “Excellent” health? What percent of respondents did not answer the question (NA)?</p></li>
+</ol>
+<p>In the barchart, we like to have control of the <strong>bar colors</strong>. This is controlled with the <code>col=</code> option. For example, add the option <code>col=&quot;green&quot;</code> to redraw the <code>genhealth</code> barchart with green bars.</p>
+<p>To see all the named colors, use the command <code>colors()</code>. (Do this in the console, or hide the output if you put it into a code chunk – it’s a <em>long</em> list.) Experiment with some of the named colors to find one you like, and include that in the barchart command in your report.</p>
+<p>To make gradations or use colors from other sorts of palettes, you can use the RColorBrewer package. To learn more details of working with color palettes, and with colors in general, see the Color Specifications section of the <a href="../commands.html">commands documentation</a>. For instance, try the following:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss) %&gt;% barchart(col=brewer.pal(5, &quot;YlGnBu&quot;))</code></pre>
+<p>Up to this point, we have been uncritical of the default <strong>chart labeling</strong>. Let’s see how to take control of this in R. In particular, for our barchart, we should improve the x-axis label and add an overall title.</p>
+<p>A correct label for the x-axis is “Percent of Respondents”. To add an x-axis label, use the <code>xlab=</code> option, as follows:</p>
+<pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;%
+    barchart(col=brewer.pal(5, &quot;YlGnBu&quot;), xlab=&quot;Percent of Respondents&quot;)</code></pre>
+<p>To add a main title, like “Distribution of General Health”, use the <code>main=</code> option:</p>
 <pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;%
     barchart(col=brewer.pal(5, &quot;YlGnBu&quot;), xlab=&quot;Percent of Respondents&quot;,
-        main=&quot;Distribution of General Health&quot;)</code></pre></li>
-<li><p><strong>Pie charts</strong> are popular, but also tend to be over-used. Once in a while it’s nice to have one, as long as “proportion of the whole” is the item of interest. To show the <code>genhealth</code> responses in a pie chart, try the following:</p>
+        main=&quot;Distribution of General Health&quot;)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p><strong>Pie charts</strong> are popular, but also tend to be over-used. Once in a while it’s nice to have one, as long as “proportion of the whole” is the item of interest. To show the <code>genhealth</code> responses in a pie chart, try piping the tally into a piechart command, as follows:</p>
 <pre class="{r}"><code>tally(~genhealth, data=brfss, format=&quot;percent&quot;, useNA=&quot;no&quot;) %&gt;%
-    pie(col=brewer.pal(5, &quot;YlGnBu&quot;))</code></pre></li>
+    pie(col=brewer.pal(5, &quot;YlGnBu&quot;))</code></pre>
+<p>Compare the piechart and the barchart. Describe an aspect of the distribution which is obvious from the piechart but not from the barchart. Then, do the opposite: find an aspect which is clear in the barchart but not in the piechart.</p></li>
 </ol>
 <h2 id="general-health-vs.exercise">General Health vs. Exercise</h2>
-<p><strong>Stacked bar graphs</strong> are nice for visualizing the relationship between two categorical variables. Unfortunately, this is one of the tricker plots to make in R. Suppose we’re interested in the relationship between <code>genhealth</code> and <code>exerciseany</code>. We expect to see that those respondents who never exercise have worse general health.</p>
-<ol start="6" style="list-style-type: decimal">
+<p><strong>Stacked bar graphs</strong> are nice for visualizing the relationship between two categorical variables. Unfortunately, this is one of the trickier plots to make in R. Suppose we’re interested in the relationship between <code>genhealth</code> and <code>exerciseany</code>. We expect to see that those respondents who never exercise have worse general health (right?).</p>
+<ol start="4" style="list-style-type: decimal">
 <li><p>Make a tally of percentages for <code>genhealth</code> against <code>exerciseany</code>, and store the result:</p>
 <pre class="{r}"><code>healthVsExercise &lt;- tally(~genhealth|exerciseany, data=brfss,
     format=&quot;percent&quot;, useNA=&quot;no&quot;)
-healthVsExercise</code></pre></li>
+healthVsExercise</code></pre>
+<p>You should see a table with column-wise percentages. This means that the percentages <strong>in each column</strong> add up to 100%. So, for example, we can see that about 21.6% of the respondents <em>who exercise</em> report having excellent health.</p>
+<p>What percent of the “non-exercisers” report having excellent health? Does it look like the “exercisers” tend to have better general health than the “non-exercisers”? Explain.</p></li>
+<li><p>To show the data as a stacked bar graph, we will basically pipe the table into a <code>barchart</code> command. However, because of the limitations of the <code>barchart</code> command, we have to transpose the table (swap the rows and columns) before piping it into the barchart.</p></li>
 </ol>
-<p>You should see a table with column-wise percentages. Does it look like the “exercisers” tend to have better general health than the “non-exercisers”? Explain.</p>
-<ol start="7" style="list-style-type: decimal">
-<li><p>Because of the limitations of the <code>barchart</code> command, we have to transpose the table (swap the rows and columns) before piping into the barchart. We use the <code>t()</code> command to transpose. <code>auto.key</code> is used to make a legend for the barchart. The whole thing looks like this (try the various versions below):</p>
+<p>We use the <code>t()</code> command to transpose the table. <code>auto.key</code> is used to make a legend for the barchart. Below are <em>three different</em> ways of doing this; they each arrange the legend in a different way. The third includes a chart title. Try each version and note the differences:</p>
 <pre class="{r}"><code>healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(columns=3))
 healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;top&quot;))
 healthVsExercise %&gt;% t() %&gt;% barchart(auto.key=list(space=&quot;right&quot;),
-    main=&quot;General Health vs. Does the Respondent Ever Exercise&quot;)</code></pre></li>
-<li><p>If you want to specify a color palette, you really have to dig deep. Let’s give it a try. The <code>brewer</code> palette which ranges from red to purple will make an attractive spectrum. Let’s store it with 5 color values:</p>
-<pre class="{r}"><code>myColors &lt;- Brewer.pal(5, RdPu)</code></pre>
-<p>Store the levels of the <code>genhealth</code> variable:</p>
+    main=&quot;General Health vs. Does the Respondent Ever Exercise&quot;)</code></pre>
+<p>The default colors are not very pleasing for this barchart. To specify a different color palette, you really have to dig deep. Let’s give it a try. Note: You might want to put all the following commands into the same R chunk and wait to run it until it’s complete.</p>
+<p>The <code>brewer</code> palette which ranges from red to purple will make an attractive spectrum. Let’s store it with 5 color values:</p>
+<pre class="{r}"><code>myColors &lt;- brewer.pal(5, &quot;RdPu&quot;)</code></pre>
+<p>Store the levels (categories) of the <code>genhealth</code> variable:</p>
 <pre class="{r}"><code>healthLevels &lt;- list(levels(brfss$genhealth))</code></pre>
 <p>Build the legend <code>myKey</code> using the levels for <code>genhealth</code> and the colors in <code>myColors</code>:</p>
 <pre class="{r}"><code>myKey &lt;- list(text=healthLevels, rectangles=list(col=myColors))</code></pre>
-<p>Draw the stacked barchart with the new palette in both the bars and the legend, and give it a main title:</p>
+<p>Draw the stacked barchart with the new palette in both the bars and the legend:</p>
 <pre class="{r}"><code>healthVsExercise %&gt;% t() %&gt;% barchart(col=myColors, key=myKey,
     main=&quot;General Health vs. Does the Respondent Ever Exercise&quot;)</code></pre>
-<p>Does the relationship between <code>genhealth</code> and <code>exerciseany</code> prove that if a person exercises they will improve their health? Explain.</p></li>
+<ol start="6" style="list-style-type: decimal">
+<li>Does the relationship between <code>genhealth</code> and <code>exerciseany</code> prove that if a person exercises then they will improve their health? Explain.</li>
 </ol>
 <h2 id="general-health-vs.income-and-age-group">General Health vs. Income and Age Group</h2>
-<p>Now let’s see how income level and age group might be related to general health for this group of respondents.</p>
-<ol start="9" style="list-style-type: decimal">
+<p>Now we will see how income level and age group might be related to general health for this group of respondents.</p>
+<ol start="7" style="list-style-type: decimal">
 <li><p><strong>Before looking at any relevant graphs</strong>, make some predictions. Do you think there is any relationship between income level and health? What about the relationship between age and health? Explain.</p></li>
-<li><p>Using what you learned previously in this lab, make a nice stacked bar graph for general health vs. income level (<code>income</code>). What do you learn from the graph? Compare with your prediction above.</p></li>
-<li><p>Also make a stacked bar graph for general health vs. age. What do you learn from the graph? Compare with your prediction above.</p></li>
+<li><p>Using what you learned previously in this lab, make a nice stacked bar graph for general health vs. income level (<code>income</code>). The last (large) chunk will definitely be useful, but first you need to store a value for <code>healthVsIncome</code>, similar to how we stored <code>healthVsExercise</code>.</p>
+<p>What do you learn from the graph? Compare with your prediction above.</p></li>
+<li><p>Also make a stacked bar graph for general health vs. age (using <code>age7</code>, which has 10-year intervals).</p>
+<p>What do you learn from the graph? Compare with your prediction above.</p></li>
 </ol>
-<p>Let’s investigate the 3-way relationship among general health, income, and age. In particular, is the relationship between general health and income constant across all ages, or does it vary with each age group? This calls for a 3-way graph, plotting general health against income and using <code>age</code> as a “panel” variable. The formula syntax for this is <code>~genhealth|income+age</code>. Store the tally and take a look at it:</p>
-<pre class="{r}"><code>healthVsIncomeAndAge &lt;- tally(~genhealth|income+age, data=brfss,
+<p>Let’s investigate the 3-way relationship among general health, income, and age. In particular, is the relationship between general health and income constant across all ages, or does it vary with each age group? This calls for a 3-way graph, plotting general health against income and using <code>age7</code> as a “panel” variable. The formula syntax for this is <code>~genhealth|income+age7</code>. Store the tally and take a look at it:</p>
+<pre class="{r}"><code>healthVsIncomeAndAge &lt;- tally(~genhealth|income+age7, data=brfss,
     format=&quot;percent&quot;, useNA=&quot;no&quot;)
 healthVsIncomeAndAge</code></pre>
 <p>This makes a rather overwhelming table of numbers! To help the average human make sense of this, we will make a paneled stacked barchart. There is a “magic” bit of code here, <code>aperm(c(2,3,1))</code>, taking the place of <code>t()</code> for 3-way graphs.</p>
 <pre class="{r}"><code>healthVsIncomeAndAge %&gt;% aperm(c(2,3,1)) %&gt;%
     barchart(col=myColors, key=myKey)</code></pre>
-<ol start="12" style="list-style-type: decimal">
+<ol start="10" style="list-style-type: decimal">
 <li><p>For each age group, is it the case that those with higher income level report better general health? Explain how you see this in the graph.</p></li>
 <li><p>Is the nature of the relationship between general health and income exactly the same across all ages, or do you notice it being weaker for some age groups? Explain what you see and how that makes sense.</p></li>
 </ol>
-<h2 id="height">Height</h2>
-<ol start="14" style="list-style-type: decimal">
-<li><p>Draw a basic histogram of the <code>height</code> variable using the <code>brfss</code> data. Is this a good view of the data? Explain.</p></li>
-<li><p>In order to focus in on the typical values for the <code>height</code> variable, we can pipe the data through a filter to remove the tails. Let’s keep the middle 99% of the values. First find the quantiles for 0.005 (the lowest 1/2-percent) and 0.995 (the highest 1/2-percent) and then them to form a subset of the heights:</p>
-<pre class="{r}"><code>lowCutoff &lt;- quantile(~height, data=brfss, na.rm=TRUE, probs=.005)
-highCutoff &lt;- quantile(~height, data=brfss, na.rm=TRUE, probs=.995)
-heightSubset &lt;- brfss %&gt;%
-filter(height &gt;= lowCutoff &amp; height &lt;= highCutoff)</code></pre>
-<p>Now draw the filtered histogram:</p>
-<pre class="{r}"><code>histogram(~height, data=heightSubset)</code></pre>
-<p>Describe what you see. Can you explain why it looks like that?</p></li>
-<li><p>There is not <em>really</em> a gap in the middle of the data. The appearance of a break is coming from integer data interacting badly with the breakpoints for creating the histogram bins. One way to fix this is to put breaks specifically at all the “.5” marks on the horizonatal axis:</p>
-<pre class="{r}"><code>myBreaks &lt;- seq(from=lowCutoff - 0.5, to=highCutoff + 0.5, by=1)
-myBreaks
-histogram(~height, data=heightSubset, breaks=myBreaks)</code></pre>
-<p>Describe the height distribution. Be sure to discuss, what are the typical heights for these respondents.</p></li>
-</ol>
-<h2 id="height-and-sex">Height and Sex</h2>
-<ol start="17" style="list-style-type: decimal">
-<li><p>Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal. Indeed, with a boxplot we can see this difference (include a <code>bwplot</code> of <code>sex~height</code> in your response to this question). Can you explain why the histogram does not show a clear bimodal pattern?</p>
-<p>As a companion to the <code>bwplot</code>, let’s also make a histogram which is paneled by sex. Notice the use of the formula <code>~height|sex</code> for height versus sex, and the <code>layout=c(1,2)</code> option for forcing the panels to line up vertically (1 column, 2 rows):</p>
-<pre class="{r}"><code>histogram(~height|sex, data=heightSubset, breaks=myBreaks, layout=c(1,2))</code></pre></li>
-</ol>
-<h2 id="height-and-weight">Height and Weight</h2>
-<p>In this section we investigate the relationship between <code>height</code> and <code>weight</code> for our respondents. Because the data file is huge (over 1.3 million rows), we can save computing time by working with a random sample of the rows.</p>
-<ol start="18" style="list-style-type: decimal">
-<li>Use the following commands to make a scatterplot of weight versus height for a sample of 30,000 rows from the <code>brfss</code> dataset (notice the use of the <code>slice</code> command to use a subset of the rows):</li>
-</ol>
-<pre class="{r}"><code>mySample &lt;- sample(1:nrow(brfss), 30000)
-summary(mySample)
-brfssSample &lt;- brfss %&gt;% slice(mySample)
-xyplot(weight~height, data=brfssSample)</code></pre>
-<p>Describe the overall pattern in the data. Is there a relationship between height and weight for these subjects?</p>
-<ol start="19" style="list-style-type: decimal">
-<li><p>One way to summarize the data in a scatterplot is to add a smooth fit line (notice that the “line” in this context might be curved). Add the fit line with the <code>panel.loess</code> command (<code>lwd=</code> is an option for setting line width):</p>
-<pre class="{r}"><code>ladd(panel.loess(x, y, col=&quot;darkgreen&quot;, lwd=2))</code></pre>
-<p>The smooth fit line is almost straight. Does this mean there is a “strong” linear relationship between the two variables? Explain.</p></li>
-</ol>
-<hr />
-<p>TODO: more options: pch, cex</p>
+<h3 id="submissions">Submissions</h3>
+<p>When you are ready to submit:</p>
+<ul>
+<li>Make sure to knit the final report before downloading.</li>
+<li>Download both the Lab5Report.Rmd and the Lab5Report.html files (one at a time).</li>
+<li><strong>Submit both files via Moodle</strong>.</li>
+</ul>
 </body>
 </html>
