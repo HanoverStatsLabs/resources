@@ -35,9 +35,7 @@ We have created a starting project for you. In order to set it up:
 - In future labs, of course, you don't need to create a new parent folder, just use the Browse button to select Math217Labs as the parent folder.
 - Enter the following URL into the "Repository URL" field but **DO NOT** press `<enter>` right away. Either type the URL by hand (no spaces) or copy it from the HTML version.
 
-    ```
-    https://github.com/HanoverStatsLabs/Lab-Intro-RMarkdown
-    ```
+    > [https://github.com/HanoverStatsLabs/Lab-Intro-RMarkdown](https://github.com/HanoverStatsLabs/Lab-Intro-RMarkdown)
 
 - Move to the middle textbox and enter a name for the project directory. `Lab_3_yourname` might be a reasonable choice.
 - Click on **Create Project** to finalize the setup process.
@@ -48,9 +46,7 @@ The file we are interested in is called `Lab3Report.Rmd`. Click on it to open it
 
 ## Working with RMarkdown Documents
 
-RMarkdown documents typically start with a *header* section. In it you get to specify title, author and date for the report, as well as some other technical settings that we will not worry about right now. Take a moment to add your own information in the header fields. Make sure to save your edits (File > Save) before proceeding.
-
-The rest of the RMarkdown document will contain the actual contents of your report.
+RMarkdown documents typically start with a *header* section. In it you get to specify title, author and date for the report, as well as some other technical settings that we will not worry about right now. Take a moment to add your own information in the header fields. Make sure to save your edits (File > Save) before proceeding. The rest of the RMarkdown document will contain the actual contents of your report.
 
 ### Exporting an RMarkdown Document
 

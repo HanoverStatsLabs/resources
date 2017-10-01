@@ -15,39 +15,36 @@
 <body>
 <h1 id="lab-5-customizing-graphs-in-r">Lab 5: Customizing Graphs in R</h1>
 <h2 id="introduction">Introduction</h2>
-<p>In this lab we learn how to</p>
+<p>In this lab we learn how to use command options to customize the results of our R commands. Along the way, we will also get more practice writing statistical reports in R Markdown.</p>
+<p>We will be working with a new dataset based on the Center for Disease Control’s annual BRFSS survey. This dataset collects information over four different years of the survey, totaling over 1.3 million respondents and 24 health-related variables.</p>
 <h2 id="overall-goals">Overall Goals</h2>
 <p>In this lab we will:</p>
-<p>New R commands introduced in this lab:</p>
+<ul>
+<li>Control colors in graphs.</li>
+<li>Add a key (legend) to a graph.</li>
+<li>Make stacked bar graphs, scaled to 100%.</li>
+<li>Format the result of a tally to show percents.</li>
+</ul>
+<p>New R commands introduced in this lab: <code>colors</code>, <code>brewer.pal</code>, <code>list</code>, <code>t</code></p>
 <h2 id="start-a-new-project-in-rstudio">Start a New Project in RStudio</h2>
 <p>We start similar to the last lab. We will start a new project based on a prepared repository.</p>
 <ul>
 <li>In your web browser, open this Lab 5 assignment from the HanoverStatsLabs website. You will need to copy-paste a link from it in a few steps.</li>
 <li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>.</li>
 <li><p>Paste this URL in but <strong>DO NOT</strong> press <code>&lt;enter&gt;</code> right away:</p>
-<pre><code>https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git</code></pre></li>
+<blockquote>
+<p><a href="https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git" class="uri">https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git</a></p>
+</blockquote></li>
 <li>Press Tab to go to the next field — it should auto-complete the directory name. Change it, if you want, to <code>lab_5_yourname</code>.</li>
 <li>Make sure the parent directory is the folder where you want to keep your projects for this class.</li>
 <li>Click <code>Create Project</code>.</li>
-<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab5Report.Rmd</code>. Click the file name to edit the file, and then run all the R chunks.</li>
-<li><p>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</p></li>
-</ul>
-<h2 id="creating-an-rstudio-project">Creating an RStudio Project</h2>
-<p>We start similarly to the last lab. We will start a new project based on a prepared repository.</p>
-<ul>
-<li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>. You will then see three textboxes.</li>
-<li>Verify that the directory listed in the third textbox is the one you created for your labs. If not, then click the <strong>Browse</strong> button to display a list of all the folders in your home directory on vault and choose the correct one.</li>
-<li><p>Copy the following URL from the HTML page and paste it into the “Repository URL” field but <strong>DO NOT</strong> press <code>&lt;enter&gt;</code> right away.</p>
-<pre><code>https://github.com/HanoverStatsLabs/Lab-Data-Import.git</code></pre></li>
-<li>Click on <strong>Create Project</strong> to finalize the setup process.</li>
-<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab5Report.Rmd</code>. Click the file name to edit the file.</li>
-<li>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</li>
-<li><strong>DO NOW</strong>: Edit the header section to add your own title, name, and date.</li>
-<li><p>Before moving on, make sure to <strong>run the chunk</strong> which contains the instruction <code>library(hanoverbase)</code>.</p></li>
+<li><strong>Edit the header section</strong> to add your own title, name, and date.</li>
+<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab5Report.Rmd</code>. <strong>Click the file name</strong> to edit the file, and then <strong>run all the R code chunks</strong>: Run &gt; Run All.</li>
+<li><p>Recall that we will mostly be editing this report file rather than working directly in the console. You may want to make the report window larger than the console window.</p></li>
 </ul>
 <h2 id="import-and-view-dataset">Import and View Dataset</h2>
 <ul>
-<li>In your R Markdown report, make a new R code chunk. In the new chunk, use the <code>data</code> command to load the dataset named <code>brfss</code>; <strong>run this chunk</strong>.</li>
+<li>In your R Markdown report, make a new R code chunk below the existing chunks. In the new chunk, use the <code>data</code> command (see Lab 1, for example) to load the dataset named <code>brfss</code>; <strong>run this chunk</strong>.</li>
 <li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the <code>?</code> command should not be put into your R Markdown report.</li>
 <li>You should see that the data has 24 variables and over 1.3 million rows.</li>
 <li>Use the <code>?</code> command <em>in the console</em> to view information about the brfss data file (the “codebook”): <code>?brfss</code></li>
@@ -56,6 +53,7 @@
 <p><strong>Important formatting note</strong>: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report. You should use section headings, subsection headings, numbered lists, unnumbered lists, etc. to organize your work and make it easy for your reader to follow. You can refer to the <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a> for help with creating these effects.</p>
 <p><strong>R Chunks</strong>: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.</p>
 <p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?</p>
+<p><strong>Refer to Previous Labs for Examples</strong>: We don’t expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to previous labs for examples of the needed syntax.</p>
 <h2 id="general-health">General Health</h2>
 <ol style="list-style-type: decimal">
 <li>Make a tally and a barchart (as you did for WeekDays in a previous lab) for the <code>genhealth</code> variable. Which category of the variable is the most frequent?</li>

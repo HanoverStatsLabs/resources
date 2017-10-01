@@ -7,6 +7,43 @@
   <meta name="generator" content="pandoc" />
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -32,10 +69,12 @@
 <li>In RStudio, go to <code>File &gt; New Project &gt; Version Control &gt; Git</code>. You will then see three textboxes.</li>
 <li>Verify that the directory listed in the third textbox is the one you created for your labs. If not, then click the <strong>Browse</strong> button to display a list of all the folders in your home directory on vault and choose the correct one.</li>
 <li><p>Copy the following URL from the HTML page and paste it into the “Repository URL” field but <strong>DO NOT</strong> press <code>&lt;enter&gt;</code> right away.</p>
-<pre><code>https://github.com/HanoverStatsLabs/Lab-Data-Import.git</code></pre></li>
+<blockquote>
+<p><a href="https://github.com/HanoverStatsLabs/Lab-Data-Import.git" class="uri">https://github.com/HanoverStatsLabs/Lab-Data-Import.git</a></p>
+</blockquote></li>
 <li>Move to the middle textbox and enter a name for the project directory. <code>Lab_4_yourname</code> might be a reasonable choice.</li>
 <li>Click on <strong>Create Project</strong> to finalize the setup process.</li>
-<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab4Report.Rmd</code>. Click the file name to edit the file.</li>
+<li>Your Files pane should now show the provided files, in particular a file titled <code>Lab4Report.Rmd</code>. <strong>Click the file name to edit the file.</strong></li>
 <li>Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.</li>
 <li><strong>DO NOW</strong>: Edit the header section to add your own title, name, and date.</li>
 <li><p>Before moving on, make sure to <strong>run the chunk</strong> which contains the instruction <code>library(hanoverbase)</code>.</p></li>
@@ -45,7 +84,7 @@
 <p>For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.</p>
 <ul>
 <li>Go to <code>File &gt; Import Dataset &gt; From CSV ...</code></li>
-<li>Paste in the following URL: <code>https://hanoverstatslabs.github.io/resources/datasets/driving.csv</code></li>
+<li>Paste in the following URL: <a href="https://hanoverstatslabs.github.io/resources/datasets/driving.csv" class="uri">https://hanoverstatslabs.github.io/resources/datasets/driving.csv</a></li>
 <li>Click the <strong>Update</strong> button to the right of the URL and you should see the data in the Preview Window. We now need to make sure the data is being read correctly before doing the actual import.</li>
 </ul>
 <p>This data contains information recorded over the Fall 2007-2008 term when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.</p>
@@ -60,14 +99,16 @@
 <li>For each column in the data, RStudio needs to know the type of values for that column (integer, character, date, etc.). The system is usually smart enough to do the right thing.</li>
 <li>For this data set, we will let RStudio “guess” the types as best it can.</li>
 <li>If you ever find that RStudio did not guess the type correctly, you can use the column heading in the import dialog to specify a type (or have RStudio skip a column entirely if you don’t really need it).</li>
-<li>Click the <strong>Import</strong> button.</li>
+<li>Click the <strong>Import</strong> button. If the import went okay, you should now see the dataset in the data view.</li>
 </ul></li>
 <li>Copying the appropriate code:
 <ul>
-<li>If the import went okay, you should now see the dataset in the data view. If it looks OK, then go to your report and add a new code chunk below the existing code chunks.</li>
+<li>In your report, <strong>add a new code chunk</strong> for the import. Put it below the existing code chunks. We will be copying code from the console to complete the chunk.</li>
 <li>Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
-<li>From the Console, one at a time, copy the two lines that were run in the console (from clicking the Import button). Do not copy the <code>&gt;</code> prompt. The first line to be copied is <code>library(readr)</code>. The second starts with <code>driving &lt;-</code>.</li>
-<li>This code chunk will ensure that when anyone compiles the report, the dataset will be loaded and ready to use.</li>
+<li><p>From the Console, one at a time, copy the two lines that were run in the console (as a result of clicking the Import button) and paste them into the chunk; do not copy the <code>&gt;</code> prompt. The new chunk should now look as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+driving &lt;-<span class="st"> </span>...  <span class="co"># copy this line from the console!</span></code></pre></div></li>
+<li><p>This code chunk ensures that when anyone compiles the report, the dataset will be loaded and ready to use.</p></li>
 </ul></li>
 </ul>
 <p>Take a moment to look at the two lines of code in your new chunk. The first line uses the <code>library</code> command to load a new package (also called a library) named <code>readr</code>. This package contains useful functions for loading new data. The second line uses the <code>read_csv</code> command from this package to load the data and store it in the name <code>driving</code>. You can access this data in the rest of your report via this name. You should be able to see the <code>driving</code> entry in the Environment pane.</p>
@@ -86,12 +127,13 @@ driving$weekDay &lt;- driving$weekDay %&gt;% ordered(labels=days)</code></pre>
 <p><strong>Important formatting note</strong>: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report. You should use section headings, subsection headings, numbered lists, unnumbered lists, etc. to organize your work and make it easy for your reader to follow. You can refer to the <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a> for help with creating these effects.</p>
 <p><strong>R Chunks</strong>: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.</p>
 <p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?</p>
+<p><strong>Refer to Previous Labs for Examples</strong>: We don’t expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to previous labs for examples of the needed syntax.</p>
 <h3 id="week-days">Week Days</h3>
-<p>The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (<code>tally</code>) and a barchart of the weekDay variable.</p>
+<p>The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (<code>tally</code>) and a barchart of the weekDay variable. Hint: Refer back to a previous lab for an example of piping a tally into a barchart.</p>
 <ol style="list-style-type: decimal">
 <li>The instructor was teaching only four days a week. Which do you think is the workday on which the instructor was not teaching? Explain.</li>
 <li>Looking at the weekday frequencies, explain why most of the frequencies are even. How do you explain those that are not?</li>
-<li>What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?</li>
+<li>What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar (13 full weeks in Fall term, plus a week of exams)? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?</li>
 </ol>
 <h3 id="distance-traveled">Distance Traveled</h3>
 <p>In this set of questions we will investigate the distribution of the <code>miles</code> variable, which records the miles traveled per trip as a difference of the mileages recorded by the car’s odometer. You will likely need several outputs:</p>

@@ -24,13 +24,11 @@ We start similarly to the last lab. We will start a new project based on a prepa
 - Verify that the directory listed in the third textbox is the one you created for your labs.  If not, then click the **Browse** button to display a list of all the folders in your home directory on vault and choose the correct one.
 - Copy the following URL from the HTML page and paste it into the "Repository URL" field but **DO NOT** press `<enter>` right away.
 
-    ```
-    https://github.com/HanoverStatsLabs/Lab-Data-Import.git
-    ```
+    > [https://github.com/HanoverStatsLabs/Lab-Data-Import.git](https://github.com/HanoverStatsLabs/Lab-Data-Import.git)
 
 - Move to the middle textbox and enter a name for the project directory. `Lab_4_yourname` might be a reasonable choice.
 - Click on **Create Project** to finalize the setup process.
-- Your Files pane should now show the provided files, in particular a file titled `Lab4Report.Rmd`. Click the file name to edit the file.
+- Your Files pane should now show the provided files, in particular a file titled `Lab4Report.Rmd`. **Click the file name to edit the file.**
 - Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.
 - **DO NOW**: Edit the header section to add your own title, name, and date.
 - Before moving on, make sure to **run the chunk** which contains the instruction `library(hanoverbase)`.
@@ -42,7 +40,7 @@ In the previous labs we have prepared the data for you in R's built-in system. B
 For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.
 
 - Go to `File > Import Dataset > From CSV ...`
-- Paste in the following URL: `https://hanoverstatslabs.github.io/resources/datasets/driving.csv`
+- Paste in the following URL: [https://hanoverstatslabs.github.io/resources/datasets/driving.csv](https://hanoverstatslabs.github.io/resources/datasets/driving.csv)
 - Click the **Update** button to the right of the URL and you should see the data in the Preview Window. We now need to make sure the data is being read correctly before doing the actual import.
 
 This data contains information recorded over the Fall 2007-2008 term when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.
@@ -54,12 +52,18 @@ This data contains information recorded over the Fall 2007-2008 term when one of
     - For each column in the data, RStudio needs to know the type of values for that column (integer, character, date, etc.). The system is usually smart enough to do the right thing.
     - For this data set, we will let RStudio "guess" the types as best it can.
     - If you ever find that RStudio did not guess the type correctly, you can use the column heading in the import dialog to specify a type (or have RStudio skip a column entirely if you don't really need it).
-    - Click the **Import** button.
+    - Click the **Import** button. If the import went okay, you should now see the dataset in the data view.
 - Copying the appropriate code:
-    - If the import went okay, you should now see the dataset in the data view. If it looks OK, then go to your report and add a new code chunk below the existing code chunks.
+    - In your report, **add a new code chunk** for the import.  Put it below the existing code chunks. We will be copying code from the console to complete the chunk.
     - Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output "Show nothing (run code)".
-    - From the Console, one at a time, copy the two lines that were run in the console (from clicking the Import button).  Do not copy the `>` prompt.  The first line to be copied is `library(readr)`.  The second starts with `driving <-`.
-    - This code chunk will ensure that when anyone compiles the report, the dataset will be loaded and ready to use.
+    - From the Console, one at a time, copy the two lines that were run in the console (as a result of clicking the Import button) and paste them into the chunk; do not copy the `>` prompt. The new chunk should now look as follows:
+
+        ```r
+        library(readr)
+        driving <- ...  # copy this line from the console!
+        ```
+
+    - This code chunk ensures that when anyone compiles the report, the dataset will be loaded and ready to use.
 
 Take a moment to look at the two lines of code in your new chunk. The first line uses the `library` command to load a new package (also called a library) named `readr`. This package contains useful functions for loading new data. The second line uses the `read_csv` command from this package to load the data and store it in the name `driving`. You can access this data in the rest of your report via this name. You should be able to see the `driving` entry in the Environment pane.
 
@@ -87,13 +91,15 @@ The two lines we used above introduced some new features:
 
 **Knit Early and Often**: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?
 
+**Refer to Previous Labs for Examples**: We don't expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to previous labs for examples of the needed syntax.
+
 ### Week Days
 
-The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (`tally`) and a barchart of the weekDay variable.
+The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (`tally`) and a barchart of the weekDay variable. Hint: Refer back to a previous lab for an example of piping a tally into a barchart.
 
 1. The instructor was teaching only four days a week. Which do you think is the workday on which the instructor was not teaching? Explain.
 2. Looking at the weekday frequencies, explain why most of the frequencies are even. How do you explain those that are not?
-3. What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?
+3. What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar (13 full weeks in Fall term, plus a week of exams)? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?
 
 ### Distance Traveled
 

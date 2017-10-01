@@ -2,13 +2,20 @@
 
 ## Introduction
 
-In this lab we learn how to
+In this lab we learn how to use command options to customize the results of our R commands. Along the way, we will also get more practice writing statistical reports in R Markdown.
+
+We will be working with a new dataset based on the Center for Disease Control's annual BRFSS survey. This dataset collects information over four different years of the survey, totaling over 1.3 million respondents and 24 health-related variables.
 
 ## Overall Goals
 
 In this lab we will:
 
-New R commands introduced in this lab:
+- Control colors in graphs.
+- Add a key (legend) to a graph.
+- Make stacked bar graphs, scaled to 100%.
+- Format the result of a tally to show percents.
+
+New R commands introduced in this lab: `colors`, `brewer.pal`, `list`, `t`
 
 ## Start a New Project in RStudio
 
@@ -17,38 +24,19 @@ We start similar to the last lab. We will start a new project based on a prepare
 - In your web browser, open this Lab 5 assignment from the HanoverStatsLabs website. You will need to copy-paste a link from it in a few steps.
 - In RStudio, go to `File > New Project > Version Control > Git`.
 - Paste this URL in but **DO NOT** press `<enter>` right away:
-    ```
-    https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git
-    ```
+
+    > [https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git](https://github.com/HanoverStatsLabs/Lab-Customize-Graphs.git)
+
 - Press Tab to go to the next field --- it should auto-complete the directory name. Change it, if you want, to `lab_5_yourname`.
 - Make sure the parent directory is the folder where you want to keep your projects for this class.
 - Click `Create Project`.
-- Your Files pane should now show the provided files, in particular a file titled `Lab5Report.Rmd`. Click the file name to edit the file, and then run all the R chunks.
-- Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.
-
-
-## Creating an RStudio Project
-
-We start similarly to the last lab. We will start a new project based on a prepared repository.
-
-- In RStudio, go to `File > New Project > Version Control > Git`. You will then see three textboxes.
-- Verify that the directory listed in the third textbox is the one you created for your labs.  If not, then click the **Browse** button to display a list of all the folders in your home directory on vault and choose the correct one.
-- Copy the following URL from the HTML page and paste it into the "Repository URL" field but **DO NOT** press `<enter>` right away.
-
-    ```
-    https://github.com/HanoverStatsLabs/Lab-Data-Import.git
-    ```
-
-- Click on **Create Project** to finalize the setup process.
-- Your Files pane should now show the provided files, in particular a file titled `Lab5Report.Rmd`. Click the file name to edit the file.
-- Recall that we will mostly be editing this report file, rather than working directly in the console. You may want to make the report window larger than the console window.
-- **DO NOW**: Edit the header section to add your own title, name, and date.
-- Before moving on, make sure to **run the chunk** which contains the instruction `library(hanoverbase)`.
-
+- **Edit the header section** to add your own title, name, and date.
+- Your Files pane should now show the provided files, in particular a file titled `Lab5Report.Rmd`. **Click the file name** to edit the file, and then **run all the R code chunks**: Run > Run All.
+- Recall that we will mostly be editing this report file rather than working directly in the console. You may want to make the report window larger than the console window.
 
 ## Import and View Dataset
 
-- In your R Markdown report, make a new R code chunk.  In the new chunk, use the `data` command to load the dataset named `brfss`; **run this chunk**.
+- In your R Markdown report, make a new R code chunk below the existing chunks.  In the new chunk, use the `data` command (see Lab 1, for example) to load the dataset named `brfss`; **run this chunk**.
 - Use the `View` command *in the console* to see the data in the Preview window.  **Note**:  Do not put the `View` command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the `?` command should not be put into your R Markdown report.
 - You should see that the data has 24 variables and over 1.3 million rows.
 - Use the `?` command *in the console* to view information about the brfss data file (the "codebook"):  `?brfss`
@@ -60,6 +48,8 @@ We start similarly to the last lab. We will start a new project based on a prepa
 **R Chunks**: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.
 
 **Knit Early and Often**: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?
+
+**Refer to Previous Labs for Examples**: We don't expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to previous labs for examples of the needed syntax.
 
 ## General Health
 
