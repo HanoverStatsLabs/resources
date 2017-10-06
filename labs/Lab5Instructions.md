@@ -4,7 +4,7 @@
 
 In this lab we learn how to use command options to customize the results of our R commands. Along the way, we will also get more practice writing statistical reports in R Markdown.
 
-We will be working with a new dataset based on the Center for Disease Control's annual BRFSS survey. This dataset collects information over four different years of the survey, totaling over 1.3 million respondents and 24 health-related variables.
+We will be working with a new dataset based on the Centers for Disease Control's annual BRFSS survey. This dataset collects information over four different years of the survey, totaling over 1.3 million respondents and 24 health-related variables.
 
 ## Overall Goals
 
