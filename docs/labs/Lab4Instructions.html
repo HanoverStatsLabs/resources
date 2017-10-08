@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Checking for misalignments:
 <ul>
 <li>Sometimes programs misidentify the column separators and may misalign some columns.</li>
-<li>Scroll through the file to make sure that what shows up in each column makes sense for that column (for instance does it look like the columns got shifted?). <strong>HINT</strong> If you can only see one row of data at a time, make the font smaller in the Import window.</li>
+<li>Scroll through the file to make sure that what shows up in each column makes sense for that column (for instance does it look like the columns got shifted?). <strong>HINT</strong> If you can only see one row of data at a time, make the font smaller in the Import window (use your browser zoom features, if any).</li>
 </ul></li>
 <li>Setting the column types:
 <ul>
@@ -107,14 +107,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
 <li><p>From the Console, one at a time, copy the two lines that were run in the console (as a result of clicking the Import button) and paste them into the chunk; do not copy the <code>&gt;</code> prompt. The new chunk should now look as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
-driving &lt;-<span class="st"> </span>...  <span class="co"># copy this line from the console!</span></code></pre></div></li>
+driving &lt;-<span class="st"> </span>...  <span class="co"># copy this one line from the console!</span></code></pre></div></li>
 <li><p>This code chunk ensures that when anyone compiles the report, the dataset will be loaded and ready to use.</p></li>
 </ul></li>
 </ul>
 <p>Take a moment to look at the two lines of code in your new chunk. The first line uses the <code>library</code> command to load a new package (also called a library) named <code>readr</code>. This package contains useful functions for loading new data. The second line uses the <code>read_csv</code> command from this package to load the data and store it in the name <code>driving</code>. You can access this data in the rest of your report via this name. You should be able to see the <code>driving</code> entry in the Environment pane.</p>
 <p>Before we move on, there is one more step we must take with the data. The <code>weekDay</code> column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative (numerical). You will need to run the following commands (make sure to include them in the code chunk you created earlier and to <strong>run the chunk</strong>). Recall that you can copy these lines from the corresponding HTML version of the instructions.</p>
-<pre class="{r}"><code>days &lt;- c(&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;)
-driving$weekDay &lt;- driving$weekDay %&gt;% ordered(labels=days)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">days &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Mon&quot;</span>, <span class="st">&quot;Tue&quot;</span>, <span class="st">&quot;Wed&quot;</span>, <span class="st">&quot;Thu&quot;</span>, <span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>)
+driving<span class="op">$</span>weekDay &lt;-<span class="st"> </span>driving<span class="op">$</span>weekDay <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ordered</span>(<span class="dt">labels=</span>days)</code></pre></div>
 <p>Look at the data table after running the chunk. You should see the 3-letter abbreviations in the weekDay column instead of number codes.</p>
 <p>The two lines we used above introduced some new features:</p>
 <ul>
@@ -126,15 +126,16 @@ driving$weekDay &lt;- driving$weekDay %&gt;% ordered(labels=days)</code></pre>
 <h2 id="statistical-investigations">Statistical Investigations</h2>
 <p><strong>Important formatting note</strong>: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report. You should use section headings, subsection headings, numbered lists, unnumbered lists, etc. to organize your work and make it easy for your reader to follow. You can refer to the <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a> for help with creating these effects.</p>
 <p><strong>R Chunks</strong>: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.</p>
-<p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?</p>
-<p><strong>Refer to Previous Labs for Examples</strong>: We don’t expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to previous labs for examples of the needed syntax.</p>
+<p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to? (If you do not knit often, you should at least <strong>save</strong> often.)</p>
+<p><strong>Refer to the R Cheatsheet and Previous Labs for Examples</strong>: We don’t expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to the provided R Cheatsheet for help.</p>
 <h3 id="week-days">Week Days</h3>
 <p>The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (<code>tally</code>) and a barchart of the weekDay variable. Hint: Refer back to a previous lab for an example of piping a tally into a barchart.</p>
 <ol style="list-style-type: decimal">
 <li>The instructor was teaching only four days a week. Which do you think is the workday on which the instructor was not teaching? Explain.</li>
-<li>Looking at the weekday frequencies, explain why most of the frequencies are even. How do you explain those that are not?</li>
+<li>Looking at the frequencies in the tally, explain why most of the frequencies are even numbers. How do you explain those that are odd numbers?</li>
 <li>What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar (13 full weeks in Fall term, plus a week of exams)? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?</li>
 </ol>
+<p><strong>Note</strong>: Don’t forget to knit often!</p>
 <h3 id="distance-traveled">Distance Traveled</h3>
 <p>In this set of questions we will investigate the distribution of the <code>miles</code> variable, which records the miles traveled per trip as a difference of the mileages recorded by the car’s odometer. You will likely need several outputs:</p>
 <ul>
@@ -146,43 +147,46 @@ driving$weekDay &lt;- driving$weekDay %&gt;% ordered(labels=days)</code></pre>
 </ul>
 <p>Here are the questions for you to answer.</p>
 <ol start="4" style="list-style-type: decimal">
-<li>What is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?</li>
+<li>Looking at the favstats summary and the first histogram, what is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?</li>
 <li>The distribution should appear skewed to the right with a very sharp drop-off to the left, and some high outliers to the right. Explain why we might expect these three behaviors in this dataset.</li>
-<li>When focusing on the values below 48 miles, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for the presence of these modes that would account for their similar frequencies.</li>
+<li>When focusing on the values below 48 miles in the second histogram, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for the presence of these modes that would account for their similar frequencies. (The boxplots and last summary may also be helpful here.)</li>
 </ol>
 <h3 id="driving-times">Driving Times</h3>
 <p>The (elapsed) <code>time</code> variable is calculated as the difference in minutes between the instructor’s departure time and arrival time. We should create the following summaries:</p>
 <ul>
 <li>A <code>favstats</code> summary and a histogram of the <code>time</code> variable.</li>
 <li><p>Two <code>xyplot</code>s (scatterplots) of the <code>time</code> variable against the <code>miles</code> variable. In the first plot we exclude three particularly unusual/incorrect time values, and in the second plot we restrict further to the “<code>miles &lt; 50</code>” region containing the typical distances. Use the following commands for this (may want to copy-paste them rather than type them in):</p>
-<pre class="{r}"><code>scatter1 &lt;- xyplot(time~miles,
-    data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40))
-print(scatter1)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scatter1 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(time<span class="op">~</span>miles,
+    <span class="dt">data=</span>driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">&lt;=</span><span class="st"> </span><span class="dv">90</span> <span class="op">&amp;</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span>))
+<span class="kw">print</span>(scatter1)
 
-scatter2 &lt;- xyplot(time~miles,
-    data=driving %&gt;% filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50))
-print(scatter2)</code></pre>
+scatter2 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(time<span class="op">~</span>miles,
+    <span class="dt">data=</span>driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">&lt;=</span><span class="st"> </span><span class="dv">90</span> <span class="op">&amp;</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span> <span class="op">&amp;</span><span class="st"> </span>miles <span class="op">&lt;</span><span class="st"> </span><span class="dv">50</span>))
+<span class="kw">print</span>(scatter2)</code></pre></div>
 <p>Note that we actually “stored” the graphs in names, and referred to those names to display the graphs with the <code>print</code> commands. In general, you can store graphs this way and process them further in later commands.</p></li>
 </ul>
 <p>Here are the questions for you to answer.</p>
 <ol start="7" style="list-style-type: decimal">
 <li>Discuss the distribution of the time variable, including any unusual observations and plausible explanations for the various aspects of the distribution.</li>
-<li>Describe the relationship between the <code>time</code> variable and the <code>miles</code> variable. What is the overall pattern, how does it make sense? Are there deviations? Is there a clear linear association?</li>
+<li><p>Describe the relationship between the <code>time</code> variable and the <code>miles</code> variable. What is the overall pattern, how does it make sense? Are there deviations? Is there a clear linear association?</p></li>
 <li><p>For this question, we are enhancing the scatterplots from above by adding straight lines at the 55 mph speed limit. Note that 55 mph corresponds to 60 minutes per 55 miles, making the slope of the line (<code>b</code>) equal to <code>60/55</code>:</p>
-<pre class="{r}"><code>ladd(panel.abline(a=0, b=60/55), plot=scatter1)
-ladd(panel.abline(a=0, b=60/55), plot=scatter2)</code></pre>
-How are the various points in the graph positioned relative to these lines? What does this tell you about the instructor’s driving habits?</li>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="dv">60</span><span class="op">/</span><span class="dv">55</span>), <span class="dt">plot=</span>scatter1)
+<span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="dv">60</span><span class="op">/</span><span class="dv">55</span>), <span class="dt">plot=</span>scatter2)</code></pre></div>
+<p>Notice that if a point is on the line, that trip has an average speed of 55 mph.</p>
+<ol style="list-style-type: lower-alpha">
+<li>There is a trip which took 79 minutes and 47.4 miles. Find that point on the scatterplot. What was the average speed for that trip, in miles per hour? Is the point for that trip below the line, or above the line?</li>
+<li>What does it mean when the point for a trip is below the line?</li>
+<li>Where are most of the points in relation to the line (below vs. above)? What does this tell you about the instructor’s driving habits?</li>
+</ol></li>
 <li><p>We will now color the points in the scatterplot based on the direction of travel (we will learn more in a future lab about the special graph settings used in this example):</p>
-<pre class="{r}"><code>xyplot(time~miles, data=driving %&gt;%
-    filter(time &lt;= 90 &amp; time &gt; 40 &amp; miles &lt; 50),
-    groups=direction, pch=19, auto.key=TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(time<span class="op">~</span>miles, <span class="dt">data=</span>driving <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(time <span class="op">&lt;=</span><span class="st"> </span><span class="dv">90</span> <span class="op">&amp;</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span> <span class="op">&amp;</span><span class="st"> </span>miles <span class="op">&lt;</span><span class="st"> </span><span class="dv">50</span>),
+    <span class="dt">groups=</span>direction, <span class="dt">pch=</span><span class="dv">19</span>, <span class="dt">auto.key=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p>What pattern do you see in the colors? How do you explain it?</p></li>
 </ol>
 <h3 id="submissions">Submissions</h3>
-<p>When you are ready to submit:</p>
 <ul>
-<li>Make sure to knit the final report before downloading.</li>
-<li>Download both the Lab4Report.Rmd and the Lab4Report.html files (one at a time).</li>
+<li>Make sure to knit one last time, then download the Lab4Report.Rmd file: in the <strong>Files pane</strong> (lower right), click the checkbox for the RMD file, then choose <code>More &gt; Export... &gt; Download</code>. <em>Do the same for Lab4Report.html.</em></li>
 <li><strong>Submit both files via Moodle</strong>.</li>
 </ul>
 </body>

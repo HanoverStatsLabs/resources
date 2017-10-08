@@ -47,7 +47,7 @@ This data contains information recorded over the Fall 2007-2008 term when one of
 
 - Checking for misalignments:
     - Sometimes programs misidentify the column separators and may misalign some columns.
-    - Scroll through the file to make sure that what shows up in each column makes sense for that column (for instance does it look like the columns got shifted?). **HINT** If you can only see one row of data at a time, make the font smaller in the Import window.
+    - Scroll through the file to make sure that what shows up in each column makes sense for that column (for instance does it look like the columns got shifted?). **HINT** If you can only see one row of data at a time, make the font smaller in the Import window (use your browser zoom features, if any).
 - Setting the column types:
     - For each column in the data, RStudio needs to know the type of values for that column (integer, character, date, etc.). The system is usually smart enough to do the right thing.
     - For this data set, we will let RStudio "guess" the types as best it can.
@@ -60,7 +60,7 @@ This data contains information recorded over the Fall 2007-2008 term when one of
 
         ```r
         library(readr)
-        driving <- ...  # copy this line from the console!
+        driving <- ...  # copy this one line from the console!
         ```
 
     - This code chunk ensures that when anyone compiles the report, the dataset will be loaded and ready to use.
@@ -69,7 +69,7 @@ Take a moment to look at the two lines of code in your new chunk. The first line
 
 Before we move on, there is one more step we must take with the data. The `weekDay` column is a categorical variable coded as 1 through 7 (Monday through Sunday). We must tell RStudio about that, as right now it treats it as quantitative (numerical). You will need to run the following commands (make sure to include them in the code chunk you created earlier and to **run the chunk**). Recall that you can copy these lines from the corresponding HTML version of the instructions.
 
-```{r}
+```r
 days <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 driving$weekDay <- driving$weekDay %>% ordered(labels=days)
 ```
@@ -89,17 +89,19 @@ The two lines we used above introduced some new features:
 
 **R Chunks**: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.
 
-**Knit Early and Often**: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to?
+**Knit Early and Often**: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to? (If you do not knit often, you should at least **save** often.)
 
-**Refer to Previous Labs for Examples**: We don't expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to previous labs for examples of the needed syntax.
+**Refer to the R Cheatsheet and Previous Labs for Examples**: We don't expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to the provided R Cheatsheet for help.
 
 ### Week Days
 
 The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (`tally`) and a barchart of the weekDay variable. Hint: Refer back to a previous lab for an example of piping a tally into a barchart.
 
 1. The instructor was teaching only four days a week. Which do you think is the workday on which the instructor was not teaching? Explain.
-2. Looking at the weekday frequencies, explain why most of the frequencies are even. How do you explain those that are not?
+2. Looking at the frequencies in the tally, explain why most of the frequencies are even numbers. How do you explain those that are odd numbers?
 3. What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar (13 full weeks in Fall term, plus a week of exams)? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?
+
+**Note**: Don't forget to knit often!
 
 ### Distance Traveled
 
@@ -113,9 +115,9 @@ In this set of questions we will investigate the distribution of the `miles` var
 
 Here are the questions for you to answer.
 
-4. What is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?
+4. Looking at the favstats summary and the first histogram, what is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?
 5. The distribution should appear skewed to the right with a very sharp drop-off to the left, and some high outliers to the right. Explain why we might expect these three behaviors in this dataset.
-6. When focusing on the values below 48 miles, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for the presence of these modes that would account for their similar frequencies.
+6. When focusing on the values below 48 miles in the second histogram, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for the presence of these modes that would account for their similar frequencies. (The boxplots and last summary may also be helpful here.)
 
 ### Driving Times
 
@@ -123,7 +125,7 @@ The (elapsed) `time` variable is calculated as the difference in minutes between
 
 - A `favstats` summary and a histogram of the `time` variable.
 - Two `xyplot`s (scatterplots) of the `time` variable against the `miles` variable. In the first plot we exclude three particularly unusual/incorrect time values, and in the second plot we restrict further to the "`miles < 50`" region containing the typical distances. Use the following commands for this (may want to copy-paste them rather than type them in):
-    ```{r}
+    ```r
     scatter1 <- xyplot(time~miles,
         data=driving %>% filter(time <= 90 & time > 40))
     print(scatter1)
@@ -138,14 +140,20 @@ Here are the questions for you to answer.
 
 7. Discuss the distribution of the time variable, including any unusual observations and plausible explanations for the various aspects of the distribution.
 8. Describe the relationship between the `time` variable and the `miles` variable. What is the overall pattern, how does it make sense? Are there deviations? Is there a clear linear association?
+
 9. For this question, we are enhancing the scatterplots from above by adding straight lines at the 55 mph speed limit. Note that 55 mph corresponds to 60 minutes per 55 miles, making the slope of the line (`b`) equal to `60/55`:
-    ```{r}
+    ```r
     ladd(panel.abline(a=0, b=60/55), plot=scatter1)
     ladd(panel.abline(a=0, b=60/55), plot=scatter2)
     ```
-    How are the various points in the graph positioned relative to these lines? What does this tell you about the instructor's driving habits?
+    Notice that if a point is on the line, that trip has an average speed of 55 mph.
+
+    a. There is a trip which took 79 minutes and 47.4 miles.  Find that point on the scatterplot.  What was the average speed for that trip, in miles per hour? Is the point for that trip below the line, or above the line?
+    b. What does it mean when the point for a trip is below the line?
+    c. Where are most of the points in relation to the line (below vs. above)? What does this tell you about the instructor's driving habits?
+
 10. We will now color the points in the scatterplot based on the direction of travel (we will learn more in a future lab about the special graph settings used in this example):
-    ```{r}
+    ```r
     xyplot(time~miles, data=driving %>%
         filter(time <= 90 & time > 40 & miles < 50),
         groups=direction, pch=19, auto.key=TRUE)
@@ -154,8 +162,5 @@ Here are the questions for you to answer.
 
 ### Submissions
 
-When you are ready to submit:
-
-- Make sure to knit the final report before downloading.
-- Download both the Lab4Report.Rmd and the Lab4Report.html files (one at a time).
+- Make sure to knit one last time, then download the Lab4Report.Rmd file: in the **Files pane** (lower right), click the checkbox for the RMD file, then choose `More > Export... > Download`. *Do the same for Lab4Report.html.*
 - **Submit both files via Moodle**.
