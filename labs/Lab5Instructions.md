@@ -30,8 +30,8 @@ We start similar to the last lab. We will start a new project based on a prepare
 - Press Tab to go to the next field --- it should auto-complete the directory name. Change it, if you want, to `lab_5_yourname`.
 - Make sure the parent directory is the folder where you want to keep your projects for this class.
 - Click `Create Project`.
-- **Edit the header section** to add your own title, name, and date.
-- Your Files pane should now show the files, in particular a file titled `Lab5Report.Rmd`. **Click the file name** to edit the file, and then **run all the R code chunks**: Run > Run All.
+- Your Files pane should now show the files, in particular a file titled `Lab5Report.Rmd`. **Click the file name** to edit the file, and then **run all the R code chunks**: Run > Run A
+- **Edit the header section** to add your own title, name, and date.ll.
 - Recall that we will mostly be editing this report file rather than working directly in the console. You may want to make the report window larger than the console window.
 
 ## Import and View Dataset
