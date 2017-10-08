@@ -2,26 +2,23 @@
 
 ## Introduction
 
-
-
+In this lab we will learn a couple more techniques for working with graphs and variables in R. In particular we will see how to create new variables from existing ones.
 
 ## Overall Goals
 
-In this lab we will:
+In this lab we will learn how to:
 
-When we plot integer data in a histogram, need to take care with the bins to avoid "false" modes.
+- create a new project and start a new R Markdown document in RStudio,
+- compute quantiles (percentiles) for a variable,
+- control the bins in a histogram,
+- control the panels in a paneled histogram,
+- add a "smooth fit curve" to a scatterplot to look for the overall pattern,
+- add a regression line to a scatterplot,
+- control the size and color of added lines,
+- compute new scalar variables using an equation,
+- compute new categorical variables by breaking the values of a scalar variable.
 
-For a paneled histogram, we want to control the layout of the panels for easier comparison.
-
-Adding a "smooth fit line" (curve) to a scatterplot.
-
-Controlling the symbol/size/fill for scatterplot dots.
-
-Controlling line width/type/color.
-
-Mosaicplot
-
-New R commands introduced in this lab:
+New R commands introduced in this lab: `quantile`, `cut`, `seq`, `panel.loess`, `panel.lmline`, `with`
 
 ## Make Your Own Project in RStudio
 
@@ -125,24 +122,51 @@ In this section we investigate the relationship between `height` and `weight` fo
 
 	Describe the direction of the linear association. Explain.
 
-********************
+## Body-Mass Index / Creating New Variables
 
-TODO: more options: pch, cex
+We will now learn how to create new variables out of existing variables. We will learn about two specific methods:
 
-..........
+- Creating a new scalar variable from a equation using existing scalar variables.
+- Creating a new categorical (factor) variable from an existing scalar variable specifying breakpoints.
 
+### Creating a New Scalar Variable
 
+We start with creating a new variable that measures the [**body mass index**](https://en.wikipedia.org/wiki/Body_mass_index), typically abbreviated as BMI. The formula is "weight over height squared". If pounds and inches are used, then a conversion factor of $703$ must be applied. We will use the `heightSubset` rather than the whole `brfss`.
 
-=======
+We use the dollar sign notation here to add a new column to the data. We also introduce the `with` command, which allows us to refer to the columns of a particular dataset in the formula:
+```r
+heightSubset$bmi <- with(heightSubset, weight / (height^2) * 703)
+```
 
-## Mosaicplot
+8. Calculate a summary (`favstats`) and draw a basic histogram of the `bmi` variable using the `heightSubset` data. Describe the distribution. What can we say about the BMI values of the respondents?
 
-12. As an alternative to the stacked bar graph, we can draw a `mosaicplot`.  A basic 2-variable example shows the relationship between `income` and `health` for the `brfss` participants:
-	```r
-	healthVsIncome <- tally(~income+genhealth, data=brfss,useNA="no")
-	healthVsIncome %>% mosaicplot(color=brewer.pal(5,"RdPu"))
-	```
+### Creating a New Categorical Variable
 
-	a. What do you learn from this plot?
-	b. What is the meaning of the varying bar widths in the mosaic plot?
+We will now break the BMI values into categories according to a standard correspondence described by the World Health Organization. Even though the WHO defines 8 different BMI range, we will limit it to 4:
 
+Category        BMI Range
+------------- -----------
+Underweight    Below 18.5
+Normal           18.5--25
+Overweight         25--30
+Obese            Above 30
+
+To do this we use the new command `cut`. We have to specify where to break the values, and we can optionally give labels to the ranges (the default being an interval notation like `(25,30]`).
+```r
+heightSubset$bmicat <- heightSubset$bmi %>%
+    cut(breaks=c(0, 18.5, 25, 30, 100),
+        labels=c("Underweight", "Normal", "Overweight", "Obese"))
+```
+
+9. We now have a categorical variable called `bmicat`. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents' BMI values from this?
+
+10. We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.
+11. In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at `healthVsExercise` and `healthVsIncome` in the previous lab. Produce a stacked bar graph with *one bar for each BMI category* and *stacks determined by the `genhealth` variable*. The first command for this would be:
+    ```r
+    bmicatVsGenhealth <- tally(~genhealth|bmicat, data=heightSubset, useNA="no", format="percent")
+    ```
+
+### Submissions
+
+- Make sure to knit one last time, then download the Lab6Report.Rmd file: in the **Files pane** (lower right), click the checkbox for the RMD file, then choose `More > Export... > Download`. *Do the same for Lab6Report.html.*
+- **Submit both files via Moodle**.

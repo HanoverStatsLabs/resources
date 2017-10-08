@@ -52,15 +52,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <body>
 <h1 id="lab-6-more-fun-with-graphs-in-r">Lab 6: More Fun with Graphs in R</h1>
 <h2 id="introduction">Introduction</h2>
+<p>In this lab we will learn a couple more techniques for working with graphs and variables in R. In particular we will see how to create new variables from existing ones.</p>
 <h2 id="overall-goals">Overall Goals</h2>
-<p>In this lab we will:</p>
-<p>When we plot integer data in a histogram, need to take care with the bins to avoid “false” modes.</p>
-<p>For a paneled histogram, we want to control the layout of the panels for easier comparison.</p>
-<p>Adding a “smooth fit line” (curve) to a scatterplot.</p>
-<p>Controlling the symbol/size/fill for scatterplot dots.</p>
-<p>Controlling line width/type/color.</p>
-<p>Mosaicplot</p>
-<p>New R commands introduced in this lab:</p>
+<p>In this lab we will learn how to:</p>
+<ul>
+<li>create a new project and start a new R Markdown document in RStudio,</li>
+<li>compute quantiles (percentiles) for a variable,</li>
+<li>control the bins in a histogram,</li>
+<li>control the panels in a paneled histogram,</li>
+<li>add a “smooth fit curve” to a scatterplot to look for the overall pattern,</li>
+<li>add a regression line to a scatterplot,</li>
+<li>control the size and color of added lines,</li>
+<li>compute new scalar variables using an equation,</li>
+<li>compute new categorical variables by breaking the values of a scalar variable.</li>
+</ul>
+<p>New R commands introduced in this lab: <code>quantile</code>, <code>cut</code>, <code>seq</code>, <code>panel.loess</code>, <code>panel.lmline</code>, <code>with</code></p>
 <h2 id="make-your-own-project-in-rstudio">Make Your Own Project in RStudio</h2>
 <p>Instead of starting from a prepared project, as in previous labs, you will now create your own project.</p>
 <ul>
@@ -141,19 +147,61 @@ myBreaks        <span class="co"># this just prints the sequence of numbers</spa
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>))</code></pre></div>
 <p>Describe the direction of the linear association. Explain.</p></li>
 </ol>
-<hr />
-<p>TODO: more options: pch, cex</p>
-<p>……….</p>
-<p>=======</p>
-<h2 id="mosaicplot">Mosaicplot</h2>
-<ol start="12" style="list-style-type: decimal">
-<li><p>As an alternative to the stacked bar graph, we can draw a <code>mosaicplot</code>. A basic 2-variable example shows the relationship between <code>income</code> and <code>health</code> for the <code>brfss</code> participants:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsIncome &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>income<span class="op">+</span>genhealth, <span class="dt">data=</span>brfss,<span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
-healthVsIncome <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mosaicplot</span>(<span class="dt">color=</span><span class="kw">brewer.pal</span>(<span class="dv">5</span>,<span class="st">&quot;RdPu&quot;</span>))</code></pre></div>
-<ol style="list-style-type: lower-alpha">
-<li>What do you learn from this plot?</li>
-<li>What is the meaning of the varying bar widths in the mosaic plot?</li>
-</ol></li>
+<h2 id="body-mass-index-creating-new-variables">Body-Mass Index / Creating New Variables</h2>
+<p>We will now learn how to create new variables out of existing variables. We will learn about two specific methods:</p>
+<ul>
+<li>Creating a new scalar variable from a equation using existing scalar variables.</li>
+<li>Creating a new categorical (factor) variable from an existing scalar variable specifying breakpoints.</li>
+</ul>
+<h3 id="creating-a-new-scalar-variable">Creating a New Scalar Variable</h3>
+<p>We start with creating a new variable that measures the <a href="https://en.wikipedia.org/wiki/Body_mass_index"><strong>body mass index</strong></a>, typically abbreviated as BMI. The formula is “weight over height squared”. If pounds and inches are used, then a conversion factor of <span class="math inline">\(703\)</span> must be applied. We will use the <code>heightSubset</code> rather than the whole <code>brfss</code>.</p>
+<p>We use the dollar sign notation here to add a new column to the data. We also introduce the <code>with</code> command, which allows us to refer to the columns of a particular dataset in the formula:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heightSubset<span class="op">$</span>bmi &lt;-<span class="st"> </span><span class="kw">with</span>(heightSubset, weight <span class="op">/</span><span class="st"> </span>(height<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="dv">703</span>)</code></pre></div>
+<ol start="8" style="list-style-type: decimal">
+<li>Calculate a summary (<code>favstats</code>) and draw a basic histogram of the <code>bmi</code> variable using the <code>heightSubset</code> data. Describe the distribution. What can we say about the BMI values of the respondents?</li>
 </ol>
+<h3 id="creating-a-new-categorical-variable">Creating a New Categorical Variable</h3>
+<p>We will now break the BMI values into categories according to a standard correspondence described by the World Health Organization. Even though the WHO defines 8 different BMI range, we will limit it to 4:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Category</th>
+<th align="right">BMI Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Underweight</td>
+<td align="right">Below 18.5</td>
+</tr>
+<tr class="even">
+<td align="left">Normal</td>
+<td align="right">18.5–25</td>
+</tr>
+<tr class="odd">
+<td align="left">Overweight</td>
+<td align="right">25–30</td>
+</tr>
+<tr class="even">
+<td align="left">Obese</td>
+<td align="right">Above 30</td>
+</tr>
+</tbody>
+</table>
+<p>To do this we use the new command <code>cut</code>. We have to specify where to break the values, and we can optionally give labels to the ranges (the default being an interval notation like <code>(25,30]</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heightSubset<span class="op">$</span>bmicat &lt;-<span class="st"> </span>heightSubset<span class="op">$</span>bmi <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">cut</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">18.5</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">100</span>),
+        <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Underweight&quot;</span>, <span class="st">&quot;Normal&quot;</span>, <span class="st">&quot;Overweight&quot;</span>, <span class="st">&quot;Obese&quot;</span>))</code></pre></div>
+<ol start="9" style="list-style-type: decimal">
+<li><p>We now have a categorical variable called <code>bmicat</code>. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents’ BMI values from this?</p></li>
+<li>We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.</li>
+<li><p>In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at <code>healthVsExercise</code> and <code>healthVsIncome</code> in the previous lab. Produce a stacked bar graph with <em>one bar for each BMI category</em> and <em>stacks determined by the <code>genhealth</code> variable</em>. The first command for this would be:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bmicatVsGenhealth &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>bmicat, <span class="dt">data=</span>heightSubset, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>)</code></pre></div></li>
+</ol>
+<h3 id="submissions">Submissions</h3>
+<ul>
+<li>Make sure to knit one last time, then download the Lab6Report.Rmd file: in the <strong>Files pane</strong> (lower right), click the checkbox for the RMD file, then choose <code>More &gt; Export... &gt; Download</code>. <em>Do the same for Lab6Report.html.</em></li>
+<li><strong>Submit both files via Moodle</strong>.</li>
+</ul>
 </body>
 </html>

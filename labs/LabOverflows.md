@@ -19,3 +19,24 @@ healthVsYearAndAge %>% aperm(c(2,3,1)) %>% barchart(col=myColors, key=myKey)
 
 Describe what you see in this final graph.  How does it compare with your observations in the previous question?  How does this make sense?
 
+********************
+
+TODO: more options: pch, cex
+
+..........
+
+
+
+=======
+
+## Mosaicplot
+
+12. As an alternative to the stacked bar graph, we can draw a `mosaicplot`.  A basic 2-variable example shows the relationship between `income` and `health` for the `brfss` participants:
+    ```r
+    healthVsIncome <- tally(~income+genhealth, data=brfss,useNA="no")
+    healthVsIncome %>% mosaicplot(color=brewer.pal(5,"RdPu"))
+    ```
+
+    a. What do you learn from this plot?
+    b. What is the meaning of the varying bar widths in the mosaic plot?
+

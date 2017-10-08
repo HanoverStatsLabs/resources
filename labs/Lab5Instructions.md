@@ -190,8 +190,5 @@ healthVsIncomeAndAge %>% aperm(c(2,3,1)) %>%
 
 ### Submissions
 
-When you are ready to submit:
-
-- Make sure to knit the final report before downloading.
-- Download both the Lab5Report.Rmd and the Lab5Report.html files (one at a time).
+- Make sure to knit one last time, then download the Lab5Report.Rmd file: in the **Files pane** (lower right), click the checkbox for the RMD file, then choose `More > Export... > Download`. *Do the same for Lab5Report.html.*
 - **Submit both files via Moodle**.
