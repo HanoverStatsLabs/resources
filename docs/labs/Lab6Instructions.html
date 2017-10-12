@@ -64,7 +64,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>add a regression line to a scatterplot,</li>
 <li>control the size and color of added lines,</li>
 <li>compute new scalar variables using an equation,</li>
-<li>compute new categorical variables by breaking the values of a scalar variable.</li>
+<li>compute new categorical variables by binning the values of a scalar variable.</li>
 </ul>
 <p>New R commands introduced in this lab: <code>quantile</code>, <code>cut</code>, <code>seq</code>, <code>panel.loess</code>, <code>panel.lmline</code>, <code>with</code></p>
 <h2 id="make-your-own-project-in-rstudio">Make Your Own Project in RStudio</h2>
@@ -81,7 +81,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Go to <code>File &gt; New File &gt; R Markdown...</code>.</li>
 <li>In the <code>Document</code> tab of the resulting dialog, give your report a title (Lab 6 Report) and put your name in the Author textbox. Keep HTML as the output format. Click <code>OK</code>.</li>
 <li>You should now see your new RMarkdown document at the upper left; <strong>save</strong> it. In the Save File dialog, enter the file name with no spaces: <code>Lab6Report</code>. (Do not use a filename extension.)</li>
-<li>Everything below the provided code chunk is boilerplate and <strong>should be removed</strong>. Do so now.</li>
+<li>Everything below the <em>first</em> provided code chunk is boilerplate and <strong>should be removed</strong>. Do so now.</li>
 <li><strong>Note</strong>: The top-level section heading (one <code>#</code>) is already in use in this document for the report title. Use second-level headings (<code>##</code>) for the main sections of the report. (If you need subsections, use <code>###</code>.)</li>
 <li>Use the <code>Insert</code> pulldown to add a new R code chunk. Add the command <code>library(hanoverbase)</code>. Use the chunk options dialog to disable warnings, disable messages, and “show nothing (run code)”.</li>
 <li><strong>Run the chunk</strong> which you just created.</li>
@@ -89,7 +89,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2 id="import-and-view-dataset">Import and View Dataset</h2>
 <ul>
 <li>Make a new R code chunk and use the <code>data(brfss)</code> command (see Lab 1, for example) to load the dataset named <code>brfss</code>; <strong>run this chunk</strong>.</li>
-<li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the <code>?</code> command should not be put into your R Markdown report.</li>
+<li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling.</li>
 <li>This data should be familiar from the previous lab.</li>
 </ul>
 <p>You are now ready to start working on your report. The sections below give you questions to answer and commands to try. Here are a few reminders:</p>
@@ -110,24 +110,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 highCutoff &lt;-<span class="st"> </span><span class="kw">quantile</span>(<span class="op">~</span>height, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>, <span class="dt">probs=</span>.<span class="dv">995</span>)
 heightSubset &lt;-<span class="st"> </span>brfss <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">filter</span>(height <span class="op">&gt;=</span><span class="st"> </span>lowCutoff <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;=</span><span class="st"> </span>highCutoff)</code></pre></div>
+<p>If this was successful, you should see a <code>heightSubset</code> entry in the Environment pane, showing around 99% of the initial observations.</p>
 <p>Now draw the histogram with the filtered data. Note: Instead of letting the histogram breaks be set by default, we will ask for 20 breaks. Later on, we’ll take finer control of the breaks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>height, <span class="dt">data=</span>heightSubset, <span class="dt">breaks=</span><span class="dv">20</span>)</code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li>Describe the overall shape of the distribution.</li>
 <li>Make a tally of the <code>sex</code> variable for the <code>heightSubset</code> data. What do you learn? How might this help to explain the shape of the histogram?</li>
 </ol></li>
-<li><p>When working with integer data such as <code>height</code>, we have to take care with our histogram bins / number of breaks, since integer data can interact badly with the breakpoints for creating the histogram bins.</p>
-<p>For example, if we have bins of width 1.4 with the first bin starting at 0, then the breaks are at 0, 1.4, 2.8, 4.2, etc. Notice that some bins have two integers (2.8 to 4.2 has 3 and 4) while others have one integer (1.4 to 2.8 has only 2). So the frequencies of the bins are not easily comparable.</p>
-<p>Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain an integer within their bounds.</p>
+<li><p>When working with whole number data such as <code>height</code>, we have to take care with our histogram bins / number of breaks, since whole number data can interact badly with the breakpoints for creating the histogram bins.</p>
+<p>For example, if we have bins of width 1.4 with the first bin starting at 0, then the breaks are at 0, 1.4, 2.8, 4.2, etc. Notice that some bins have two whole numbers (2.8 to 4.2 has 3 and 4) while others have one whole number (1.4 to 2.8 has only 2). So the frequencies of the bins are not easily comparable.</p>
+<p>Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain an whole number within their bounds.</p>
 <p>To avoid these problems, we can put breaks specifically at all the “.5” marks on the axis. We use the <code>seq</code> command to create a sequence of numbers with a given start value, stop value, and step size.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myBreaks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span>lowCutoff <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">to=</span>highCutoff <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">by=</span><span class="dv">1</span>)
 myBreaks        <span class="co"># this just prints the sequence of numbers</span>
 <span class="kw">histogram</span>(<span class="op">~</span>height, <span class="dt">data=</span>heightSubset, <span class="dt">breaks=</span>myBreaks)</code></pre></div>
-<p>Describe the height distribution: overall shape, center (from <code>favstats</code>), spread (for typical heights), number/location of modes (if any).</p></li>
+<p>Notice how the whole numbers on the x-axis are now centered below their corresponding bars.</p>
+<p>Describe the height distribution: overall shape, center (make a <code>favstats</code>), spread (for typical heights), number/location of modes (if any).</p></li>
 </ol>
 <h2 id="height-and-sex-paneled-histogram">Height and Sex / Paneled Histogram</h2>
 <ol start="4" style="list-style-type: decimal">
-<li><p>Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal. Indeed, with a boxplot we can see this difference. Draw a <code>bwplot</code> of <code>sex~height</code> now.</p>
+<li><p>Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal. Indeed, with a boxplot we can see this difference. Draw a <code>bwplot</code> of <code>sex~height</code> now, using the <code>heightSubset</code> data.</p>
 <p>As a companion to the <code>bwplot</code>, let’s also make a histogram which is paneled by sex. Notice the use of the formula <code>~height|sex</code> for height versus sex, and the <code>layout=c(1,2)</code> option for forcing the panels to line up vertically (1 column, 2 rows):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>height<span class="op">|</span>sex, <span class="dt">data=</span>heightSubset, <span class="dt">breaks=</span>myBreaks, <span class="dt">layout=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</code></pre></div>
 <p>Use the boxplot and the paneled histogram to explain why the original histogram does not show a clear bimodal pattern.</p></li>
@@ -135,33 +137,34 @@ myBreaks        <span class="co"># this just prints the sequence of numbers</spa
 <h2 id="height-and-weight-smooth-fit-curve-and-line-options">Height and Weight / Smooth Fit Curve and Line Options</h2>
 <p>In this section we investigate the relationship between <code>height</code> and <code>weight</code> for our respondents.</p>
 <ol start="5" style="list-style-type: decimal">
-<li><p>Make a scatterplot of weight versus height for the <code>brfss</code> dataset.</p>
+<li><p>Make a scatterplot of weight versus height for the <code>heightSubset</code> dataset.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Why do the dots make vertical stripes on the scatterplot?</li>
 <li>Describe the overall pattern in the data. Do you see a strong relationship between height and weight for these subjects? Explain.</li>
 </ol></li>
 <li><p>One way to summarize the data in a scatterplot is to add a smooth fit line (notice that the “line” in this context might be curved). Add the fit line with the <code>panel.loess</code> command. Note that <code>lwd=</code> is an option for setting line width.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.loess</span>(x, y, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>))</code></pre></div>
-<p>The smooth fit line is almost straight, indicating some sort of linear association. Note: the <em>strength</em> of the linear relationship cannot be seen in this graph.</p></li>
-<li><p>In addition to the smooth fit line, we can show the linear regression model:</p>
+<p>The smooth fit line is almost straight, indicating some sort of linear association. Note: the <em>strength</em> of the linear relationship cannot be seen in this graph.</p>
+<p>In addition to the smooth fit line, we can show the linear regression model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>))</code></pre></div>
 <p>Describe the direction of the linear association. Explain.</p></li>
 </ol>
 <h2 id="body-mass-index-creating-new-variables">Body-Mass Index / Creating New Variables</h2>
 <p>We will now learn how to create new variables out of existing variables. We will learn about two specific methods:</p>
 <ul>
-<li>Creating a new scalar variable from a equation using existing scalar variables.</li>
+<li>Creating a new scalar variable from an equation using existing scalar variables.</li>
 <li>Creating a new categorical (factor) variable from an existing scalar variable specifying breakpoints.</li>
 </ul>
 <h3 id="creating-a-new-scalar-variable">Creating a New Scalar Variable</h3>
 <p>We start with creating a new variable that measures the <a href="https://en.wikipedia.org/wiki/Body_mass_index"><strong>body mass index</strong></a>, typically abbreviated as BMI. The formula is “weight over height squared”. If pounds and inches are used, then a conversion factor of <span class="math inline">\(703\)</span> must be applied. We will use the <code>heightSubset</code> rather than the whole <code>brfss</code>.</p>
-<p>We use the dollar sign notation here to add a new column to the data. We also introduce the <code>with</code> command, which allows us to refer to the columns of a particular dataset in the formula:</p>
+<p>We use the dollar sign notation here to add a new column to the data. We also introduce the <code>with</code> command, which allows us to refer to the columns of a particular dataset in the equation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heightSubset<span class="op">$</span>bmi &lt;-<span class="st"> </span><span class="kw">with</span>(heightSubset, weight <span class="op">/</span><span class="st"> </span>(height<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="dv">703</span>)</code></pre></div>
-<ol start="8" style="list-style-type: decimal">
+<p>If this has succeeded, you should now see a new column in the <code>heightSubset</code>, called <code>bmi</code>.</p>
+<ol start="7" style="list-style-type: decimal">
 <li>Calculate a summary (<code>favstats</code>) and draw a basic histogram of the <code>bmi</code> variable using the <code>heightSubset</code> data. Describe the distribution. What can we say about the BMI values of the respondents?</li>
 </ol>
 <h3 id="creating-a-new-categorical-variable">Creating a New Categorical Variable</h3>
-<p>We will now break the BMI values into categories according to a standard correspondence described by the World Health Organization. Even though the WHO defines 8 different BMI range, we will limit it to 4:</p>
+<p>We will now break the BMI values into categories according to a standard correspondence described by the World Health Organization. Even though the WHO defines eight different BMI ranges, we will simplify it to four:</p>
 <table>
 <thead>
 <tr class="header">
@@ -192,11 +195,14 @@ myBreaks        <span class="co"># this just prints the sequence of numbers</spa
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heightSubset<span class="op">$</span>bmicat &lt;-<span class="st"> </span>heightSubset<span class="op">$</span>bmi <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">cut</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">18.5</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">100</span>),
         <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Underweight&quot;</span>, <span class="st">&quot;Normal&quot;</span>, <span class="st">&quot;Overweight&quot;</span>, <span class="st">&quot;Obese&quot;</span>))</code></pre></div>
-<ol start="9" style="list-style-type: decimal">
-<li><p>We now have a categorical variable called <code>bmicat</code>. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents’ BMI values from this?</p></li>
+<p>After running this command, you should see another new column titled <code>bmicat</code> in the <code>heightSubset</code> data.</p>
+<ol start="8" style="list-style-type: decimal">
+<li>We now have a categorical variable called <code>bmicat</code>. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents’ BMI values from this?</li>
 <li>We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.</li>
 <li><p>In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at <code>healthVsExercise</code> and <code>healthVsIncome</code> in the previous lab. Produce a stacked bar graph with <em>one bar for each BMI category</em> and <em>stacks determined by the <code>genhealth</code> variable</em>. The first command for this would be:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bmicatVsGenhealth &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>bmicat, <span class="dt">data=</span>heightSubset, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>)</code></pre></div></li>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsBmicat &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>bmicat, <span class="dt">data=</span>heightSubset,
+     <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
+<p>What do you see in the stacked bar graph? How does it compare with your prediction?</p></li>
 </ol>
 <h3 id="submissions">Submissions</h3>
 <ul>

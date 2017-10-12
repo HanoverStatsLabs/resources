@@ -16,7 +16,7 @@ In this lab we will learn how to:
 - add a regression line to a scatterplot,
 - control the size and color of added lines,
 - compute new scalar variables using an equation,
-- compute new categorical variables by breaking the values of a scalar variable.
+- compute new categorical variables by binning the values of a scalar variable.
 
 New R commands introduced in this lab: `quantile`, `cut`, `seq`, `panel.loess`, `panel.lmline`, `with`
 
@@ -35,7 +35,7 @@ Now you need to start a new RMarkdown report file.
 - Go to `File > New File > R Markdown...`.
 - In the `Document` tab of the resulting dialog, give your report a title (Lab 6 Report) and put your name in the Author textbox.  Keep HTML as the output format. Click `OK`.
 - You should now see your new RMarkdown document at the upper left; **save** it.  In the Save File dialog, enter the file name with no spaces: `Lab6Report`.  (Do not use a filename extension.)
-- Everything below the provided code chunk is boilerplate and **should be removed**.  Do so now.
+- Everything below the *first* provided code chunk is boilerplate and **should be removed**.  Do so now.
 - **Note**: The top-level section heading (one `#`) is already in use in this document for the report title.  Use second-level headings (`##`) for the main sections of the report.  (If you need subsections, use `###`.)
 - Use the `Insert` pulldown to add a new R code chunk.  Add the command `library(hanoverbase)`. Use the chunk options dialog to disable warnings, disable messages, and "show nothing (run code)".
 - **Run the chunk** which you just created.
@@ -43,7 +43,7 @@ Now you need to start a new RMarkdown report file.
 ## Import and View Dataset
 
 - Make a new R code chunk and use the `data(brfss)` command (see Lab 1, for example) to load the dataset named `brfss`; **run this chunk**.
-- Use the `View` command *in the console* to see the data in the Preview window.  **Note**:  Do not put the `View` command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the `?` command should not be put into your R Markdown report.
+- Use the `View` command *in the console* to see the data in the Preview window.  **Note**:  Do not put the `View` command in an R chunk, it will prevent your report from knitting/compiling.
 - This data should be familiar from the previous lab.
 
 You are now ready to start working on your report.  The sections below give you questions to answer and commands to try.  Here are a few reminders:
@@ -67,6 +67,8 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 	heightSubset <- brfss %>%
 	    filter(height >= lowCutoff & height <= highCutoff)
 	```
+    If this was successful, you should see a `heightSubset` entry in the Environment pane, showing around 99% of the initial observations.
+
 	Now draw the histogram with the filtered data. Note: Instead of letting the histogram breaks be set by default, we will ask for 20 breaks.  Later on, we'll take finer control of the breaks.
 	```r
 	histogram(~height, data=heightSubset, breaks=20)
@@ -74,11 +76,11 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
     a. Describe the overall shape of the distribution.
     b. Make a tally of the `sex` variable for the `heightSubset` data. What do you learn? How might this help to explain the shape of the histogram?
 
-3. When working with integer data such as `height`, we have to take care with our histogram bins / number of breaks, since integer data can interact badly with the breakpoints for creating the histogram bins.
+3. When working with whole number data such as `height`, we have to take care with our histogram bins / number of breaks, since whole number data can interact badly with the breakpoints for creating the histogram bins.
 
-	For example, if we have bins of width 1.4 with the first bin starting at 0, then the breaks are at 0, 1.4, 2.8, 4.2, etc.  Notice that some bins have two integers (2.8 to 4.2 has 3 and 4) while others have one integer (1.4 to 2.8 has only 2). So the frequencies of the bins are not easily comparable.
+	For example, if we have bins of width 1.4 with the first bin starting at 0, then the breaks are at 0, 1.4, 2.8, 4.2, etc.  Notice that some bins have two whole numbers (2.8 to 4.2 has 3 and 4) while others have one whole number (1.4 to 2.8 has only 2). So the frequencies of the bins are not easily comparable.
 
-	Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain an integer within their bounds.
+	Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain an whole number within their bounds.
 
 	To avoid these problems, we can put breaks specifically at all the ".5" marks on the axis. We use the `seq` command to create a sequence of numbers with a given start value, stop value, and step size.
 	```r
@@ -86,11 +88,13 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 	myBreaks  		# this just prints the sequence of numbers
 	histogram(~height, data=heightSubset, breaks=myBreaks)
 	```
-	Describe the height distribution: overall shape, center (from `favstats`), spread (for typical heights), number/location of modes (if any).
+    Notice how the whole numbers on the x-axis are now centered below their corresponding bars.
+
+	Describe the height distribution: overall shape, center (make a `favstats`), spread (for typical heights), number/location of modes (if any).
 
 ## Height and Sex / Paneled Histogram
 
-4. Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal.  Indeed, with a boxplot we can see this difference. Draw a `bwplot` of `sex~height` now.
+4. Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal.  Indeed, with a boxplot we can see this difference. Draw a `bwplot` of `sex~height` now, using the `heightSubset` data.
 
     As a companion to the `bwplot`, let's also make a histogram which is paneled by sex.  Notice the use of the formula `~height|sex` for height versus sex, and the `layout=c(1,2)` option for forcing the panels to line up vertically (1 column, 2 rows):
     ```r
@@ -102,7 +106,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 
 In this section we investigate the relationship between `height` and `weight` for our respondents.
 
-5. Make a scatterplot of weight versus height for the `brfss` dataset.
+5. Make a scatterplot of weight versus height for the `heightSubset` dataset.
 
     a. Why do the dots make vertical stripes on the scatterplot?
     b. Describe the overall pattern in the data.  Do you see a strong relationship between height and weight for these subjects? Explain.
@@ -114,7 +118,7 @@ In this section we investigate the relationship between `height` and `weight` fo
 	```
 	The smooth fit line is almost straight, indicating some sort of linear association.  Note: the *strength* of the linear relationship cannot be seen in this graph.
 
-7. In addition to the smooth fit line, we can show the linear regression model:
+    In addition to the smooth fit line, we can show the linear regression model:
 
 	```r
 	ladd(panel.lmline(x, y, col="red", lwd=2))
@@ -126,23 +130,24 @@ In this section we investigate the relationship between `height` and `weight` fo
 
 We will now learn how to create new variables out of existing variables. We will learn about two specific methods:
 
-- Creating a new scalar variable from a equation using existing scalar variables.
+- Creating a new scalar variable from an equation using existing scalar variables.
 - Creating a new categorical (factor) variable from an existing scalar variable specifying breakpoints.
 
 ### Creating a New Scalar Variable
 
 We start with creating a new variable that measures the [**body mass index**](https://en.wikipedia.org/wiki/Body_mass_index), typically abbreviated as BMI. The formula is "weight over height squared". If pounds and inches are used, then a conversion factor of $703$ must be applied. We will use the `heightSubset` rather than the whole `brfss`.
 
-We use the dollar sign notation here to add a new column to the data. We also introduce the `with` command, which allows us to refer to the columns of a particular dataset in the formula:
+We use the dollar sign notation here to add a new column to the data. We also introduce the `with` command, which allows us to refer to the columns of a particular dataset in the equation:
 ```r
 heightSubset$bmi <- with(heightSubset, weight / (height^2) * 703)
 ```
+If this has succeeded, you should now see a new column in the `heightSubset`, called `bmi`.
 
-8. Calculate a summary (`favstats`) and draw a basic histogram of the `bmi` variable using the `heightSubset` data. Describe the distribution. What can we say about the BMI values of the respondents?
+7. Calculate a summary (`favstats`) and draw a basic histogram of the `bmi` variable using the `heightSubset` data. Describe the distribution. What can we say about the BMI values of the respondents?
 
 ### Creating a New Categorical Variable
 
-We will now break the BMI values into categories according to a standard correspondence described by the World Health Organization. Even though the WHO defines 8 different BMI range, we will limit it to 4:
+We will now break the BMI values into categories according to a standard correspondence described by the World Health Organization. Even though the WHO defines eight different BMI ranges, we will simplify it to four:
 
 Category        BMI Range
 ------------- -----------
@@ -157,14 +162,16 @@ heightSubset$bmicat <- heightSubset$bmi %>%
     cut(breaks=c(0, 18.5, 25, 30, 100),
         labels=c("Underweight", "Normal", "Overweight", "Obese"))
 ```
+After running this command, you should see another new column titled `bmicat` in the `heightSubset` data.
 
-9. We now have a categorical variable called `bmicat`. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents' BMI values from this?
-
-10. We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.
-11. In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at `healthVsExercise` and `healthVsIncome` in the previous lab. Produce a stacked bar graph with *one bar for each BMI category* and *stacks determined by the `genhealth` variable*. The first command for this would be:
+8. We now have a categorical variable called `bmicat`. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents' BMI values from this?
+9. We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.
+10. In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at `healthVsExercise` and `healthVsIncome` in the previous lab. Produce a stacked bar graph with *one bar for each BMI category* and *stacks determined by the `genhealth` variable*. The first command for this would be:
     ```r
-    bmicatVsGenhealth <- tally(~genhealth|bmicat, data=heightSubset, useNA="no", format="percent")
+    healthVsBmicat <- tally(~genhealth|bmicat, data=heightSubset,
+         format="percent", useNA="no")
     ```
+    What do you see in the stacked bar graph? How does it compare with your prediction?
 
 ### Submissions
 
