@@ -18,20 +18,20 @@ In this lab we will learn how to:
 
 As we did in the previous lab, start a new project:
 
-- In RStudio, go to `File > New Project > New Directory > Empty Project`
-- Make sure the parent directory (second textbox) is the folder where you want to keep your projects for this class. Use the `browse` button if necessary.
+- In RStudio, go to **File > New Project > New Directory > Empty Project**
+- Make sure the parent directory (second textbox) is the folder where you want to keep your projects for this class. Use the **Browse** button if necessary.
 - Enter a name for the new directory; it is good practice to avoid spaces in your file names by using underscores in place of spaces.  For example, `Lab_7` would be a good name.
-- Click `Create Project`.
+- Click **Create Project**.
 - In the Files pane, you should now see a file `Lab_7.Rproj`. This is the project configuration file, and you don't need to do anything with it.
 
 Now you need to start a new RMarkdown report file.
 
-- Go to `File > New File > R Markdown...`.
-- In the `Document` tab of the resulting dialog, give your report a title (Lab 7 Report) and put your name in the Author textbox.  Keep HTML as the output format. Click `OK`.
+- Go to **File > New File > R Markdown...**.
+- In the **Document** tab of the resulting dialog, give your report a title (Lab 7 Report) and put your name in the Author textbox.  Keep HTML as the output format. Click **OK**.
 - You should now see your new RMarkdown document at the upper left; **save** it.  In the Save File dialog, enter the file name with no spaces: `Lab7Report`.  (Do not use a filename extension.)
 - Everything below the *first* provided code chunk is boilerplate and **should be removed**.  Do so now.
 - **Note**: The top-level section heading (one `#`) is already in use in this document for the report title.  Use second-level headings (`##`) for the main sections of the report.  (If you need subsections, use `###`.)
-- Use the `Insert` pulldown to add a new R code chunk.  Add the command `library(hanoverbase)`. Use the chunk options dialog to disable warnings, disable messages, and "show nothing (run code)".
+- Use the **Insert** pulldown to add a new R code chunk.  Add the command `library(hanoverbase)`. Use the chunk options dialog to disable warnings, disable messages, and "show nothing (run code)".
 - **Run the chunk** which you just created.
 
 ## Import From Excel
@@ -39,25 +39,35 @@ Now you need to start a new RMarkdown report file.
 In order to add a data file to the project itself, we start by uploading an Excel file:
 
 - Download the Excel file that holds the relevant data: [hanoverstatslabs.github.io/resources/datasets/guns.xlsx](hanoverstatslabs.github.io/resources/datasets/guns.xlsx)
-- In the **Files** pane (lower right), click the `upload` button to start the `Upload Files` dialog.
-- Click `Choose File` and navigate to your Downloads folder. Find the file **guns.xlsx** and click on it.
-- Click `OK` to finish the upload. If this was successful, you should now see `guns.xlsx` in your Files pane.
+- In the **Files** pane (lower right), click the **upload** button to start the `Upload Files` dialog.
+- Click **Choose File** and navigate to your Downloads folder. Find the file `guns.xlsx` and click on it.
+- Click **OK** to finish the upload. If this was successful, you should now see `guns.xlsx` in your Files pane.
 
-Now we need to import the actual data from the Excel file into the RStudio project (into both the console and into the report):
+Now we need to *import the actual data from the Excel file into the RStudio project* (both into the console and into the report):
 
-- Click on the `guns.xlsx` file. Take the option `Import Dataset`. This should bring up the `Import Excel Data` dialog.
-- If the preview looks reasonable, click the `Import` button to do the import. You should now see the guns data in the data viewer, and a couple of lines of import code in the console.
+- Click on the `guns.xlsx` file. Choose the option **Import Dataset**. This should bring up the **Import Excel Data** dialog.
+- If the preview looks reasonable, click the **Import** button to do the import. You should now see the `guns` data in the data viewer, and a couple of lines of import code in the console. Next we will add these lines into our report.
 - Make a new R code chunk in your report (below the `hanoverbase` chunk).
-- There are two lines of code to copy from the console and paste into the new chunk. The first looks like `library(readxl)` and the second begins `guns <-`. You do not need to run this chunk at this time, since we've already run those commands.
+- There are two lines of code to copy from the console and paste into the new chunk. The first looks like `library(readxl)` and the second begins with `guns <-`. You do not need to run this chunk at this time, since we've already run those commands. But you need to have them in the chunk when you knit the report.
 
 ## Explanation of the Variables in the Guns Dataset
 
-We created the file `guns.xlsx` from data provided at [www.openintro.org/stat/data](www.openintro.org/stat/data). The four variables in the data are as follows:
+We created the file `guns.xlsx` from data provided at [www.openintro.org/stat/data](www.openintro.org/stat/data). The five variables in the data are as follows:
 
-- country: Name of the country.
-- mort_rate: The number of gun-related deaths per 10,000 population.
-- own_rate: The number of guns per 100 population. Note that this counts numbers of guns, not numbers of people. (Do you think it includes unregistered guns?)
-- hdi: The country's numeric Human Development Index (a composite statistic of life expectancy, education, and per capita income indicators).
+country
+  ~ Name of the country.
+
+mort_rate
+  ~ The number of gun-related deaths per 10,000 population.
+
+own_rate
+  ~ The number of guns per 100 population. Note that this counts numbers of guns, not numbers of people. (Do you think it includes unregistered guns?)
+
+hdi
+  ~ The country's numeric Human Development Index (a composite statistic of life expectancy, education, and per capita income indicators).
+
+continent
+  ~ The continent that the country belongs to.
 
 ## Statistical Investigations
 
@@ -116,9 +126,9 @@ We wonder if countries with high gun ownership rates also have high gun-related 
     ```r
     fit1 <- lm(mort_rate~own_rate, data=guns)
     coefficients(fit)
-    r1 =<- cor(mort_rate~own_rate, data=guns)
-    r1
-    r1^2
+    r1 <- cor(mort_rate~own_rate, data=guns)
+    r1      # prints the correlation
+    r1^2    # prints the "r-squared"
     ```
 
     a. Write the equation of the linear model.
@@ -133,15 +143,15 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 
     Remember that any remaining pattern in the residual plot indicates an incomplete model.
 
-    Do you see that there is a pattern in the residuals, or do they look "unpatterned" for the most part.
+    Do you see that there is a pattern in the residuals, or do they look "unpatterned" for the most part?
 
-8. Correlation and regression are both susceptible to the effects of outliers and other influential points. Let's see what happens when we filter out the U.S. from the data.
+8. Correlation and regression are both susceptible to the effects of outliers and other influential points. Let's see what happens when we filter out the U.S. entry from the data.
 
     ```r
     gunsFiltered <- ....   # pipe the `guns` data through a filter to remove U.S.
     ```
 
-    **Repeat** the code for #4 - #7 with the newly filtered dataset. Change the names `g1`, `fit1` and `r1` to `g2`, `fit2` and `r2`. In the new scatterplot, for example, you should **no longer see** the point for the U.S. (own_rate > 80).
+    **Repeat** the code for #4 - #7 with the newly filtered dataset (`gunsFiltered`). Change the names `g1`, `fit1` and `r1` to `g2`, `fit2` and `r2`. In the new scatterplot, for example, you should **no longer see** the point for the U.S. (own_rate > 80).
 
     a. Has your perception of the association changed? Explain.
     b. Is there still a positive association? A linear association?
@@ -154,11 +164,11 @@ We wonder if countries with high gun ownership rates also have high gun-related 
     ladd(panel.abline(fit2, col="magenta", lwd=2))
     ```
 
-    Explain why the second line (fit2) has a smaller slope.
+    Explain why the second line (`fit2`) has a smaller slope.
 
 ### Other Relationships
 
-10. To make a correlation table, use the `cor` command in a new way:
+10. We will now briefly take a look at how the two rates relate to the third variable of interest, `hdi`. We can do so by creating a **correlation table**, that shows the correlations between all possible pairs of selected variables. To make a correlation table, use the `cor` command in a new way:
 
     ```r
     cor(guns[,2:4])  # uses columns 2 - 4 in the data
@@ -174,7 +184,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 
 11. We want to investigate whether the relationship between mortality rate and ownership rate varies depending on the `hdi` of the various countries. In order to do that, we will split the countries into groups based on their `hdi`. To find a good split, draw a histogram for `hdi` using a suitable number of breaks.  Where would you split the values into different categories?
 
-12. Create a variable `hdicat` which splits the cases depending on whether the `hdi` is lower or higher than $0.85$. We pipe the `hdi` values into the `cut` command to create the desired breaks.
+12. Create a new column `hdicat` in the dataset, which splits the cases depending on whether the `hdi` is lower or higher than $0.85$. We pipe the `hdi` values into the `cut` command to create the desired breaks.
 
     ```r
     guns$hdicat <- guns$hdi %>% cut(breaks=c(0.75, 0.85, 0.95))
@@ -191,7 +201,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
     cor(mort_rate~own_rate, data=guns %>% filter(hdi > 0.85))
     ```
 
-    What do you see in the resulting plot and correlations? Explain as best you can what is going on here.
+    What do you see in the resulting plot and correlations? Explain as best you can what is going on.
 
 ### Submissions
 
