@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1 id="lab-7-linear-modeling">Lab 7: Linear Modeling</h1>
+<h2 id="introduction">Introduction</h2>
+<p>In this lab we will learn how to work with linear models in RStudio.</p>
+<h2 id="overall-goals">Overall Goals</h2>
+<p>In this lab we will learn how to:</p>
+<ul>
+<li>add a data file to a project by importing from Excel,</li>
+<li>customize scatterplots,</li>
+<li>fit, visualize, and analyze linear models,</li>
+<li>and interpret residual plots.</li>
+</ul>
+<h2 id="make-your-own-project-in-rstudio">Make Your Own Project in RStudio</h2>
+<p>As we did in the previous lab, start a new project:</p>
+<ul>
+<li>In RStudio, go to <code>File &gt; New Project &gt; New Directory &gt; Empty Project</code></li>
+<li>Make sure the parent directory (second textbox) is the folder where you want to keep your projects for this class. Use the <code>browse</code> button if necessary.</li>
+<li>Enter a name for the new directory; it is good practice to avoid spaces in your file names by using underscores in place of spaces. For example, <code>Lab_7</code> would be a good name.</li>
+<li>Click <code>Create Project</code>.</li>
+<li>In the Files pane, you should now see a file <code>Lab_7.Rproj</code>. This is the project configuration file, and you don’t need to do anything with it.</li>
+</ul>
+<p>Now you need to start a new RMarkdown report file.</p>
+<ul>
+<li>Go to <code>File &gt; New File &gt; R Markdown...</code>.</li>
+<li>In the <code>Document</code> tab of the resulting dialog, give your report a title (Lab 7 Report) and put your name in the Author textbox. Keep HTML as the output format. Click <code>OK</code>.</li>
+<li>You should now see your new RMarkdown document at the upper left; <strong>save</strong> it. In the Save File dialog, enter the file name with no spaces: <code>Lab7Report</code>. (Do not use a filename extension.)</li>
+<li>Everything below the <em>first</em> provided code chunk is boilerplate and <strong>should be removed</strong>. Do so now.</li>
+<li><strong>Note</strong>: The top-level section heading (one <code>#</code>) is already in use in this document for the report title. Use second-level headings (<code>##</code>) for the main sections of the report. (If you need subsections, use <code>###</code>.)</li>
+<li>Use the <code>Insert</code> pulldown to add a new R code chunk. Add the command <code>library(hanoverbase)</code>. Use the chunk options dialog to disable warnings, disable messages, and “show nothing (run code)”.</li>
+<li><strong>Run the chunk</strong> which you just created.</li>
+</ul>
+<h2 id="import-from-excel">Import From Excel</h2>
+<p>In order to add a data file to the project itself, we start by uploading an Excel file:</p>
+<ul>
+<li>Download the Excel file that holds the relevant data: <a href="hanoverstatslabs.github.io/resources/datasets/guns.xlsx" class="uri">hanoverstatslabs.github.io/resources/datasets/guns.xlsx</a></li>
+<li>In the <strong>Files</strong> pane (lower right), click the <code>upload</code> button to start the <code>Upload Files</code> dialog.</li>
+<li>Click <code>Choose File</code> and navigate to your Downloads folder. Find the file <strong>guns.xlsx</strong> and click on it.</li>
+<li>Click <code>OK</code> to finish the upload. If this was successful, you should now see <code>guns.xlsx</code> in your Files pane.</li>
+</ul>
+<p>Now we need to import the actual data from the Excel file into the RStudio project (into both the console and into the report):</p>
+<ul>
+<li>Click on the <code>guns.xlsx</code> file. Take the option <code>Import Dataset</code>. This should bring up the <code>Import Excel Data</code> dialog.</li>
+<li>If the preview looks reasonable, click the <code>Import</code> button to do the import. You should now see the guns data in the data viewer, and a couple of lines of import code in the console.</li>
+<li>Make a new R code chunk in your report (below the <code>hanoverbase</code> chunk).</li>
+<li>There are two lines of code to copy from the console and paste into the new chunk. The first looks like <code>library(readxl)</code> and the second begins <code>guns &lt;-</code>. You do not need to run this chunk at this time, since we’ve already run those commands.</li>
+</ul>
+<h2 id="explanation-of-the-variables-in-the-guns-dataset">Explanation of the Variables in the Guns Dataset</h2>
+<p>We created the file <code>guns.xlsx</code> from data provided at <a href="www.openintro.org/stat/data" class="uri">www.openintro.org/stat/data</a>. The four variables in the data are as follows:</p>
+<ul>
+<li>country: Name of the country.</li>
+<li>mort_rate: The number of gun-related deaths per 10,000 population.</li>
+<li>own_rate: The number of guns per 100 population. Note that this counts numbers of guns, not numbers of people. (Do you think it includes unregistered guns?)</li>
+<li>hdi: The country’s numeric Human Development Index (a composite statistic of life expectancy, education, and per capita income indicators).</li>
+</ul>
+<h2 id="statistical-investigations">Statistical Investigations</h2>
+<p>You are now ready to start working on your report. The sections below give you questions to answer and commands to try. Here are a few reminders:</p>
+<ul>
+<li><strong>Important formatting note</strong>: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report, using formatting elements to make the report easy to read. See: <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a></li>
+<li><strong>R Chunks</strong>: As usual, create R Chunks (use the <code>Insert</code> pulldown) for your R commands. Use the R Cheatsheet for help as needed.</li>
+<li><strong>Knit Early and Often</strong></li>
+</ul>
+<h3 id="warmup">Warmup</h3>
+<p>To get warmed up and familiarize ourselves with the variables, we will start with some one-variable investigations.</p>
+<ol style="list-style-type: decimal">
+<li><p>Make a <code>favstats</code> summary and a histogram for the <code>own_rate</code> variable; you should adjust the number of breaks in order to get a good view.</p>
+<p>Also make a labeled dotplot to show the countries in the dataset, sorted by gun ownership rate:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="op">~</span>own_rate<span class="op">|</span>country, <span class="dt">data=</span>guns) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</code></pre></div>
+<p>You should see two clusters in the dotplot, a couple of high outliers, and one extremely high outlier.</p>
+<p>Describe the distribution of <code>own_rate</code>. What are the outliers and what are their gun ownership rates (number of guns per 100 population)?</p></li>
+<li>Do the same for <code>mort_rate</code>. Describe what you find.</li>
+<li><p>Do the same for <code>hdi</code>. Describe what you find.</p></li>
+</ol>
+<h3 id="mortality-and-gun-ownership">Mortality and Gun Ownership</h3>
+<p>We wonder if countries with high gun ownership rates also have high gun-related mortality rates. We can investigate this with a scatterplot.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Make a scatterplot for <code>mort_rate</code> (y) vs. <code>own_rate</code> (x). Describe the overall pattern (including direction, if any) of the data and identify any unusual points. Attach a name to your plot so you can recall that plot in the future:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g1 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
+g1     <span class="co"># this is just to display the graph</span></code></pre></div></li>
+<li><p>First we’ll do some modeling without removing any observations. Let’s start with a smooth fit curve.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.loess</span>(x, y, <span class="dt">col=</span><span class="st">&quot;&lt;your color here&gt;&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>), <span class="dt">plot=</span>g1)</code></pre></div>
+<p>Does it look like a linear model is a good fit for these data? Explain.</p></li>
+<li><p>Let’s see what a linear model looks like on this plot:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;&lt;your color here&gt;&quot;</span>))</code></pre></div>
+<p>In order to find the equation of our linear model, we need to calculate the slope and intercept. And to assess how well the model fits the data, we should calculate the square of the correlation (R-square linear).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
+<span class="kw">coefficients</span>(fit)
+r1 =<span class="er">&lt;</span><span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
+r1
+r1<span class="op">^</span><span class="dv">2</span></code></pre></div>
+<ol style="list-style-type: lower-alpha">
+<li>Write the equation of the linear model.</li>
+<li>Assess how well the linear model fits the data. Explain.</li>
+</ol></li>
+<li><p>In order to further assess the appropriateness of the linear model, we look at a residual plot, showing the <strong>residual</strong> (y minus fitted) vs. fitted. We add a horizontal line at 0 to help us judge the presence of a pattern:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(<span class="kw">resid</span>(fit)<span class="op">~</span><span class="kw">fitted</span>(fit))
+<span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">h=</span><span class="dv">0</span>))</code></pre></div>
+<p>Remember that any remaining pattern in the residual plot indicates an incomplete model.</p>
+<p>Do you see that there is a pattern in the residuals, or do they look “unpatterned” for the most part.</p></li>
+<li><p>Correlation and regression are both susceptible to the effects of outliers and other influential points. Let’s see what happens when we filter out the U.S. from the data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gunsFiltered &lt;-<span class="st"> </span>....   <span class="co"># pipe the `guns` data through a filter to remove U.S.</span></code></pre></div>
+<p><strong>Repeat</strong> the code for #4 - #7 with the newly filtered dataset. Change the names <code>g1</code>, <code>fit1</code> and <code>r1</code> to <code>g2</code>, <code>fit2</code> and <code>r2</code>. In the new scatterplot, for example, you should <strong>no longer see</strong> the point for the U.S. (own_rate &gt; 80).</p>
+<ol style="list-style-type: lower-alpha">
+<li>Has your perception of the association changed? Explain.</li>
+<li>Is there still a positive association? A linear association?</li>
+<li>Has the correlation changed? If so, how?</li>
+</ol></li>
+<li><p>Now we will show both linear models on the original (unfiltered) scatterplot. This demonstrates the effect of single influential observation on the modeling process.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.abline</span>(fit1, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>), <span class="dt">plot=</span>g1)
+<span class="kw">ladd</span>(<span class="kw">panel.abline</span>(fit2, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>))</code></pre></div>
+<p>Explain why the second line (fit2) has a smaller slope.</p></li>
+</ol>
+<h3 id="other-relationships">Other Relationships</h3>
+<ol start="10" style="list-style-type: decimal">
+<li><p>To make a correlation table, use the <code>cor</code> command in a new way:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(guns[,<span class="dv">2</span><span class="op">:</span><span class="dv">4</span>])  <span class="co"># uses columns 2 - 4 in the data</span></code></pre></div>
+<p>Use a similar command to make a second table using the <code>gunsFiltered</code> data.</p>
+<p>To see the correlation between two variables x and y, for example, find x in the columns and y in the rows. The number for that row and column gives the correlation for that pair.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Explain why the correlations on the “main diagonal” will always be 1.0.</li>
+<li>With which of the two rates is the <code>hdi</code> most strongly correlated?</li>
+<li><code>hdi</code> tries to measure how “advanced” the country is in terms of education, health, etc. How does it make sense that <code>hdi</code> is positively correlated with gun ownership rate?</li>
+</ol></li>
+<li><p>We want to investigate whether the relationship between mortality rate and ownership rate varies depending on the <code>hdi</code> of the various countries. In order to do that, we will split the countries into groups based on their <code>hdi</code>. To find a good split, draw a histogram for <code>hdi</code> using a suitable number of breaks. Where would you split the values into different categories?</p></li>
+<li><p>Create a variable <code>hdicat</code> which splits the cases depending on whether the <code>hdi</code> is lower or higher than <span class="math inline">\(0.85\)</span>. We pipe the <code>hdi</code> values into the <code>cut</code> command to create the desired breaks.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">guns<span class="op">$</span>hdicat &lt;-<span class="st"> </span>guns<span class="op">$</span>hdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cut</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="fl">0.75</span>, <span class="fl">0.85</span>, <span class="fl">0.95</span>))</code></pre></div>
+<p>If this worked correctly, you should see the new variable <code>hdicat</code> in the data viewer.</p>
+<p>Now we make a paneled scatterplot for <code>mort_rate</code> versus <code>own_rate</code>, paneled by <code>hdicat</code>. We use <code>ladd</code> to add the linear models and <code>cor</code> to find the correlations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate<span class="op">|</span>hdicat, <span class="dt">data=</span>guns)
+<span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y))
+<span class="kw">cor</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(hdi <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.85</span>))
+<span class="kw">cor</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(hdi <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.85</span>))</code></pre></div>
+<p>What do you see in the resulting plot and correlations? Explain as best you can what is going on here.</p></li>
+</ol>
+<h3 id="submissions">Submissions</h3>
+<ul>
+<li>Make sure to knit one last time, then download the Lab7Report.Rmd file: in the <strong>Files pane</strong> (lower right), click the checkbox for the RMD file, then choose <code>More &gt; Export... &gt; Download</code>. <em>Do the same for Lab7Report.html.</em></li>
+<li><strong>Submit both files via Moodle</strong>.</li>
+</ul>
+</body>
+</html>
