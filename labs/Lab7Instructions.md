@@ -38,7 +38,7 @@ Now you need to start a new RMarkdown report file.
 
 In order to add a data file to the project itself, we start by uploading an Excel file:
 
-- Download the Excel file that holds the relevant data: [hanoverstatslabs.github.io/resources/datasets/guns.xlsx](hanoverstatslabs.github.io/resources/datasets/guns.xlsx)
+- Download the Excel file that holds the relevant data: [https://hanoverstatslabs.github.io/resources/datasets/guns.xlsx](https://hanoverstatslabs.github.io/resources/datasets/guns.xlsx)
 - In the **Files** pane (lower right), click the **upload** button to start the `Upload Files` dialog.
 - Click **Choose File** and navigate to your Downloads folder. Find the file `guns.xlsx` and click on it.
 - Click **OK** to finish the upload. If this was successful, you should now see `guns.xlsx` in your Files pane.
