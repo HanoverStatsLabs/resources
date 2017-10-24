@@ -89,6 +89,8 @@ To get warmed up and familiarize ourselves with the variables, we will start wit
     sum(~own_rate|country, data=guns) %>% sort() %>% dotplot()
     ```
 
+    If the dotplot looks too squeezed in the generated report, put it in its own chunk and use the chunk's options menu and the option **Use custom rigure size** to specify the desired height for the chunk.
+
     You should see two clusters in the dotplot, a couple of high outliers, and one extremely high outlier.
 
     Describe the distribution of `own_rate`. What are the outliers and what are their gun ownership rates (number of guns per 100 population)?
@@ -125,11 +127,13 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 
     ```r
     fit1 <- lm(mort_rate~own_rate, data=guns)
-    coefficients(fit)
+    coefficients(fit1)
     r1 <- cor(mort_rate~own_rate, data=guns)
     r1      # prints the correlation
     r1^2    # prints the "r-squared"
     ```
+
+    The last two numbers in the printout are the correlation $r$ and its square $r^2$ respetively. The two previous values are the intercept and slope for the linear model.
 
     a. Write the equation of the linear model.
     b. Assess how well the linear model fits the data. Explain.
@@ -145,13 +149,15 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 
     Do you see that there is a pattern in the residuals, or do they look "unpatterned" for the most part?
 
-8. Correlation and regression are both susceptible to the effects of outliers and other influential points. Let's see what happens when we filter out the U.S. entry from the data.
+8. Correlation and regression are both susceptible to the effects of outliers and other influential points. Let's see what happens when we filter out the U.S. entry from the data. The following command will create a new dataset called `gunsFiltered` by removing the U.S. from the `guns` dataset. You will need to replace the three dots with an expression involding the various variables, that would leave out the United States (Hint: The U.S. is the only country with a very high ownership rate).
 
     ```r
-    gunsFiltered <- ....   # pipe the `guns` data through a filter to remove U.S.
+    gunsFiltered <- guns %>% filter(  ..change this..  )
     ```
 
-    **Repeat** the code for #4 - #7 with the newly filtered dataset (`gunsFiltered`). Change the names `g1`, `fit1` and `r1` to `g2`, `fit2` and `r2`. In the new scatterplot, for example, you should **no longer see** the point for the U.S. (own_rate > 80).
+    If this was done correctly, you should see a new dataset entry in your environment that does not contain the U.S.
+
+    **Repeat** the code for #4 - #7 with the newly filtered dataset (`gunsFiltered`), changing the names `g1`, `fit1` and `r1` to `g2`, `fit2` and `r2` respectively. In the new scatterplot, for example, you should **no longer see** the point for the U.S. (own_rate > 80).
 
     a. Has your perception of the association changed? Explain.
     b. Is there still a positive association? A linear association?
@@ -190,7 +196,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
     guns$hdicat <- guns$hdi %>% cut(breaks=c(0.75, 0.85, 0.95))
     ```
 
-    If this worked correctly, you should see the new variable `hdicat` in the data viewer.
+    If this worked correctly, you should see a new column `hdicat` added to the `guns` dataset.
 
     Now we make a paneled scatterplot for `mort_rate` versus `own_rate`, paneled by `hdicat`. We use `ladd` to add the linear models and `cor` to find the correlations:
 

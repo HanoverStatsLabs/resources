@@ -127,6 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>Make a <code>favstats</code> summary and a histogram for the <code>own_rate</code> variable; you should adjust the number of breaks in order to get a good view.</p>
 <p>Also make a labeled dotplot to show the countries in the dataset, sorted by gun ownership rate:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="op">~</span>own_rate<span class="op">|</span>country, <span class="dt">data=</span>guns) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</code></pre></div>
+<p>If the dotplot looks too squeezed in the generated report, put it in its own chunk and use the chunk’s options menu and the option <strong>Use custom rigure size</strong> to specify the desired height for the chunk.</p>
 <p>You should see two clusters in the dotplot, a couple of high outliers, and one extremely high outlier.</p>
 <p>Describe the distribution of <code>own_rate</code>. What are the outliers and what are their gun ownership rates (number of guns per 100 population)?</p></li>
 <li>Do the same for <code>mort_rate</code>. Describe what you find.</li>
@@ -145,10 +146,11 @@ g1     <span class="co"># this is just to display the graph</span></code></pre><
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;&lt;your color here&gt;&quot;</span>))</code></pre></div>
 <p>In order to find the equation of our linear model, we need to calculate the slope and intercept. And to assess how well the model fits the data, we should calculate the square of the correlation (R-square linear).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
-<span class="kw">coefficients</span>(fit)
+<span class="kw">coefficients</span>(fit1)
 r1 &lt;-<span class="st"> </span><span class="kw">cor</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
 r1      <span class="co"># prints the correlation</span>
 r1<span class="op">^</span><span class="dv">2</span>    <span class="co"># prints the &quot;r-squared&quot;</span></code></pre></div>
+<p>The last two numbers in the printout are the correlation <span class="math inline">\(r\)</span> and its square <span class="math inline">\(r^2\)</span> respetively. The two previous values are the intercept and slope for the linear model.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Write the equation of the linear model.</li>
 <li>Assess how well the linear model fits the data. Explain.</li>
@@ -158,9 +160,10 @@ r1<span class="op">^</span><span class="dv">2</span>    <span class="co"># print
 <span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">h=</span><span class="dv">0</span>))</code></pre></div>
 <p>Remember that any remaining pattern in the residual plot indicates an incomplete model.</p>
 <p>Do you see that there is a pattern in the residuals, or do they look “unpatterned” for the most part?</p></li>
-<li><p>Correlation and regression are both susceptible to the effects of outliers and other influential points. Let’s see what happens when we filter out the U.S. entry from the data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gunsFiltered &lt;-<span class="st"> </span>....   <span class="co"># pipe the `guns` data through a filter to remove U.S.</span></code></pre></div>
-<p><strong>Repeat</strong> the code for #4 - #7 with the newly filtered dataset (<code>gunsFiltered</code>). Change the names <code>g1</code>, <code>fit1</code> and <code>r1</code> to <code>g2</code>, <code>fit2</code> and <code>r2</code>. In the new scatterplot, for example, you should <strong>no longer see</strong> the point for the U.S. (own_rate &gt; 80).</p>
+<li><p>Correlation and regression are both susceptible to the effects of outliers and other influential points. Let’s see what happens when we filter out the U.S. entry from the data. The following command will create a new dataset called <code>gunsFiltered</code> by removing the U.S. from the <code>guns</code> dataset. You will need to replace the three dots with an expression involding the various variables, that would leave out the United States (Hint: The U.S. is the only country with a very high ownership rate).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gunsFiltered &lt;-<span class="st"> </span>guns <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(  ..change this..  )</code></pre></div>
+<p>If this was done correctly, you should see a new dataset entry in your environment that does not contain the U.S.</p>
+<p><strong>Repeat</strong> the code for #4 - #7 with the newly filtered dataset (<code>gunsFiltered</code>), changing the names <code>g1</code>, <code>fit1</code> and <code>r1</code> to <code>g2</code>, <code>fit2</code> and <code>r2</code> respectively. In the new scatterplot, for example, you should <strong>no longer see</strong> the point for the U.S. (own_rate &gt; 80).</p>
 <ol style="list-style-type: lower-alpha">
 <li>Has your perception of the association changed? Explain.</li>
 <li>Is there still a positive association? A linear association?</li>
@@ -185,7 +188,7 @@ r1<span class="op">^</span><span class="dv">2</span>    <span class="co"># print
 <li><p>We want to investigate whether the relationship between mortality rate and ownership rate varies depending on the <code>hdi</code> of the various countries. In order to do that, we will split the countries into groups based on their <code>hdi</code>. To find a good split, draw a histogram for <code>hdi</code> using a suitable number of breaks. Where would you split the values into different categories?</p></li>
 <li><p>Create a new column <code>hdicat</code> in the dataset, which splits the cases depending on whether the <code>hdi</code> is lower or higher than <span class="math inline">\(0.85\)</span>. We pipe the <code>hdi</code> values into the <code>cut</code> command to create the desired breaks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">guns<span class="op">$</span>hdicat &lt;-<span class="st"> </span>guns<span class="op">$</span>hdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cut</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="fl">0.75</span>, <span class="fl">0.85</span>, <span class="fl">0.95</span>))</code></pre></div>
-<p>If this worked correctly, you should see the new variable <code>hdicat</code> in the data viewer.</p>
+<p>If this worked correctly, you should see a new column <code>hdicat</code> added to the <code>guns</code> dataset.</p>
 <p>Now we make a paneled scatterplot for <code>mort_rate</code> versus <code>own_rate</code>, paneled by <code>hdicat</code>. We use <code>ladd</code> to add the linear models and <code>cor</code> to find the correlations:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate<span class="op">|</span>hdicat, <span class="dt">data=</span>guns)
 <span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y))
