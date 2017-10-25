@@ -89,7 +89,7 @@ To get warmed up and familiarize ourselves with the variables, we will start wit
     sum(~own_rate|country, data=guns) %>% sort() %>% dotplot()
     ```
 
-    If the dotplot looks too squeezed in the generated report, put it in its own chunk and use the chunk's options menu and the option **Use custom rigure size** to specify the desired height for the chunk.
+    If the dotplot looks too squeezed in the generated report, put it in its own chunk and use the chunk's options menu and the option **Use custom figure size** to specify the desired height for the chunk.
 
     You should see two clusters in the dotplot, a couple of high outliers, and one extremely high outlier.
 

@@ -127,7 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>Make a <code>favstats</code> summary and a histogram for the <code>own_rate</code> variable; you should adjust the number of breaks in order to get a good view.</p>
 <p>Also make a labeled dotplot to show the countries in the dataset, sorted by gun ownership rate:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="op">~</span>own_rate<span class="op">|</span>country, <span class="dt">data=</span>guns) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</code></pre></div>
-<p>If the dotplot looks too squeezed in the generated report, put it in its own chunk and use the chunk’s options menu and the option <strong>Use custom rigure size</strong> to specify the desired height for the chunk.</p>
+<p>If the dotplot looks too squeezed in the generated report, put it in its own chunk and use the chunk’s options menu and the option <strong>Use custom figure size</strong> to specify the desired height for the chunk.</p>
 <p>You should see two clusters in the dotplot, a couple of high outliers, and one extremely high outlier.</p>
 <p>Describe the distribution of <code>own_rate</code>. What are the outliers and what are their gun ownership rates (number of guns per 100 population)?</p></li>
 <li>Do the same for <code>mort_rate</code>. Describe what you find.</li>
