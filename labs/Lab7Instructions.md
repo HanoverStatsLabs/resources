@@ -40,7 +40,7 @@ In order to add a data file to the project itself, we start by uploading an Exce
 
 - Download the Excel file that holds the relevant data: [https://hanoverstatslabs.github.io/resources/datasets/guns.xlsx](https://hanoverstatslabs.github.io/resources/datasets/guns.xlsx)
 - In the **Files** pane (lower right), click the **upload** button to start the `Upload Files` dialog.
-- Click **Choose File** and navigate to your Downloads folder. Find the file `guns.xlsx` and click on it.
+- Navigate to your Downloads folder. Find the file `guns.xlsx` and click on it.
 - Click **OK** to finish the upload. If this was successful, you should now see `guns.xlsx` in your Files pane.
 
 Now we need to *import the actual data from the Excel file into the RStudio project* (both into the console and into the report):
@@ -100,19 +100,19 @@ To get warmed up and familiarize ourselves with the variables, we will start wit
 
 ### Mortality and Gun Ownership
 
-We wonder if countries with high gun ownership rates also have high gun-related mortality rates.  We can investigate this with a scatterplot.
-
-4. Make a scatterplot for `mort_rate` (y) vs. `own_rate` (x). Describe the overall pattern (including direction, if any) of the data and identify any unusual points. Attach a name to your plot so you can recall that plot in the future:
+We wonder if countries with high gun ownership rates also have high gun-related mortality rates.  We can investigate this with a scatterplot. We start by making a scatterplot for `mort_rate` (y) vs. `own_rate` (x). We attach the name `graph1` to the plot so that we can recall the plot in the future:
 
     ```r
-    g1 <- xyplot(mort_rate~own_rate, data=guns)
-    g1     # this is just to display the graph
+    graph1 <- xyplot(mort_rate~own_rate, data=guns)
+    graph1     # this is just to display the graph
     ```
 
-5. First we'll do some modeling without removing any observations. Let's start with a smooth fit curve.
+4. Based on the scatterplot we just made, describe the overall pattern (including direction, if any) of the data and identify any unusual points.
+
+5. We'll do some modeling without removing any observations to start with. Let's start with a smooth fit curve. Recall that to see all of the available color names in R, you can run the command `colors()` in the console.
 
     ```r
-    ladd(panel.loess(x, y, col="<your color here>", lwd=2), plot=g1)
+    ladd(panel.loess(x, y, col="your color here", lwd=2), plot=graph1)
     ```
 
     Does it look like a linear model is a good fit for these data? Explain.
@@ -120,7 +120,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 6. Let's see what a linear model looks like on this plot:
 
     ```r
-    ladd(panel.lmline(x, y, col="<your color here>"))
+    ladd(panel.lmline(x, y, col="your color here"))
     ```
 
     In order to find the equation of our linear model, we need to calculate the slope and intercept. And to assess how well the model fits the data, we should calculate the square of the correlation (R-square linear).
@@ -129,11 +129,10 @@ We wonder if countries with high gun ownership rates also have high gun-related 
     fit1 <- lm(mort_rate~own_rate, data=guns)
     coefficients(fit1)
     r1 <- cor(mort_rate~own_rate, data=guns)
-    r1      # prints the correlation
-    r1^2    # prints the "r-squared"
+    c("r"=r1, "rsquared"=r1^2)
     ```
 
-    The last two numbers in the printout are the correlation $r$ and its square $r^2$ respetively. The two previous values are the intercept and slope for the linear model.
+    The last two numbers in the printout are the correlation $r$ and its square $r^2$ respetively. The two previous numbers are the intercept and slope for the linear model.
 
     a. Write the equation of the linear model.
     b. Assess how well the linear model fits the data. Explain.
@@ -141,7 +140,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 7. In order to further assess the appropriateness of the linear model, we look at a residual plot, showing the **residual** (y minus fitted) vs. fitted. We add a horizontal line at 0 to help us judge the presence of a pattern:
 
     ```r
-    xyplot(resid(fit)~fitted(fit))
+    xyplot(resid(fit1)~fitted(fit1))
     ladd(panel.abline(h=0))
     ```
 
@@ -149,7 +148,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 
     Do you see that there is a pattern in the residuals, or do they look "unpatterned" for the most part?
 
-8. Correlation and regression are both susceptible to the effects of outliers and other influential points. Let's see what happens when we filter out the U.S. entry from the data. The following command will create a new dataset called `gunsFiltered` by removing the U.S. from the `guns` dataset. You will need to replace the three dots with an expression involding the various variables, that would leave out the United States (Hint: The U.S. is the only country with a very high ownership rate).
+8. Correlation and regression are both susceptible to the effects of outliers and other influential points. Let's see what happens when we filter out the U.S. entry from the data. The following command will create a new dataset called `gunsFiltered` by removing the row for the U.S. from the `guns` dataset. You will need to **replace the "..change this.."** with an expression involving the various variables, to leave out the U.S. (Hint: The U.S. is the only country with a very high gun ownership rate).
 
     ```r
     gunsFiltered <- guns %>% filter(  ..change this..  )
@@ -157,16 +156,16 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 
     If this was done correctly, you should see a new dataset entry in your environment that does not contain the U.S.
 
-    **Repeat** the code for #4 - #7 with the newly filtered dataset (`gunsFiltered`), changing the names `g1`, `fit1` and `r1` to `g2`, `fit2` and `r2` respectively. In the new scatterplot, for example, you should **no longer see** the point for the U.S. (own_rate > 80).
+    **Repeat** the code for #4 - #7 with the newly filtered dataset (`gunsFiltered`), changing the names `graph1`, `fit1` and `r1` to `graph2`, `fit2` and `r2` respectively. In the new scatterplot, for example, you should **no longer see** the point for the U.S. (own_rate > 80).
 
     a. Has your perception of the association changed? Explain.
     b. Is there still a positive association? A linear association?
     c. Has the correlation changed? If so, how?
 
-9. Now we will show both linear models on the original (unfiltered) scatterplot. This demonstrates the effect of single influential observation on the modeling process.
+9. Now we will show both linear models on the original (unfiltered) scatterplot. This demonstrates the effect of a single influential observation on the modeling process.
 
     ```r
-    ladd(panel.abline(fit1, col="black", lwd=2), plot=g1)
+    ladd(panel.abline(fit1, col="black", lwd=2), plot=graph1)
     ladd(panel.abline(fit2, col="magenta", lwd=2))
     ```
 
