@@ -1,0 +1,74 @@
+pre {
+   width: 98%;
+   margin-top: 0.1em;
+   background: none;
+}
+
+body {
+   font-size: 10pt;
+}
+
+h1, h2, h3, h4, p, dl, pre {
+   border: 0;
+   padding : 0;
+   margin : 0;
+}
+
+h2 {
+   font-size: 110%;
+   font-weight: bold;
+}
+
+h3 {
+   font-size: 110%;
+   font-weight: normal;
+}
+
+h2, h3 {
+   text-align: center;
+}
+
+section.level2 {
+   border: 1px solid purple;
+   border-radius: 10px;
+   margin-top: 0.5em;
+}
+
+section.level3, dl {
+   border-width: 1px 0 0 0;
+   border-style: dotted;
+   border-color: purple;
+}
+
+dl::after {
+   clear: both;
+}
+
+dt {
+   /*width: 100%;*/
+   padding-top: 1px;
+}
+
+dd {
+   border-top: 1px solid #f5eaf9;
+}
+
+/*dd:nth-of-type(even) {
+   background-color: #fbf9fc;
+   background-clip: border-box;
+   border-radius: 10px;
+}
+*/
+dd {
+   margin: 0;
+   padding-left: 11em;
+}
+
+section.level2 {
+   page-break-inside: avoid;
+   page-break-before: auto;
+}
+
+pre.sourceCode.r, code.sourceCode.r {
+   background: none;
+}

@@ -12,7 +12,7 @@ DATASETS := $(DATASETS:%=docs/datasets/%)
 
 $(HTMLFILES): docs/%.html: %.md $(TEMPLATE) makeHTML.hs
 	mkdir -p $(@D)
-	pandoc -o $@ --template=$(TEMPLATE) --mathjax --smart --filter ./makeHtml.hs $<
+	pandoc -o $@ --template=$(TEMPLATE) --mathjax --section-divs -t html5 --smart --filter ./makeHtml.hs $<
 
 $(PDFS): docs/%.pdf: %.md $(TEXTEMPLATE)  makeTex.hs
 	mkdir -p $(@D)
