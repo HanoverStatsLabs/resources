@@ -8,13 +8,16 @@
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
-<h1 id="lab-1-introduction-to-r-and-rstudio">Lab 1: Introduction to R and RStudio</h1>
-<h2 id="overall-goals">Overall Goals</h2>
+<section id="lab-1-introduction-to-r-and-rstudio" class="level1">
+<h1>Lab 1: Introduction to R and RStudio</h1>
+<section id="overall-goals" class="level2">
+<h2>Overall Goals</h2>
 <ul>
 <li>Start RStudio.</li>
 <li>Learn the different screen areas in RStudio.</li>
@@ -29,7 +32,9 @@
 <li>Simple numerical summaries</li>
 </ul></li>
 </ul>
-<h2 id="specific-r-commands-learned">Specific R commands learned</h2>
+</section>
+<section id="specific-r-commands-learned" class="level2">
+<h2>Specific R commands learned</h2>
 <ul>
 <li><code>data</code> for loading built-in data.</li>
 <li><code>?</code> for asking for information on a function or data.</li>
@@ -37,7 +42,9 @@
 <li><code>nrow</code> for number of rows.</li>
 <li>…</li>
 </ul>
-<h2 id="lab-1">Lab 1</h2>
+</section>
+<section id="lab-1" class="level2">
+<h2>Lab 1</h2>
 <ul>
 <li>Start RStudio (TODO: weblink)</li>
 <li>Panes:
@@ -111,5 +118,7 @@
 <p>counties %&gt;% transmute(state = state, pop = pop2010, whitepop = pop2010 * white / 100) %&gt;% group_by(state) %&gt;% summarize(pop = sum(pop), whitepop = sum(whitepop)) %&gt;% transmute(state = state, white = whitepop/pop * 100) %&gt;% arrange(white)</p>
 <p>Easier: sum(white<em>pop2010/100~state, data=counties)/sum(pop2010~state, data=counties) </em>100</p>
 <p>sum(~black*pop2010/100, data=counties %&gt;% filter(!is.na(black)))/sum(~pop2010, data=counties %&gt;% filter(!is.na(black)))</p>
+</section>
+</section>
 </body>
 </html>

@@ -45,18 +45,19 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
 <p>The data in <code>brfss</code> span 15 years; we have data for 2000, 2005, 2010, and 2015.</p>
-<ol start="14" style="list-style-type: decimal">
+<ol start="14" type="1">
 <li><p>Make a stacked bar graph showing <code>age7</code> (age in 10-year increments) vs. <code>year</code> (survey year). What do you learn about the U.S. population over the last 15 years?</p></li>
 <li><p>Use <code>tally</code> and <code>barchart</code> to make a graph of the general health level against the survey year, and write a conclusion. What do you learn about general health levels in the U.S. over the time span 2000 to 2015? Provide a plausible explanation for any pattern you see.</p></li>
 </ol>
 <p>Whenever we notice an association between two variables, we should ask if there are “lurking” variables that might help to explain the association. Age and sex are possible lurking variables in this situation.</p>
-<ol start="16" style="list-style-type: decimal">
+<ol start="16" type="1">
 <li>Use the code provided below to make a graph of general health vs. survey year, broken down (paneled) by age group.</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myColors =<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;PuBuGn&quot;</span>)
@@ -70,15 +71,17 @@ healthVsYearAndAge <span class="op">%&gt;%</span><span class="st"> </span><span 
 <p>TODO: more options: pch, cex</p>
 <p>……….</p>
 <p>=======</p>
-<h2 id="mosaicplot">Mosaicplot</h2>
-<ol start="12" style="list-style-type: decimal">
+<section id="mosaicplot" class="level2">
+<h2>Mosaicplot</h2>
+<ol start="12" type="1">
 <li><p>As an alternative to the stacked bar graph, we can draw a <code>mosaicplot</code>. A basic 2-variable example shows the relationship between <code>income</code> and <code>health</code> for the <code>brfss</code> participants:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsIncome &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>income<span class="op">+</span>genhealth, <span class="dt">data=</span>brfss,<span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
 healthVsIncome <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mosaicplot</span>(<span class="dt">color=</span><span class="kw">brewer.pal</span>(<span class="dv">5</span>,<span class="st">&quot;RdPu&quot;</span>))</code></pre></div>
-<ol style="list-style-type: lower-alpha">
+<ol type="a">
 <li>What do you learn from this plot?</li>
 <li>What is the meaning of the varying bar widths in the mosaic plot?</li>
 </ol></li>
 </ol>
+</section>
 </body>
 </html>

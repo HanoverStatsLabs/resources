@@ -45,12 +45,14 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
-<h1 id="guide-to-r-commands">Guide to R Commands</h1>
+<section id="guide-to-r-commands" class="level1">
+<h1>Guide to R Commands</h1>
 <p>This list is meant to be used as a reference. Seeing all the commands at once can be overwhelming. You should follow the <a href="labs.html">labs</a> for a more smooth introduction to programming in R.</p>
 <p>The main use of this guide is to find out the common options that can be added to these commands. Throughout the guide, sections enclosed in angle brackets like this: <code>&lt;dataset&gt;</code> are placeholders meant to be replaced by the appropriate text for your data.</p>
 <ul>
@@ -79,27 +81,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#barchart">barchart</a></li>
 </ul></li>
 </ul>
-<h2 id="data-preparation">Data Preparation</h2>
+<section id="data-preparation" class="level2">
+<h2>Data Preparation</h2>
 <p>Commands in this section involve data preparation, for instance loading new data or filtering a data set.</p>
-<h3 id="read_csv"><code>read_csv</code></h3>
+<section id="read_csv" class="level3">
+<h3><code>read_csv</code></h3>
 <p><code>read_csv</code> is used for loading comma-separated-format (CSV) files. This is a popular format for transmitting data, and works well with spreadsheet programs like Excel. Excel can read CSV files and can also export/save to CSV format.</p>
 <p>In RStudio you can use the <code>Import Dataset &gt; From CSV</code> menu option, and it will create the appropriate <code>read_csv</code> command for you.</p>
-<h4 id="options">Options</h4>
+<section id="options" class="level4">
+<h4>Options</h4>
 <ul>
 <li><code>file=&quot;...&quot;</code> is the first option, and you can omit the <code>file=</code> part for it. The quoted expression specifies which file to load. If the file is online, all you need to use is the web link to the file. If it is on your computer, it should hopefully be in the “working directory”. In that case you just need to provide the filename.</li>
 </ul>
 <p>There are many other more specialized options, for situations when the initial dataset is not properly formatted. We will not discuss them here, but you can read more on the documentation page <code>?read_csv</code>.</p>
-<h4 id="examples">Examples</h4>
+</section>
+<section id="examples" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># A local file:</span>
 myData &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;myDatafile.csv&quot;</span>)
 <span class="co"># A file from the internet</span>
 myData &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;http://hanoverstatslabs.github.io/resources/datasets/driving.csv&quot;</span>)</code></pre></div>
-<h3 id="data">data</h3>
+</section>
+</section>
+<section id="data" class="level3">
+<h3>data</h3>
 <p><code>data</code> is used to load data that was saved in an R package. It is typically followed by the <a href="#view"><code>View</code></a> command.</p>
 <p>If used with no arguments, as <code>data()</code>, it will list all datasets available in all loaded packages.</p>
-<h4 id="options-1">Options</h4>
+<section id="options-1" class="level4">
+<h4>Options</h4>
 <p>The data command has a simple syntax. It expects simply the name of the dataset. The only option worth mentioning as an addition is <code>package=&quot;...&quot;</code> where you can specify which package the data comes from. It is usually not needed.</p>
-<h4 id="examples-1">Examples</h4>
+</section>
+<section id="examples-1" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See all available datasets</span>
 <span class="kw">data</span>()
 <span class="co"># Load a dataset with a specific name</span>
@@ -108,17 +121,25 @@ myData &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span clas
 <span class="kw">data</span>(brfss, <span class="dt">package=</span><span class="st">&quot;hanoverbase&quot;</span>)
 <span class="co"># Follow it with the `View` command</span>
 <span class="kw">View</span>(brfss)</code></pre></div>
-<h3 id="view">View</h3>
+</section>
+</section>
+<section id="view" class="level3">
+<h3>View</h3>
 <p><code>View</code> is used to bring up a spreadsheet view of a dataset. The dataset must have been previously created, by <a href="#read_csv"><code>read_csv</code></a>, <a href="#data"><code>data</code></a> or some other method.</p>
-<h4 id="examples-2">Examples</h4>
+<section id="examples-2" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First load a dataset</span>
 <span class="kw">load</span>(brfss)
 <span class="co"># Then view it</span>
 <span class="kw">View</span>(brfss)</code></pre></div>
-<h3 id="head-tail">head, tail</h3>
+</section>
+</section>
+<section id="head-tail" class="level3">
+<h3>head, tail</h3>
 <p><code>head</code> and <code>tail</code> can be used in order to extract the first few, or the last few, cases from a dataset. They can often be used as the last step in a piping sequence in order to see the top results from our operation.</p>
 <p>Both functions take two arguments: The name of the object (often provided via piping) and the number of cases to show, which defaults to around 6.</p>
-<h4 id="examples-3">Examples</h4>
+<section id="examples-3" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show only the first few cases from the dataset</span>
 <span class="kw">data</span>(brfss)
 <span class="kw">head</span>(brfss)
@@ -130,11 +151,18 @@ brfss <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">he
 <span class="co"># State populations, top 6</span>
 <span class="kw">data</span>(counties)
 <span class="kw">sum</span>(<span class="op">~</span>pop2010<span class="op">|</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tail</span>()</code></pre></div>
-<h3 id="filter">filter</h3>
+</section>
+</section>
+<section id="filter" class="level3">
+<h3>filter</h3>
 <p>TODO</p>
-<h2 id="summaries">Summaries</h2>
+</section>
+</section>
+<section id="summaries" class="level2">
+<h2>Summaries</h2>
 <p>Commands in this section produce numerical summaries.</p>
-<h3 id="the-formula-interface">The Formula Interface</h3>
+<section id="the-formula-interface" class="level3">
+<h3>The Formula Interface</h3>
 <p>Most of the commands we are using expect the variables to be specified via a formula interface. A formula in general looks as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&lt;</span>lhs<span class="op">&gt;</span><span class="er">~&lt;</span>rhs<span class="op">&gt;</span><span class="er">|&lt;</span>groups<span class="op">&gt;</span></code></pre></div>
 <p>Here the left-hand-side may be completely absent and the vertical line and <code>groups</code> part may also be absent. Both sides contain the variables to be considered, and multiple variables can be separated by a plus sign.</p>
@@ -149,7 +177,8 @@ brfss <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">he
 <dd>The variables in the groups section are meant to be variables used to break down the results. If used in a graph situation for example, the graph would have a different panel for each value of the group variables.
 </dd>
 </dl>
-<h4 id="examples-4">Examples</h4>
+<section id="examples-4" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Looking at general health on its own</span>
 <span class="op">~</span>genhealth
 <span class="co"># Compare physical health against mental health,</span>
@@ -157,25 +186,37 @@ brfss <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">he
 physhealth<span class="op">~</span>menthealth<span class="op">|</span>genhealth
 <span class="co"># Look at both physical health and mental health</span>
 <span class="op">~</span>physhealth<span class="op">+</span>menthhealth</code></pre></div>
-<h3 id="piping">Piping</h3>
+</section>
+</section>
+<section id="piping" class="level3">
+<h3>Piping</h3>
 <p>The <strong>piping</strong> operatior, <code>%&gt;%</code>, is a very useful operator that allows us to simplify the writing of complex steps. The operator takes the value on its left side, and uses it as the first argument in the function on its right side. Here is one example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsExercise &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss)
 healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>()</code></pre></div>
 <p>The first line creates a new table, <code>healthVsExercise</code>, with the tallies. The second line takes that table, and feeds it into the <code>t</code> function, and then feeds the result into the <code>barchart</code> function. That line is exactly the same as the following much harder to read expression:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barchart</span>(<span class="kw">t</span>(healthVsExercise))</code></pre></div>
-<h3 id="summary"><code>summary</code></h3>
+</section>
+<section id="summary" class="level3">
+<h3><code>summary</code></h3>
 <p><code>summary</code> can be used on the whole dataset, to get a quick overview of the various variables and their summaries.</p>
-<h4 id="options-2">Options</h4>
+<section id="options-2" class="level4">
+<h4>Options</h4>
 <p>Typically you do not need to add any options to this method.</p>
 <ul>
 <li><code>digits</code>: You can control how many digits are shown by adding the <code>digits=...</code> option.</li>
 <li><code>maxsum</code>: You can determine how many categories (including the missing values category) will show from factors by adding the <code>maxsum=...</code> option. The most frequent categories are shown first.</li>
 </ul>
-<h4 id="examples-5">Examples</h4>
+</section>
+<section id="examples-5" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(brfss, <span class="dt">digits=</span><span class="dv">3</span>, <span class="dt">maxsum=</span><span class="dv">6</span>)</code></pre></div>
-<h3 id="tally"><code>tally</code></h3>
+</section>
+</section>
+<section id="tally" class="level3">
+<h3><code>tally</code></h3>
 <p><code>tally</code> is used to produce frequency tables and cross-tabulation tables for categorical variables. The first argument should be a formula involving the variables to use, and it should be followed by a <code>data=&lt;dataset&gt;</code> option specifying which dataset to use.</p>
-<h4 id="options-3">Options</h4>
+<section id="options-3" class="level4">
+<h4>Options</h4>
 <p>By default <code>tally</code> will create a table of frequencies for the various combinations of values.</p>
 <ul>
 <li><code>sort</code>: You can specify <code>sort=TRUE</code> if you want to options to be sorted in order of frequency. By default they will be ordered in the order specified in the variable.</li>
@@ -183,11 +224,16 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <li><code>margins</code>: You can add the option <code>margins=TRUE</code> if you would like to see marginal probabilities (totals) added to the table.</li>
 <li><code>useNA</code>: You can add <code>useNA=&quot;no&quot;</code> to remove the missing values from the computations and the result.</li>
 </ul>
-<h4 id="examples-6">Examples</h4>
+</section>
+<section id="examples-6" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># There is a higher percent of Very Good/Excellent health people amongst those</span>
 <span class="co"># that exercise vs those that do not.</span>
 <span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
-<h3 id="aggregating-functions">Aggregating Functions</h3>
+</section>
+</section>
+<section id="aggregating-functions" class="level3">
+<h3>Aggregating Functions</h3>
 <p>There is a long list of commands that all follow a similar syntax, and all aggregate values of some variable, possibly broken down by other categorical variables. They all have the syntax:</p>
 <pre><code>&lt;command&gt;(&lt;formula&gt;, ...options)</code></pre>
 <p>The formula has the form <code>&lt;aggregatingVariable&gt;~&lt;breakDown1&gt;+&lt;breakDown2&gt;...</code> where the variable on the LHS is the scalar variable to be aggregated, and the variables in the RHS are the categorical variables by which to break the groups down.</p>
@@ -205,13 +251,16 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <li><code>sum</code> for the sum of the values</li>
 <li><code>prod</code> for the product of the values</li>
 </ul>
-<h4 id="options-4">Options</h4>
+<section id="options-4" class="level4">
+<h4>Options</h4>
 <p>All commands accept the same options:</p>
 <ul>
 <li><code>data</code>: add <code>data=&lt;dataset&gt;</code> to specify the dataset to use</li>
 <li><code>na.rm</code>: add <code>na.rm=TRUE</code> to remove the missing values before computing. Most of the functions above will simply return <code>NA</code>, representing missing value, if there are any missing values present and <code>na.rm=TRUE</code> was not added.</li>
 </ul>
-<h4 id="examples-7">Examples</h4>
+</section>
+<section id="examples-7" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Stats on number of days per month with physical/mental health problems,</span>
 <span class="co"># broken down by general health</span>
 <span class="kw">mean</span>(physhealth<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
@@ -221,9 +270,14 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <span class="kw">sum</span>(pop2010<span class="op">~</span>state, <span class="dt">data=</span>counties, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
 <span class="co"># Stats for percent of blacks in county, broken down by state</span>
 <span class="kw">favstats</span>(black<span class="op">~</span>state, <span class="dt">data=</span>counties, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</code></pre></div>
-<h2 id="plotting">Plotting</h2>
+</section>
+</section>
+</section>
+<section id="plotting" class="level2">
+<h2>Plotting</h2>
 <p>Commands in this section produce graphical summaries. Before we look at individual commands, we discuss options common to most graphs.</p>
-<h3 id="common-graph-options">Common Graph Options</h3>
+<section id="common-graph-options" class="level3">
+<h3>Common Graph Options</h3>
 <p>These options can be added to most graph commands:</p>
 <ul>
 <li><code>xlab=&quot;...&quot;</code> specifies the label for the x axis.</li>
@@ -231,10 +285,9 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <li><code>main=&quot;...&quot;</code> specifies the main graph title, which appears at the top.</li>
 <li><code>col=...</code> specifies what colors to use for the various elements. Look at the <a href="#color-specifications">Color Specifications</a> section for more details.</li>
 <li><p><code>pch=...</code> can be used on graphs with points to choose what point-style to use. The options are summarized in this image:</p>
-<div class="figure">
-<img src="images/symbols.png" alt="pch and lty options" />
-<p class="caption">pch and lty options</p>
-</div>
+<figure>
+<img src="images/symbols.png" alt="pch and lty options" /><figcaption>pch and lty options</figcaption>
+</figure>
 The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code> command. Use <code>c(..., ...)</code> for multiple values.</li>
 <li><code>lty=...</code> can be used on graphs with lines to choose the line style to use. The graph above shows the options for line types. Use <code>c(..., ...)</code> for multiple values.</li>
 <li><code>lwd=...</code> can be used on graphs with lines to specify the thickness of the lines, 1 being the standard size. For instance <code>lwd=1.4</code> will draw the lines 40% thicker.</li>
@@ -244,7 +297,9 @@ The icons 21-25 can use a fill-in (background) color, via the <code>bg=...</code
 <li><code>auto.key</code> and <code>key</code>: These options are used for to add <a href="#legend-specifications">legends</a> to graphs that need them. For details look at the corresponding section.</li>
 <li><p><code>layout</code>: TODO</p></li>
 </ul>
-<h3 id="legend-specifications">Legend Specifications</h3>
+</section>
+<section id="legend-specifications" class="level3">
+<h3>Legend Specifications</h3>
 <p>Legends are needed when we use a grouping variable, to identify the different colors and symbols used. Adding a default legend is easy to do. However, customizing the legend and the graph in general becomes trickier.</p>
 <p>To specify the legend you have two options you can add to graphs:</p>
 <dl>
@@ -267,7 +322,9 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <p>Instead of, or in addition to, <code>rectangles</code>, we could also use <code>lines</code> and <code>points</code> to add those symbols. You can use most of the <a href="#common-graph-options">common graph options</a> to specify these lines and symbols, just like we used <code>col</code> above.</p>
 </dd>
 </dl>
-<h3 id="color-specifications">Color Specifications</h3>
+</section>
+<section id="color-specifications" class="level3">
+<h3>Color Specifications</h3>
 <p>Graph colors can be specified in a variety of different ways. We outline these different ways here. They are to be used with the <code>col=...</code> graph option.</p>
 <dl>
 <dt>By name</dt>
@@ -286,10 +343,13 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <p>In order to use a palette, you would use the command <code>brewer.pal(&lt;n&gt;, &lt;name&gt;)</code> where <code>&lt;n&gt;</code> is the number of colors to choose, and <code>&lt;name&gt;</code> is the palette’s name, in quotes. For instance to use four colors from the “Accent” palette we would do: <code>col=brewer.pal(4, &quot;Accent&quot;)</code></p>
 </dd>
 </dl>
-<h3 id="histogram"><code>histogram</code></h3>
+</section>
+<section id="histogram" class="level3">
+<h3><code>histogram</code></h3>
 <p><code>histogram</code> is used to produce histograms. The typical syntax would use a formula <code>~&lt;variable&gt;</code> as the first argument, followed by a <code>data=&lt;dataset&gt;</code> option to specify the dataset to use.</p>
 <p>You can also create multiple panels based on the values of a categorical variable, with a formula <code>~&lt;variable&gt;|&lt;factorVariable&gt;</code>.</p>
-<h4 id="options-5">Options</h4>
+<section id="options-5" class="level4">
+<h4>Options</h4>
 <ul>
 <li><code>breaks</code> can be used in two ways, but the simplest one is to set it equal to a single number, specifying the number of breakpoints to be used for the histogram bars.</li>
 <li><code>type</code> must equal one of <code>&quot;percent&quot;</code>, <code>&quot;count&quot;</code> or <code>&quot;density&quot;</code> and determines what the heights of the bars correspond to:
@@ -299,25 +359,39 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <li><code>&quot;density&quot;</code> means that the <em>area</em> of each bar corresponds to the percent of cases in that range.</li>
 </ul></li>
 </ul>
-<h4 id="examples-8">Examples</h4>
+</section>
+<section id="examples-8" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>black, <span class="dt">data=</span>counties, <span class="dt">breaks=</span><span class="dv">40</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)
 <span class="kw">histogram</span>(<span class="op">~</span>physhealth<span class="op">|</span>genhealth, <span class="dt">data=</span>brfss)</code></pre></div>
-<h3 id="barchart"><code>barchart</code></h3>
+</section>
+</section>
+<section id="barchart" class="level3">
+<h3><code>barchart</code></h3>
 <p><code>barchart</code> is used to produce bar charts. It is typically used by first doing a <code>tally</code> and then piping the result into <code>barchart</code>.</p>
-<h4 id="options-6">Options</h4>
+<section id="options-6" class="level4">
+<h4>Options</h4>
 <ul>
 <li><code>horizontal</code>: By default the bars will be horizontal. If you would prefer vertical bars, add the option <code>horizontal=FALSE</code>.</li>
 <li><code>origin</code>: Barcharts should start at 0, but sometimes the default setting does not force that behavior. Set <code>origin=0</code> to achieve that.</li>
 </ul>
-<h4 id="examples-9">Examples</h4>
+</section>
+<section id="examples-9" class="level4">
+<h4>Examples</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">horizontal=</span><span class="ot">FALSE</span>)</code></pre></div>
-<h4 id="stacked-bar-charts">100% Stacked Bar Charts</h4>
+</section>
+<section id="stacked-bar-charts" class="level4">
+<h4>100% Stacked Bar Charts</h4>
 <p>100% stacked bar charts are somewhat tricky to make. We start with a <code>tally</code> with the two variables separated by a vertical line (not plus!), then set the format to <code>percent</code>. Before piping that into a barchart, however, we have to pipe it through the <code>t</code> command, which transposes columns and rows. The main syntax would look like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
 <p>You may have to swap the two variables to get them in the desired order.</p>
 <p>seq quantile Histogram: breaks (both forms),</p>
-<h2 id="cleanup">Cleanup</h2>
+</section>
+</section>
+</section>
+<section id="cleanup" class="level2">
+<h2>Cleanup</h2>
 <ul>
 <li>bargraph (mosaic) MIGHT NOT NEED?</li>
 <li>barchart (lattice) barchart better for Pareto charts…</li>
@@ -340,5 +414,7 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <li>View (rstudio)</li>
 <li><p>pdist, xpnorm, xqnorm, xpbinom (mosaic) FOR VISUALIZING THEORETICAL DISTRIBUTIONS</p></li>
 </ul>
+</section>
+</section>
 </body>
 </html>

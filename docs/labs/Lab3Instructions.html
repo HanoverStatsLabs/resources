@@ -8,13 +8,16 @@
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
-<h1 id="lab-3-generating-reports-with-r-markdown">Lab 3: Generating Reports with R Markdown</h1>
-<h2 id="introduction">Introduction</h2>
+<section id="lab-3-generating-reports-with-r-markdown" class="level1">
+<h1>Lab 3: Generating Reports with R Markdown</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
 <p>In this lab we learn how to integrate R code and text into a single report. We use the RMarkdown file format for this (<code>.Rmd</code>), which has many advantages:</p>
 <ul>
 <li>The R code that produces our results is incorporated into our report. This way our results can be reproduced very easily.</li>
@@ -22,7 +25,9 @@
 <li>The RMarkdown document can easily produce different outputs, e.g. PDF, Web pages, Word documents.</li>
 <li>RMarkdown is built atop of Markdown, which is a very popular formatting standard for creating structured plain text documents. You can learn more about RMarkdown at the following link: <a href="http://rmarkdown.rstudio.com/" class="uri">http://rmarkdown.rstudio.com/</a>.</li>
 </ul>
-<h2 id="overall-goals">Overall Goals</h2>
+</section>
+<section id="overall-goals" class="level2">
+<h2>Overall Goals</h2>
 <p>In this lab we will learn how to:</p>
 <ul>
 <li>create a basic RMarkdown document</li>
@@ -32,7 +37,9 @@
 </ul>
 <p>At the same time we will get a chance to practice the R commands we learned in the previous labs.</p>
 <p>New R commands introduced in this lab: <code>sum</code>, <code>panel.abline</code>, <code>ladd</code>.</p>
-<h2 id="creating-an-rstudio-project">Creating an RStudio Project</h2>
+</section>
+<section id="creating-an-rstudio-project" class="level2">
+<h2>Creating an RStudio Project</h2>
 <p>RStudio projects allow us to organize our work. A project is essentially a folder/directory of related files. You can easily start a new project or download someone else’s project to start.</p>
 <p>We have created a starting project for you. In order to set it up:</p>
 <ul>
@@ -50,21 +57,31 @@
 </ul>
 <p>If all has gone well, you should now see the project files in the <strong>Files pane</strong> at the bottom right of RStudio.</p>
 <p>The file we are interested in is called <code>Lab3Report.Rmd</code>. Click on it to open it up for editing. It should appear at the top left of the application window. We will work on this file in the subsequent sections.</p>
-<h2 id="working-with-rmarkdown-documents">Working with RMarkdown Documents</h2>
+</section>
+<section id="working-with-rmarkdown-documents" class="level2">
+<h2>Working with RMarkdown Documents</h2>
 <p>RMarkdown documents typically start with a <em>header</em> section. In it you get to specify title, author and date for the report, as well as some other technical settings that we will not worry about right now. Take a moment to add your own information in the header fields. Make sure to save your edits (File &gt; Save) before proceeding. The rest of the RMarkdown document will contain the actual contents of your report.</p>
-<h3 id="exporting-an-rmarkdown-document">Exporting an RMarkdown Document</h3>
+<section id="exporting-an-rmarkdown-document" class="level3">
+<h3>Exporting an RMarkdown Document</h3>
 <p>Exporting an RMarkdown document into other formats is called <strong>Knitting</strong>. You will find a <strong>Knit</strong> pulldown at the top of the editing pane. Use the arrow to its right to select an output format.</p>
 <p>DO NOW: Use <strong>Knit to HTML</strong> to create a compiled version of the report. You will need to do this frequently as you work on your report.</p>
 <p>You will likely see a pop-up blocker dialog, click <strong>Try Again</strong> to have the output report show up on a new browser window. Make sure you have added your own title, name and date information to the header.</p>
 <p>As this pop-up can get quite annoying after a while, you may wish to tell RStudio to instead show the output in the bottom right <strong>Viewer</strong> pane. To set that as the default behavior, go to <code>Tools &gt; Global Options ... &gt; R Markdown &gt; Show output preview in:</code>, change that to “Viewer Pane” and click <strong>Apply</strong> and <strong>OK</strong>.</p>
-<h3 id="completing-the-lab">Completing the Lab</h3>
+</section>
+<section id="completing-the-lab" class="level3">
+<h3>Completing the Lab</h3>
 <p>The first section of the Lab 3 report introduces R Code chunks, which are the way to combine our code with the report text. The subsequent sections contain the actual assignment, where you will be prompted to make statistical investigations and to document those investigations in the report. Follow those prompts to complete the assignment.</p>
-<h3 id="submissions">Submissions</h3>
+</section>
+<section id="submissions" class="level3">
+<h3>Submissions</h3>
 <p>When you are ready to submit:</p>
 <ul>
 <li>Make sure to knit the final report before downloading.</li>
 <li>Download the Lab3Report.Rmd file as follows. In the <strong>Files</strong> pane, which is at the lower right of the application window, click the checkbox for the RMD file, then choose <code>More &gt; Export... &gt; Download</code>. Do the same for Lab3Report.html.</li>
 <li><strong>Submit both files via Moodle</strong>.</li>
 </ul>
+</section>
+</section>
+</section>
 </body>
 </html>

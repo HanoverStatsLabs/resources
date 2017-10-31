@@ -45,15 +45,20 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
-<h1 id="lab-4-importing-data">Lab 4: Importing Data</h1>
-<h2 id="introduction">Introduction</h2>
+<section id="lab-4-importing-data" class="level1">
+<h1>Lab 4: Importing Data</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
 <p>In this lab we learn how to import new data from Excel or other sources into RStudio. Along the way we will also get more practice with RMarkdown reports and statistical analysis commands.</p>
-<h2 id="overall-goals">Overall Goals</h2>
+</section>
+<section id="overall-goals" class="level2">
+<h2>Overall Goals</h2>
 <p>In this lab we will:</p>
 <ul>
 <li>learn how to import new data from the common CSV data format,</li>
@@ -62,7 +67,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>learn how to draw scatterplots.</li>
 </ul>
 <p>New R commands introduced in this lab: <code>$</code>, <code>c</code>, <code>ordered</code>, <code>print</code></p>
-<h2 id="creating-an-rstudio-project">Creating an RStudio Project</h2>
+</section>
+<section id="creating-an-rstudio-project" class="level2">
+<h2>Creating an RStudio Project</h2>
 <p>We start similarly to the last lab. We will start a new project based on a prepared repository.</p>
 <ul>
 <li>In your web browser, open this Lab 4 assignment from the HanoverStatsLabs website. You will need to copy-paste a link from it in a few steps.</li>
@@ -79,7 +86,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><strong>DO NOW</strong>: Edit the header section to add your own title, name, and date.</li>
 <li><p>Before moving on, make sure to <strong>run the chunk</strong> which contains the instruction <code>library(hanoverbase)</code>.</p></li>
 </ul>
-<h2 id="importing-data">Importing Data</h2>
+</section>
+<section id="importing-data" class="level2">
+<h2>Importing Data</h2>
 <p>In the previous labs we have prepared the data for you in R’s built-in system. But data you find in the real world is not typically in this form. It may be an Excel file, a comma-separated-format file (CSV) or one of many other formats. RStudio has built-in ways to read CSV and Excel files. Some other more obscure formats may need more work and specific instructions.</p>
 <p>For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.</p>
 <ul>
@@ -123,20 +132,25 @@ driving<span class="op">$</span>weekDay &lt;-<span class="st"> </span>driving<sp
 <li>This also introduced the “dollar sign” syntax, which has the general form <code>&lt;dataset&gt;$&lt;columnName&gt;</code> and it is used to access an individual column in a dataset. It is not needed when we use the <code>data=&lt;dataset&gt;</code> syntax, but not all commands can use that syntax.</li>
 <li>In general you only need the dollar-sign syntax when changing a variable in a dataset, or when you want to create a new variable in a dataset.</li>
 </ul>
-<h2 id="statistical-investigations">Statistical Investigations</h2>
+</section>
+<section id="statistical-investigations" class="level2">
+<h2>Statistical Investigations</h2>
 <p><strong>Important formatting note</strong>: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report. You should use section headings, subsection headings, numbered lists, unnumbered lists, etc. to organize your work and make it easy for your reader to follow. You can refer to the <a href="../rmarkdownBasics.html">R Markdown Syntax Sheet</a> for help with creating these effects.</p>
 <p><strong>R Chunks</strong>: As you create graphs and numerical summaries, be sure you are adding these commands to your R Markdown report by creating R chunks for them. While you do have some freedom regarding how you structure your report, you should typically have sections that contain a heading, a brief introductory paragraph, and an R code chunk for any relevant computations, followed by (numbered) answers to the questions.</p>
 <p><strong>Knit Early and Often</strong>: Be sure to knit frequently and examine the resulting output document. Does it look the way you wanted it to? (If you do not knit often, you should at least <strong>save</strong> often.)</p>
 <p><strong>Refer to the R Cheatsheet and Previous Labs for Examples</strong>: We don’t expect that you have memorized the intricacies of R syntax at this point. Be sure to refer to the provided R Cheatsheet for help.</p>
-<h3 id="week-days">Week Days</h3>
+<section id="week-days" class="level3">
+<h3>Week Days</h3>
 <p>The first set of questions relates to the various days of the week present in the dataset. You should make both a frequency table (<code>tally</code>) and a barchart of the weekDay variable. Hint: Refer back to a previous lab for an example of piping a tally into a barchart.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>The instructor was teaching only four days a week. Which do you think is the workday on which the instructor was not teaching? Explain.</li>
 <li>Looking at the frequencies in the tally, explain why most of the frequencies are even numbers. How do you explain those that are odd numbers?</li>
 <li>What would you expect the typical value for the workday frequencies to be, based on the Hanover College academic calendar (13 full weeks in Fall term, plus a week of exams)? To what extent does that match the data? How do you explain the workday values that deviate from the expected typical value?</li>
 </ol>
 <p><strong>Note</strong>: Don’t forget to knit often!</p>
-<h3 id="distance-traveled">Distance Traveled</h3>
+</section>
+<section id="distance-traveled" class="level3">
+<h3>Distance Traveled</h3>
 <p>In this set of questions we will investigate the distribution of the <code>miles</code> variable, which records the miles traveled per trip as a difference of the mileages recorded by the car’s odometer. You will likely need several outputs:</p>
 <ul>
 <li>a summary (<code>favstats</code>) of the <code>miles</code> variable,</li>
@@ -146,12 +160,14 @@ driving<span class="op">$</span>weekDay &lt;-<span class="st"> </span>driving<sp
 <li>a summary (<code>favstats</code>) of the <code>miles</code> against <code>direction</code>.</li>
 </ul>
 <p>Here are the questions for you to answer.</p>
-<ol start="4" style="list-style-type: decimal">
+<ol start="4" type="1">
 <li>Looking at the favstats summary and the first histogram, what is the typical driving distance for the instructor? Does that roughly match the distance between Louisville and Hanover?</li>
 <li>The distribution should appear skewed to the right with a very sharp drop-off to the left, and some high outliers to the right. Explain why we might expect these three behaviors in this dataset.</li>
 <li>When focusing on the values below 48 miles in the second histogram, you should notice that what appeared to be one mode is actually two modes, of roughly the same frequency, about half a mile apart from each other. Provide a plausible explanation for the presence of these modes that would account for their similar frequencies. (The boxplots and last summary may also be helpful here.)</li>
 </ol>
-<h3 id="driving-times">Driving Times</h3>
+</section>
+<section id="driving-times" class="level3">
+<h3>Driving Times</h3>
 <p>The (elapsed) <code>time</code> variable is calculated as the difference in minutes between the instructor’s departure time and arrival time. We should create the following summaries:</p>
 <ul>
 <li>A <code>favstats</code> summary and a histogram of the <code>time</code> variable.</li>
@@ -166,14 +182,14 @@ scatter2 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(time<span 
 <p>Note that we actually “stored” the graphs in names, and referred to those names to display the graphs with the <code>print</code> commands. In general, you can store graphs this way and process them further in later commands.</p></li>
 </ul>
 <p>Here are the questions for you to answer.</p>
-<ol start="7" style="list-style-type: decimal">
+<ol start="7" type="1">
 <li>Discuss the distribution of the time variable, including any unusual observations and plausible explanations for the various aspects of the distribution.</li>
 <li><p>Describe the relationship between the <code>time</code> variable and the <code>miles</code> variable. What is the overall pattern, how does it make sense? Are there deviations? Is there a clear linear association?</p></li>
 <li><p>For this question, we are enhancing the scatterplots from above by adding straight lines at the 55 mph speed limit. Note that 55 mph corresponds to 60 minutes per 55 miles, making the slope of the line (<code>b</code>) equal to <code>60/55</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="dv">60</span><span class="op">/</span><span class="dv">55</span>), <span class="dt">plot=</span>scatter1)
 <span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="dv">60</span><span class="op">/</span><span class="dv">55</span>), <span class="dt">plot=</span>scatter2)</code></pre></div>
 <p>Notice that if a point is on the line, that trip has an average speed of 55 mph.</p>
-<ol style="list-style-type: lower-alpha">
+<ol type="a">
 <li>There is a trip which took 79 minutes and 47.4 miles. Find that point on the scatterplot. What was the average speed for that trip, in miles per hour? Is the point for that trip below the line, or above the line?</li>
 <li>What does it mean when the point for a trip is below the line?</li>
 <li>Where are most of the points in relation to the line (below vs. above)? What does this tell you about the instructor’s driving habits?</li>
@@ -184,10 +200,15 @@ scatter2 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(time<span 
     <span class="dt">groups=</span>direction, <span class="dt">pch=</span><span class="dv">19</span>, <span class="dt">auto.key=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p>What pattern do you see in the colors? How do you explain it?</p></li>
 </ol>
-<h3 id="submissions">Submissions</h3>
+</section>
+<section id="submissions" class="level3">
+<h3>Submissions</h3>
 <ul>
 <li>Make sure to knit one last time, then download the Lab4Report.Rmd file: in the <strong>Files pane</strong> (lower right), click the checkbox for the RMD file, then choose <code>More &gt; Export... &gt; Download</code>. <em>Do the same for Lab4Report.html.</em></li>
 <li><strong>Submit both files via Moodle</strong>.</li>
 </ul>
+</section>
+</section>
+</section>
 </body>
 </html>

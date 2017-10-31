@@ -10,4 +10,5 @@ This page contains links to the individual lab instructions for Math 217.
 - [Lab 4](labs/Lab4Instructions.md) offers you an opportunity to practice and solidify your learning from the first three labs, and introduces more two-variable techniques.
 - [Lab 5](labs/Lab5Instructions.md) shows you how to customize graphics outputs.
 - [Lab 6](labs/Lab6Instructions.md) adds more graph customizations and shows you how to create new variables from existing ones.
-- [Lab 7](labs/Lab7Instructions.md) show you how to work with linear models in RStudio.
+- [Lab 7](labs/Lab7Instructions.md) shows you how to work with linear models in RStudio.
+- [Lab 8](labs/Lab8Instructions.md) lets you practice, in a more independent fashion, the data analysis techniques we have learned so far.

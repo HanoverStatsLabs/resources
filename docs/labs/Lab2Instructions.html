@@ -8,13 +8,16 @@
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
-<h1 id="lab-2-categorical-data-and-multi-variable-investigations">Lab 2: Categorical Data and Multi-Variable Investigations</h1>
-<h2 id="overall-goals">Overall Goals</h2>
+<section id="lab-2-categorical-data-and-multi-variable-investigations" class="level1">
+<h1>Lab 2: Categorical Data and Multi-Variable Investigations</h1>
+<section id="overall-goals" class="level2">
+<h2>Overall Goals</h2>
 <p>In <a href="Lab1Instructions.html">Lab 1</a> we were introduced to the basic operations of RStudio. In this lab we expand on the ways R helps us analyze datasets. We will learn how to:</p>
 <ul>
 <li>aggregate data based on a categorical variable</li>
@@ -29,9 +32,11 @@
 <p>We will continue working with the <code>counties</code> dataset introduced in Lab 1. If the <code>counties</code> set is not visible in the Environment pane, you will need to “reload” it by running:</p>
 <pre class="{r}"><code>data(counties)
 View(counties)</code></pre>
-<h2 id="working-with-categorical-variables">Working with Categorical Variables</h2>
+</section>
+<section id="working-with-categorical-variables" class="level2">
+<h2>Working with Categorical Variables</h2>
 <p>Recall that categorical variables take values from a limited set of options, one value for each individual case. In our <code>counties</code> data set the “individual cases” are the U.S. counties.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>What are the categorical variables in the <code>counties</code> dataset? You may need to bring up the help file for <code>counties</code> using the <code>help(counties)</code> command.</li>
 </ol>
 
@@ -40,7 +45,7 @@ View(counties)</code></pre>
 
 <p>It would be nice to have these values sorted. Use the UP arrow to recall your last command, and add a “<code>%&gt;%</code>” pipe step to sort the values, calling the sort command:</p>
 <pre class="{r}"><code>tally(~state, data=counties) %&gt;% sort()</code></pre>
-<ol start="2" style="list-style-type: decimal">
+<ol start="2" type="1">
 <li>List the five states with the highest number of counties, including how many counties they each have.</li>
 </ol>
 <p>We can get a visual representation of these counts using a barchart:</p>
@@ -48,7 +53,7 @@ View(counties)</code></pre>
 <p>Click the <strong>Zoom</strong> button to get a longer view of the barchart.</p>
 <p>The default barchart makes no attempt to order the categories, which can make the barchart hard to read. We can combine <code>tally</code>, <code>sort</code> and <code>barchart</code> to achieve a barchart ordered by the frequencies. This is typically called a <strong>Pareto chart</strong>:</p>
 <pre class="{r}"><code>tally(~state, data=counties) %&gt;% sort() %&gt;% barchart()</code></pre>
-<ol start="3" style="list-style-type: decimal">
+<ol start="3" type="1">
 <li>Which states have fewer than 10 counties? Can you see this directly from the barchart?</li>
 </ol>
 
@@ -58,44 +63,46 @@ View(counties)</code></pre>
 <pre class="{r}"><code>tally(~name, data=counties) %&gt;% sort() %&gt;% tail(10)</code></pre>
 
 <p>There is similarly a <code>head</code> command that would show us a number of entries from the top. It is not useful in this particular instance.</p>
-<ol start="4" style="list-style-type: decimal">
+<ol start="4" type="1">
 <li>What are the top 5 most frequent county names? Why does it make sense that these are popular county names?</li>
 </ol>
 
-<ol start="5" style="list-style-type: decimal">
+<ol start="5" type="1">
 <li><p>We are curious to find out which states have a “Lincoln County”. We will use the data table on the top left of the screen for this. If the county data is not visible there, double-click it in the Environment pane to bring up the data table. Use the filter option at the top right of the data table to only show the rows that contain the name “Lincoln County”.</p>
 <p>Which of the original confederate states (South Carolina, Mississippi, Florida, Alabama, Georgia, Louisiana and Texas) have a “Lincoln” County? Which of these are actually named in honor of Abraham Lincoln? (Hint: include the word “namesake” in your internet search string.)</p></li>
 </ol>
 
 
-<h2 id="working-with-two-variables-of-a-dataset">Working with Two Variables of a Dataset</h2>
+</section>
+<section id="working-with-two-variables-of-a-dataset" class="level2">
+<h2>Working with Two Variables of a Dataset</h2>
 <p>In most situations in statistics we deal with more than one variable at a time, and more specifically we are interested in the relationships between variables. For example, we may look at the percent of female population for each county as a variable on its own (one variable analysis), or we may look at how these percents vary across states (two variable analysis).</p>
-<ol start="6" style="list-style-type: decimal">
+<ol start="6" type="1">
 <li>Let us start by looking at the <code>female</code> variable. Look at the help file for the <code>counties</code> dataset. Exactly what is being measured by the <code>female</code> variable?</li>
 </ol>
 
 <p>We can start our investigation by making a histogram and a five-number summary for the <code>female</code> variable. <strong>Note</strong>: The two lines are two different commands. Be sure to press <code>enter</code> on the first before typing the second.</p>
 <pre class="{r}"><code>histogram(~female, data=counties, breaks=40)
 favstats(~female, data=counties)</code></pre>
-<ol start="7" style="list-style-type: decimal">
+<ol start="7" type="1">
 <li>Describe the distribution in plain English. Include a discussion of the range, shape (number of modes, skewness) and center.</li>
 </ol>
 
-<ol start="8" style="list-style-type: decimal">
+<ol start="8" type="1">
 <li>Does the mode’s value make sense? Why does it make sense that the distribution is unimodal?</li>
 </ol>
 <p></p>
-<ol start="9" style="list-style-type: decimal">
+<ol start="9" type="1">
 <li>Using the data table and sorting the <code>female</code> column, identify the three counties with the smallest percent of females. Possible reasons for a small female percentage could be the presence of a large male prison or military base, relative to the overall county population. Does this explanation seem to apply to the three counties (Hint: Wikipedia or Google search)?</li>
 </ol>
 <p></p>
-<ol start="10" style="list-style-type: decimal">
+<ol start="10" type="1">
 <li>Which county has the highest female percentage? Can you explain the probable reason for that?</li>
 </ol>
 <p></p>
 <p>We would like to compare these female percentages across states. Are there states whose counties tend to have unusual gender disparity? Or is the gender distribution quite uniform across states? A first step to answering this would be a boxplot of the female percentage against the states:</p>
 <pre class="{r}"><code>bwplot(state~female, data=counties)</code></pre>
-<ol start="11" style="list-style-type: decimal">
+<ol start="11" type="1">
 <li>Which state stands out in that most of its counties have a relatively low percentage of females?</li>
 </ol>
 
@@ -105,10 +112,11 @@ favstats(~female, data=counties)</code></pre>
 <pre class="{r}"><code>median(~female|state, data=counties) %&gt;% sort() %&gt;% dotplot()</code></pre>
 <p>We should point out that the values in this table are NOT the percent of females in the state. They are instead the medians of the percentages of the various counties in the state. We will see a bit later how to compute the state-wide percentages by <em>aggregating</em> the data.</p>
 
-<h5 id="digging-deeper" class="unnumbered">Digging Deeper</h5>
+<section id="digging-deeper" class="level5 unnumbered">
+<h5>Digging Deeper</h5>
 <p>We might be interested in a single state and the distribution of female percentages in its counties.</p>
 <p>We can get a quick listing of the counties for a single state by typing the state name in the “filter” box at the top right of the data table.</p>
-<ol start="12" style="list-style-type: decimal">
+<ol start="12" type="1">
 <li>Use this method to find which county in Indiana has the highest female percentage. Is there a good explanation for why this county has such a high percentage?</li>
 </ol>
 
@@ -118,10 +126,13 @@ dotplot(name~female, data = alaskaCounties)</code></pre>
 <p>You should also use the following two commands for alternative views of the same distribution (don’t forget that you can use the arrow buttons in the <strong>plots</strong> pane to scroll back and forth through the graphs you have made):</p>
 <pre class="{r}"><code> bwplot(~female, data=alaskaCounties)
  histogram(~female, data=alaskaCounties, breaks=20, type=&quot;count&quot;)</code></pre>
-<ol start="13" style="list-style-type: decimal">
+<ol start="13" type="1">
 <li>Describe the pattern of the distribution of female percentages on the various counties in Alaska (typical values, outliers). Also provide the county name for each outlier and its percent female population (2010).</li>
 </ol>
 
 <p>Please <strong>click the red button (upper right)</strong> to close your RStudio session when you are getting ready to leave the lab.</p>
+</section>
+</section>
+</section>
 </body>
 </html>

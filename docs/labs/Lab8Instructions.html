@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="lab-8-rstudio-review" class="level1">
+<h1>Lab 8: RStudio Review</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
+<p>In this lab you will review the different techniques we have discussed for analyzing data in RStudio. The dataset contains information about various 2015 car models.</p>
+</section>
+<section id="start-project-and-get-data" class="level2">
+<h2>Start Project and Get Data</h2>
+<ul>
+<li>Download the file at <a href="http://www.lock5stat.com/datasets/Cars2015.xlsx" class="uri">http://www.lock5stat.com/datasets/Cars2015.xlsx</a></li>
+<li>Start a new project in RStudio (Lab_8).</li>
+<li>Upload the data from the Excel file to the Lab_8 project.</li>
+<li>Start a new RMarkdown document for your lab report.</li>
+<li>Add chunks to your RMarkdown to load the hanoverbase library and to import the Excel data.</li>
+<li>Make sure you can view the Cars2015 data in the data viewer.</li>
+<li>Remember to save and knit often as you work on your report.</li>
+</ul>
+<section id="understanding-the-variables-in-the-cars-dataset" class="level3">
+<h3>Understanding the Variables in the Cars Dataset</h3>
+<p>If you find yourself unsure of, for example, the units used for the weight of a car, you should do a Google search on one of the car makes and models, like “Hyundai Accent” to find its weight. That information should help you determine proper units for the weight variable in the dataset.</p>
+</section>
+</section>
+<section id="statistical-investigations" class="level2">
+<h2>Statistical Investigations</h2>
+<p>Provide relevant graphs, numerical summaries, and discussions to answer the following questions. As you investigate the data, you should create <strong>at least one of each</strong> of the following types of graphs (you can also use other kinds of graphs, of course):</p>
+<ul>
+<li>histogram</li>
+<li>boxplot</li>
+<li>simple barchart</li>
+<li>stacked barchart</li>
+<li>simple scatterplot with smooth fit line</li>
+<li>scatterplot with panels</li>
+<li>piechart</li>
+</ul>
+<p>For help with writing your R code chunks, refer to the R and RStudio Cheatsheet and to the previous lab assignments: <a href="https://hanoverstatslabs.github.io/resources/" class="uri">https://hanoverstatslabs.github.io/resources/</a></p>
+<section id="questions" class="level3">
+<h3>Questions</h3>
+<ol type="1">
+<li>Investigate the distributions of the car type and size for this dataset.</li>
+<li>Investigate the relationship between type and size.</li>
+<li>Investigate the distributions of the highway mileage and city mileage data, including any possible association with type and size.</li>
+<li>What effect, if any, does the car type and weight have on the car’s time to accelerate from 0 to 60 mph? Does the weight effect on acceleration differ across the different car types? Which car type tends to have the fastest acceleration?</li>
+<li>Investigate a possible association between fuel capacity and car type. Do the same for fuel capacity and size.</li>
+</ol>
+</section>
+<section id="submission" class="level3">
+<h3>Submission</h3>
+<ul>
+<li>Make sure to knit one last time, then download the Lab8Report.Rmd file: in the <strong>Files pane</strong> (lower right), click the checkbox for the RMD file, then choose <code>More &gt; Export... &gt; Download</code>. <em>Do the same for Lab8Report.html.</em></li>
+<li><strong>Submit both files via Moodle</strong>.</li>
+</ul>
+</section>
+</section>
+</section>
+</body>
+</html>
