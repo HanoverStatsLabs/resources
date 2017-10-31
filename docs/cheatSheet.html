@@ -70,7 +70,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">help</span>(counties)   <span class="co"># Only in console</span></code></pre></div>
 </dd>
 <dt>Data Import</dt>
-<dd><p>TODO</p>
+<dd><ul>
+<li>Upload local file or use a URL</li>
+<li>File &gt; Import &gt; Dataset &gt; From …</li>
+<li>Add import code to code chunk (exclude the View command)</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -78,129 +82,172 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3>Data Viewer</h3>
 <dl>
 <dt>Order rows</dt>
-<dd><p>TODO</p>
+<dd><ul>
+<li>Click on column heading</li>
+<li>Click again to change direction</li>
+</ul>
 </dd>
 <dt>Filter</dt>
-<dd><p>TODO</p>
+<dd><ul>
+<li>Click Filter button on top left of viewer</li>
+<li>Use controls below column headings</li>
+</ul>
 </dd>
 <dt>Search</dt>
-<dd><p>TODO</p>
+<dd><ul>
+<li>Use the search box in top-right</li>
+</ul>
 </dd>
 </dl>
 </section>
+</section>
+<section id="rmarkdown-basics" class="level2">
+<h2>RMarkdown Basics</h2>
+<dl>
+<dt>Main section</dt>
+<dd><p><code>## Heading here</code></p>
+</dd>
+<dt>Subsection</dt>
+<dd><p><code>### Heading here</code></p>
+</dd>
+<dt>Italic</dt>
+<dd><p><code>*text here*</code></p>
+</dd>
+<dt>Bold</dt>
+<dd><p><code>**text here**</code></p>
+</dd>
+<dt>Numbered List</dt>
+<dd><p><code>1. text here</code></p>
+</dd>
+<dt>Unnumbered List</dt>
+<dd><p><code>- text here</code></p>
+</dd>
+<dt>Blockquote</dt>
+<dd><p><code>&gt; text here</code></p>
+</dd>
+</dl>
 </section>
 <section id="summaries" class="level2">
 <h2>Summaries</h2>
+<section id="numerical-variable" class="level3">
+<h3>Numerical Variable</h3>
 <dl>
-<dt>Numerical Variable</dt>
+<dt>favstats</dt>
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">favstats</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties)
 <span class="kw">favstats</span>(miles<span class="op">~</span>direction, <span class="dt">data=</span>driving)  <span class="co"># miles by direction</span>
-<span class="kw">favstats</span>(<span class="op">~</span>miles<span class="op">|</span>direction, <span class="dt">data=</span>driving) <span class="co"># same thing</span>
-<span class="kw">median</span>(<span class="op">~</span>female<span class="op">|</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
-<span class="kw">iqr</span>(<span class="op">~</span>poverty<span class="op">|</span>state, <span class="dt">data=</span>counties)</code></pre></div>
+<span class="kw">favstats</span>(<span class="op">~</span>miles<span class="op">|</span>direction, <span class="dt">data=</span>driving) <span class="co"># same thing</span></code></pre></div>
 </dd>
-<dt>Categorical Variable</dt>
-<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties)
-<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
-<span class="co"># Column-wise percents</span>
-<span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>sex, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
-<span class="co"># Total percents</span>
-<span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">+</span>sex, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
+<dt>median etc</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(<span class="op">~</span>female<span class="op">|</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
+<span class="kw">iqr</span>(<span class="op">~</span>poverty<span class="op">|</span>state, <span class="dt">data=</span>counties)</code></pre></div>
 </dd>
 </dl>
 </section>
-<section id="graphs" class="level2">
-<h2>Graphs</h2>
-<section id="one-variable" class="level3">
-<h3>One Variable</h3>
+<section id="categorical-variable" class="level3">
+<h3>Categorical Variable</h3>
 <dl>
-<dt>Histogram</dt>
-<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties, <span class="dt">breaks=</span><span class="dv">20</span>)
-<span class="kw">histogram</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pop2010 <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2e6</span>))</code></pre></div>
-</dd>
-<dt>Barchart</dt>
-<dd><p>TODO</p>
-</dd>
-<dt>Boxplot</dt>
-<dd><p>TODO</p>
-</dd>
-<dt>Labeled Dotplot</dt>
-<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="op">~</span>own_rate<span class="op">|</span>country, <span class="dt">data=</span>guns) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</code></pre></div>
+<dt>frequency</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties)
+<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</code></pre></div>
 </dd>
 </dl>
 </section>
 <section id="two-variables" class="level3">
 <h3>Two Variables</h3>
 <dl>
+<dt>Crosstabs</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Column-wise percents</span>
+<span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>sex, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
+<span class="co"># Total percents</span>
+<span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">+</span>sex, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</code></pre></div>
+</dd>
+<dt>Correlation</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)</code></pre></div>
+</dd>
+</dl>
+</section>
+</section>
+<section id="graphs" class="level2">
+<h2>Graphs</h2>
+<section id="one-variable" class="level3">
+<h3>One Variable</h3>
+<dl>
+<dt>Pie Chart</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pie</span>()</code></pre></div>
+</dd>
+<dt>Histogram</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">histogram</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties, <span class="dt">breaks=</span><span class="dv">20</span>)
+<span class="kw">histogram</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pop2010 <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2e6</span>))</code></pre></div>
+</dd>
+<dt>Barchart</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>()
+<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>() <span class="co"># Pareto chart</span></code></pre></div>
+</dd>
+<dt>Boxplot</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bwplot</span>(state<span class="op">~</span>female, <span class="dt">data=</span>counties)</code></pre></div>
+</dd>
+<dt>Labeled Dotplot</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="op">~</span>own_rate<span class="op">|</span>country, <span class="dt">data=</span>guns) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</code></pre></div>
+</dd>
+</dl>
+</section>
+<section id="two-variables-1" class="level3">
+<h3>Two Variables</h3>
+<dl>
 <dt>100% Stacked Barchart</dt>
-<dd><p>TODO</p>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsExer &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss,
+    <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
+healthVsExer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">auto.key=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&quot;right&quot;</span>))</code></pre></div>
 </dd>
 <dt>Scatterplot</dt>
-<dd><p>TODO</p>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
+<span class="kw">ladd</span>(<span class="kw">panel.loess</span>(x, y, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)) <span class="co"># add smooth fit line</span></code></pre></div>
 </dd>
 </dl>
 </section>
 <section id="three-variables" class="level3">
 <h3>Three Variables</h3>
 <dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
-</dd>
-</dl>
-</section>
-<section id="graph-additions" class="level3">
-<h3>Graph Additions</h3>
-<dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
+<dt>Paneled Scatterplot</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate<span class="op">|</span>hdicat, <span class="dt">data=</span>guns)</code></pre></div>
 </dd>
 </dl>
 </section>
 <section id="colors" class="level3">
 <h3>Colors</h3>
 <dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
+<dt>list by name</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colors</span>() <span class="co"># in console</span></code></pre></div>
 </dd>
-</dl>
-</section>
-<section id="panels" class="level3">
-<h3>Panels</h3>
-<dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
+<dt>palette list</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">display.brewer.all</span>()  <span class="co"># in console</span></code></pre></div>
+</dd>
+<dt>pick a palette</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">brewer.pal</span>(<span class="dv">4</span>, <span class="st">&quot;Accent&quot;</span>)</code></pre></div>
+</dd>
+<dt>add in graph</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">..plot..</span>(..., <span class="dt">col=</span>name<span class="op">-</span>or<span class="op">-</span>palette, ...)</code></pre></div>
 </dd>
 </dl>
 </section>
 </section>
 <section id="misc" class="level2">
 <h2>Misc</h2>
+<section id="linear-modeling" class="level3">
+<h3>Linear Modeling</h3>
 <dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
+<dt>add to graph</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>))</code></pre></div>
 </dd>
-</dl>
-<section id="headtail" class="level3">
-<h3>Head/Tail</h3>
-<dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
+<dt>get model</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
+<span class="kw">coefficients</span>(fit)
+<span class="kw">summary</span>(fit)</code></pre></div>
 </dd>
-</dl>
-</section>
-<section id="value-labels" class="level3">
-<h3>Value Labels</h3>
-<dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
-</dd>
-</dl>
-</section>
-<section id="item-lists" class="level3">
-<h3>Item Lists</h3>
-<dl>
-<dt>TODO</dt>
-<dd><p>TODO</p>
+<dt>diagnostics</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(<span class="kw">resid</span>(fit)<span class="op">~</span><span class="kw">fitted</span>(fit))   <span class="co"># residual plot</span>
+<span class="kw">ladd</span>(<span class="kw">panel.abline</span>(<span class="dt">h=</span><span class="dv">0</span>))
+<span class="kw">cor</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)<span class="op">^</span><span class="dv">2</span>  <span class="co"># r-squared</span></code></pre></div>
 </dd>
 </dl>
 </section>

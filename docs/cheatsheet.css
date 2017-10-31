@@ -1,3 +1,7 @@
+body {
+   max-width: 8in;
+}
+
 pre {
    width: 98%;
    margin-top: 0.1em;
@@ -71,4 +75,5 @@ section.level2 {
 
 pre.sourceCode.r, code.sourceCode.r {
    background: none;
+   font-size: 100%;
 }

@@ -24,48 +24,110 @@ Data from package
 
 Data Import
 
-:   TODO
+:   - Upload local file or use a URL
+    - File > Import > Dataset > From ...
+    - Add import code to code chunk (exclude the View command)
 
 ### Data Viewer
 
 Order rows
 
-: TODO
+:   - Click on column heading
+    - Click again to change direction
 
 Filter
 
-: TODO
+:   - Click Filter button on top left of viewer
+    - Use controls below column headings
 
 Search
 
-: TODO
+:   - Use the search box in top-right
+
+## RMarkdown Basics
+
+Main section
+
+: `## Heading here`
+
+Subsection
+
+: `### Heading here`
+
+Italic
+
+: `*text here*`
+
+Bold
+
+: `**text here**`
+
+Numbered List
+
+: `1. text here`
+
+Unnumbered List
+
+: `- text here`
+
+Blockquote
+
+: `> text here`
 
 ## Summaries
 
-Numerical Variable
+### Numerical Variable
+
+favstats
 
 :   ```r
     favstats(~pop2010, data=counties)
     favstats(miles~direction, data=driving)  # miles by direction
     favstats(~miles|direction, data=driving) # same thing
+    ```
+
+median etc
+
+:   ```r
     median(~female|state, data=counties) %>% sort()
     iqr(~poverty|state, data=counties)
     ```
 
-Categorical Variable
+### Categorical Variable
+
+frequency
 
 :   ```r
     tally(~state, data=counties)
     tally(~state, data=counties) %>% sort()
+    ```
+
+### Two Variables
+
+Crosstabs
+
+:   ```r
     # Column-wise percents
     tally(~genhealth|sex, data=brfss, format="percent", useNA="no")
     # Total percents
     tally(~genhealth+sex, data=brfss, format="percent", useNA="no")
     ```
 
+Correlation
+
+:   ```r
+    cor(mort_rate~own_rate, data=guns)
+    ```
+
 ## Graphs
 
 ### One Variable
+
+Pie Chart
+
+:   ```r
+    tally(~genhealth, data=brfss, useNA="no") %>% pie()
+    ```
 
 Histogram
 
@@ -76,11 +138,16 @@ Histogram
 
 Barchart
 
-: TODO
+:   ```r
+    tally(~state, data=counties) %>% barchart()
+    tally(~state, data=counties) %>% t() %>% barchart() # Pareto chart
+    ```
 
 Boxplot
 
-: TODO
+:   ```r
+    bwplot(state~female, data=counties)
+    ```
 
 Labeled Dotplot
 
@@ -92,56 +159,75 @@ Labeled Dotplot
 
 100% Stacked Barchart
 
-: TODO
+:   ```r
+    healthVsExer <- tally(~genhealth|exerciseany, data=brfss,
+        format="percent", useNA="no")
+    healthVsExer %>% t() %>% barchart(auto.key=list(space="right"))
+    ```
 
 Scatterplot
 
-: TODO
+:   ```r
+    xyplot(mort_rate~own_rate, data=guns)
+    ladd(panel.loess(x, y, col="magenta", lwd=2)) # add smooth fit line
+    ```
 
 ### Three Variables
 
-TODO
+Paneled Scatterplot
 
-: TODO
-
-### Graph Additions
-
-TODO
-
-: TODO
+:   ```r
+    xyplot(mort_rate~own_rate|hdicat, data=guns)
+    ```
 
 ### Colors
 
-TODO
+list by name
 
-: TODO
+:   ```r
+    colors() # in console
+    ```
 
-### Panels
+palette list
 
-TODO
+:   ```r
+    display.brewer.all()  # in console
+    ```
 
-: TODO
+pick a palette
+
+:   ```r
+    brewer.pal(4, "Accent")
+    ```
+
+add in graph
+
+:   ```r
+    ..plot..(..., col=name-or-palette, ...)
+    ```
 
 ## Misc
 
-TODO
+### Linear Modeling
 
-: TODO
+add to graph
 
-### Head/Tail
+:   ```r
+    ladd(panel.lmline(x, y, col="magenta", lwd=2))
+    ```
 
-TODO
+get model
 
-: TODO
+:   ```r
+    fit <- lm(mort_rate~own_rate, data=guns)
+    coefficients(fit)
+    summary(fit)
+    ```
 
-### Value Labels
+diagnostics
 
-TODO
-
-: TODO
-
-### Item Lists
-
-TODO
-
-: TODO
+:   ```r
+    xyplot(resid(fit)~fitted(fit))   # residual plot
+    ladd(panel.abline(h=0))
+    cor(mort_rate~own_rate, data=guns)^2  # r-squared
+    ```
