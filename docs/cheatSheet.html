@@ -150,6 +150,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties)
 <span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</code></pre></div>
 </dd>
+<dt>relative frequency</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>)</code></pre></div>
+</dd>
 </dl>
 </section>
 <section id="two-variables" class="level3">
@@ -181,7 +184,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </dd>
 <dt>Barchart</dt>
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>()
-<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>() <span class="co"># Pareto chart</span></code></pre></div>
+<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>() <span class="co"># Pareto chart</span></code></pre></div>
 </dd>
 <dt>Boxplot</dt>
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bwplot</span>(state<span class="op">~</span>female, <span class="dt">data=</span>counties)</code></pre></div>

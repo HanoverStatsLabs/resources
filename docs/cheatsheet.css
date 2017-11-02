@@ -26,6 +26,8 @@ h2 {
 h3 {
    font-size: 110%;
    font-weight: normal;
+   background-color: #fcc9f0;
+   /*border-radius: 10px 10px 0 0;*/
 }
 
 h2, h3 {
@@ -65,6 +67,7 @@ dd {
 */
 dd {
    margin: 0;
+   padding: 0 0 0.2em 0;
    padding-left: 11em;
 }
 
@@ -76,4 +79,11 @@ section.level2 {
 pre.sourceCode.r, code.sourceCode.r {
    background: none;
    font-size: 100%;
+}
+
+@media print {
+   h3 {
+      -webkit-print-color-adjust: exact;
+      background-color: #fcc9f0;
+   }
 }

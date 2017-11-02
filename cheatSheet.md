@@ -102,6 +102,12 @@ frequency
     tally(~state, data=counties) %>% sort()
     ```
 
+relative frequency
+
+:   ```r
+    tally(~genhealth, data=brfss, format="percent")
+    ```
+
 ### Two Variables
 
 Crosstabs
@@ -140,7 +146,7 @@ Barchart
 
 :   ```r
     tally(~state, data=counties) %>% barchart()
-    tally(~state, data=counties) %>% t() %>% barchart() # Pareto chart
+    tally(~state, data=counties) %>% sort() %>% barchart() # Pareto chart
     ```
 
 Boxplot

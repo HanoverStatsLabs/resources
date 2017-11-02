@@ -11,7 +11,7 @@ In this lab you will review the different techniques we have discussed for analy
 - Start a new project in RStudio (Lab_8).
 - Upload the data from the Excel file to the Lab_8 project.
 - Start a new RMarkdown document for your lab report.
-- Add chunks to your RMarkdown to load the hanoverbase library and to import the Excel data.
+- Add **two chunks** to your RMarkdown, one to load the hanoverbase library and one to import the Excel data.
 - Make sure you can view the Cars2015 data in the data viewer.
 - Remember to save and knit often as you work on your report.
 
@@ -21,7 +21,9 @@ If you find yourself unsure of, for example, the units used for the weight of a 
 
 ## Statistical Investigations
 
-Provide relevant graphs, numerical summaries, and discussions to answer the following questions. As you investigate the data, you should create **at least one of each** of the following types of graphs (you can also use other kinds of graphs, of course):
+Provide **relevant graphs**, **numerical summaries**, and **discussions** to answer the following questions. A graph cannot speak for itself; you need to provide a discussion of what you see in the graph.
+
+As you investigate the data, you should create **at least one of each** of the following types of graphs (you can also use other kinds of graphs, of course):
 
 - histogram
 - boxplot
@@ -35,11 +37,16 @@ For help with writing your R code chunks, refer to the R and RStudio Cheatsheet 
 
 ### Questions
 
-1. Investigate the distributions of the car type and size for this dataset.
-2. Investigate the relationship between type and size.
-3. Investigate the distributions of the highway mileage and city mileage data, including any possible association with type and size.
-4. What effect, if any, does the car type and weight have on the car's time to accelerate from 0 to 60 mph? Does the weight effect on acceleration differ across the different car types? Which car type tends to have the fastest acceleration?
-5. Investigate a possible association between fuel capacity and car type. Do the same for fuel capacity and size.
+When looking at a new dataset, the first thing we must do is understand each of the variables **individually**. We will only look at a subset of the variables here.
+
+1. Investigate *individually* the distributions of the car type and size for this dataset.
+2. Investigate *individually* the distributions of city mileage, highway mileage, acceleration time from 0 to 60, and weight. Make sure to identify the outliers in the data (e.g. by make and model).
+
+Once we have looked at individual variables, we would typically proceed to look at relationships between two or possibly three variables. The next set of questions requires this kind of analysis.
+
+3. Investigate the relationship between type and size.
+4. Investigate how highway mileage and city mileage are related, and also how they are related to type and size.
+5. What effect, if any, does the car type and weight have on the car's time to accelerate from 0 to 60 mph? Does the effect of weight on acceleration differ across the different car types? Which car type tends to have the fastest acceleration?
 
 ### Submission
 

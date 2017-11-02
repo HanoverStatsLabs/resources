@@ -27,7 +27,7 @@
 <li>Start a new project in RStudio (Lab_8).</li>
 <li>Upload the data from the Excel file to the Lab_8 project.</li>
 <li>Start a new RMarkdown document for your lab report.</li>
-<li>Add chunks to your RMarkdown to load the hanoverbase library and to import the Excel data.</li>
+<li>Add <strong>two chunks</strong> to your RMarkdown, one to load the hanoverbase library and one to import the Excel data.</li>
 <li>Make sure you can view the Cars2015 data in the data viewer.</li>
 <li>Remember to save and knit often as you work on your report.</li>
 </ul>
@@ -38,7 +38,8 @@
 </section>
 <section id="statistical-investigations" class="level2">
 <h2>Statistical Investigations</h2>
-<p>Provide relevant graphs, numerical summaries, and discussions to answer the following questions. As you investigate the data, you should create <strong>at least one of each</strong> of the following types of graphs (you can also use other kinds of graphs, of course):</p>
+<p>Provide <strong>relevant graphs</strong>, <strong>numerical summaries</strong>, and <strong>discussions</strong> to answer the following questions. A graph cannot speak for itself; you need to provide a discussion of what you see in the graph.</p>
+<p>As you investigate the data, you should create <strong>at least one of each</strong> of the following types of graphs (you can also use other kinds of graphs, of course):</p>
 <ul>
 <li>histogram</li>
 <li>boxplot</li>
@@ -51,12 +52,16 @@
 <p>For help with writing your R code chunks, refer to the R and RStudio Cheatsheet and to the previous lab assignments: <a href="https://hanoverstatslabs.github.io/resources/" class="uri">https://hanoverstatslabs.github.io/resources/</a></p>
 <section id="questions" class="level3">
 <h3>Questions</h3>
+<p>When looking at a new dataset, the first thing we must do is understand each of the variables <strong>individually</strong>. We will only look at a subset of the variables here.</p>
 <ol type="1">
-<li>Investigate the distributions of the car type and size for this dataset.</li>
+<li>Investigate <em>individually</em> the distributions of the car type and size for this dataset.</li>
+<li>Investigate <em>individually</em> the distributions of city mileage, highway mileage, acceleration time from 0 to 60, and weight. Make sure to identify the outliers in the data (e.g. by make and model).</li>
+</ol>
+<p>Once we have looked at individual variables, we would typically proceed to look at relationships between two or possibly three variables. The next set of questions requires this kind of analysis.</p>
+<ol start="3" type="1">
 <li>Investigate the relationship between type and size.</li>
-<li>Investigate the distributions of the highway mileage and city mileage data, including any possible association with type and size.</li>
-<li>What effect, if any, does the car type and weight have on the car’s time to accelerate from 0 to 60 mph? Does the weight effect on acceleration differ across the different car types? Which car type tends to have the fastest acceleration?</li>
-<li>Investigate a possible association between fuel capacity and car type. Do the same for fuel capacity and size.</li>
+<li>Investigate how highway mileage and city mileage are related, and also how they are related to type and size.</li>
+<li>What effect, if any, does the car type and weight have on the car’s time to accelerate from 0 to 60 mph? Does the effect of weight on acceleration differ across the different car types? Which car type tends to have the fastest acceleration?</li>
 </ol>
 </section>
 <section id="submission" class="level3">
