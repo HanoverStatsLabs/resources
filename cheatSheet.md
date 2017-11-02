@@ -149,12 +149,6 @@ Barchart
     tally(~state, data=counties) %>% sort() %>% barchart() # Pareto chart
     ```
 
-Boxplot
-
-:   ```r
-    bwplot(state~female, data=counties)
-    ```
-
 Labeled Dotplot
 
 :   ```r
@@ -176,6 +170,12 @@ Scatterplot
 :   ```r
     xyplot(mort_rate~own_rate, data=guns)
     ladd(panel.loess(x, y, col="magenta", lwd=2)) # add smooth fit line
+    ```
+
+Boxplot
+
+:   ```r
+    bwplot(state~female, data=counties)
     ```
 
 ### Three Variables

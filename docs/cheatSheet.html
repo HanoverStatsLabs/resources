@@ -186,9 +186,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>()
 <span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>() <span class="co"># Pareto chart</span></code></pre></div>
 </dd>
-<dt>Boxplot</dt>
-<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bwplot</span>(state<span class="op">~</span>female, <span class="dt">data=</span>counties)</code></pre></div>
-</dd>
 <dt>Labeled Dotplot</dt>
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="op">~</span>own_rate<span class="op">|</span>country, <span class="dt">data=</span>guns) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</code></pre></div>
 </dd>
@@ -205,6 +202,9 @@ healthVsExer <span class="op">%&gt;%</span><span class="st"> </span><span class=
 <dt>Scatterplot</dt>
 <dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
 <span class="kw">ladd</span>(<span class="kw">panel.loess</span>(x, y, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)) <span class="co"># add smooth fit line</span></code></pre></div>
+</dd>
+<dt>Boxplot</dt>
+<dd><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bwplot</span>(state<span class="op">~</span>female, <span class="dt">data=</span>counties)</code></pre></div>
 </dd>
 </dl>
 </section>

@@ -17,7 +17,7 @@ In this lab you will review the different techniques we have discussed for analy
 
 ### Understanding the Variables in the Cars Dataset
 
-If you find yourself unsure of, for example, the units used for the weight of a car, you should do a Google search on one of the car makes and models, like "Hyundai Accent" to find its weight. That information should help you determine proper units for the weight variable in the dataset.
+If you find yourself unsure of, for example, the units used for the weight of a car, you should do a Google search on one of the car makes and models, like "Hyundai Accent", to find its weight. That information should help you determine proper units for the weight variable in the dataset.
 
 ## Statistical Investigations
 
@@ -25,15 +25,17 @@ Provide **relevant graphs**, **numerical summaries**, and **discussions** to ans
 
 As you investigate the data, you should create **at least one of each** of the following types of graphs (you can also use other kinds of graphs, of course):
 
+- piechart
+- simple barchart
 - histogram
 - boxplot
-- simple barchart
 - stacked barchart
 - simple scatterplot with smooth fit line
 - scatterplot with panels
-- piechart
 
 For help with writing your R code chunks, refer to the R and RStudio Cheatsheet and to the previous lab assignments: [https://hanoverstatslabs.github.io/resources/](https://hanoverstatslabs.github.io/resources/)
+
+\newpage
 
 ### Questions
 
