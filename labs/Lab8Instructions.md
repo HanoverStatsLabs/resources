@@ -10,7 +10,7 @@ In this lab you will review the different techniques we have discussed for analy
 [http://www.lock5stat.com/datasets/Cars2015.xlsx](http://www.lock5stat.com/datasets/Cars2015.xlsx)
 - Start a new project in RStudio (Lab_8).
 - Upload the Excel file to the Lab_8 project (Files tab, upload)
-- Import the data from Excel to RStudio (Environment tab, import dataset)
+- Import the data from Excel to RStudio (Environment tab, import dataset, or click the file in the Files tab)
 - Start a new RMarkdown document for your lab report.
 - Add **two chunks** to your RMarkdown, one to load the hanoverbase library and one which includes the two lines needed to import the data from Excel.
 - Make sure you can view the Cars2015 data in the data viewer.
