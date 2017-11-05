@@ -209,7 +209,22 @@ pick a palette
 add in graph
 
 :   ```r
-    ..plot..(..., col=name-or-palette, ...)
+    ...plot...(..., col=name-or-palette, ...)
+    ```
+
+### Graph Labeling
+
+main title
+
+:   ```r
+    ...plot...(..., main="Distribution of ...", ...)
+    ```
+
+axis labels
+
+:   ```r
+    ...plot...(..., xlab="x label here", ...)
+    ...plot...(..., ylab="y label here", ...)
     ```
 
 ## Misc

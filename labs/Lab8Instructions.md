@@ -9,8 +9,8 @@ In this lab you will review the different techniques we have discussed for analy
 - Download the file at
 [http://www.lock5stat.com/datasets/Cars2015.xlsx](http://www.lock5stat.com/datasets/Cars2015.xlsx)
 - Start a new project in RStudio (Lab_8).
-- Upload the Excel file to the Lab_8 project (Files tab, upload)
-- Import the data from Excel to RStudio (Environment tab, import dataset, or click the file in the Files tab)
+- Upload the Excel file to the Lab_8 project (**Files** tab at lower right, **upload** button)
+- Import the data from Excel to RStudio (click the file in the Files tab, or go to the **Environment** tab at upper-right and click **import dataset** button).
 - Start a new RMarkdown document for your lab report.
 - Add **two chunks** to your RMarkdown, one to load the hanoverbase library and one which includes the two lines needed to import the data from Excel.
 - Make sure you can view the Cars2015 data in the data viewer.
@@ -28,11 +28,14 @@ As you investigate the data, you should create **at least one of each** of the f
 
 - piechart
 - simple barchart
+- labeled dotplot (optional)
 - histogram
 - boxplot
 - stacked barchart
 - simple scatterplot with smooth fit line
 - scatterplot with panels
+
+Make sure each graph has a main title and suitable axis labels.
 
 For help with writing your R code chunks, refer to the R and RStudio Cheatsheet and to the previous lab assignments: [https://hanoverstatslabs.github.io/resources/](https://hanoverstatslabs.github.io/resources/)
 
