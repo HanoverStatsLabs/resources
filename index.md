@@ -30,6 +30,9 @@ RMarkdown
 Other Resources
   ~ [Various resources](various.md) with further links.
 
+Workshop Resources
+  ~ [This page](workshopResources.md) contains useful resources related to the workshops we do on learning R, and might be more broadly useful to others.
+
 Installation
   ~ [Instructions](installation.md) for how to set up R Studio and related packages on your own machines.
 

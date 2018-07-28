@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="lab-complete-anova-lab" class="level1">
+<h1>Lab: Complete ANOVA lab</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
+<p>In this lab we will work on a complete problem based on ANOVA, from start to finish. We will load the data, clean it up, produce some graphs, and run appropriate analyses.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
+targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span class="st">&quot;~/statsLabPractice/targetting/targeting.sav&quot;</span>)
+<span class="co"># View(targeting)</span></code></pre></div>
+<p>Factor variables:</p>
+<ul>
+<li>target race (White/Black): Coded in the variable name</li>
+<li>object (armed/unarmed): Coded in the variable name but implicitly</li>
+<li>shot action taken (correct/incorrect): Coded in the variable name but implicitly</li>
+</ul>
+<p>Let’s take a look at the variables:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(targeting)</code></pre></div>
+<p>We will only need the first 12 variables, the remaining are computed quantities. We start by <code>gather</code>ing the 8 columns that contain observations (don’t worry about the warning):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;key&quot;</span>, <span class="dt">value=</span><span class="st">&quot;meanRT&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>)</code></pre></div>
+<p>Next we need break the <code>key</code> variable into two parts, one showing the race and another showing the outcome. We’ll first split at the underscore, and basically discard the left part:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;key&quot;</span>, <span class="dt">value=</span><span class="st">&quot;meanRT&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">separate</span>(key, <span class="kw">c</span>(<span class="st">&quot;_ignore&quot;</span>, <span class="st">&quot;key&quot;</span>), <span class="st">&quot;_&quot;</span>)</code></pre></div>
+<p>Now we split the new key variable in two parts, splitting after the first 5 characters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;key&quot;</span>, <span class="dt">value=</span><span class="st">&quot;meanRT&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">separate</span>(key, <span class="kw">c</span>(<span class="st">&quot;_ignore&quot;</span>, <span class="st">&quot;key&quot;</span>), <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">separate</span>(key, <span class="kw">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;outcome&quot;</span>), <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">starts_with</span>(<span class="st">&quot;_ignore&quot;</span>))</code></pre></div>
+<p>Next we need to work on the <code>outcome</code> variable, which actually contains two different pieces of information:</p>
+<ul>
+<li>whether the object was armed (Hits/Misses) vs unarmed (CRs/FAs)</li>
+<li>whether the subject took the correct action (Hits/CRs) or incorrect action (Misses/FAs)</li>
+</ul>
+<p>We will use <code>mutate</code> and <code>recode_factor</code> to create these:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal &lt;-<span class="st"> </span>targetingLong <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">object=</span><span class="kw">recode_factor</span>(outcome, <span class="dt">Hits=</span><span class="st">&quot;Armed&quot;</span>, <span class="dt">Misses=</span><span class="st">&quot;Armed&quot;</span>,
+                                         <span class="dt">CRs=</span><span class="st">&quot;Unarmed&quot;</span>, <span class="dt">FAs=</span><span class="st">&quot;Unarmed&quot;</span>),
+           <span class="dt">action=</span><span class="kw">recode_factor</span>(outcome, <span class="dt">Hits=</span><span class="st">&quot;Correct&quot;</span>, <span class="dt">Misses=</span><span class="st">&quot;Incorrect&quot;</span>,
+                                         <span class="dt">CRs=</span><span class="st">&quot;Correct&quot;</span>, <span class="dt">FAs=</span><span class="st">&quot;Incorrect&quot;</span>))</code></pre></div>
+<p>To double-check that we did this correctly, we’ll create counts:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(race, outcome, object, action) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>())</code></pre></div>
+<p>We should see 49 cases for each, corresponding to our initial 49 data rows.</p>
+<p>Finally, a couple more cleanup steps are in order before we move on:</p>
+<ul>
+<li>We should fix the names of some of the variables. We will use <code>rename</code> for that.</li>
+<li>We should drop the <code>outcome</code> column as it is no longer needed. We will use <code>select</code> for that.</li>
+<li>The <code>gender</code>, <code>race</code> and <code>age</code> variables need to be coded as factors. We will use <code>mutate</code> and <code>factor</code> for that (we would use <code>recode_factor</code> if we wanted to change the names of the labels, but we don’t).</li>
+</ul>
+<p>This can all be done in a series of pipelined steps.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="dt">subject=</span><span class="st">&quot;script.subjectid&quot;</span>,
+           <span class="dt">iat=</span><span class="st">&quot;expressions.d&quot;</span>,
+           <span class="dt">gender=</span><span class="st">&quot;gender_response&quot;</span>,
+           <span class="dt">age=</span><span class="st">&quot;age_response&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">starts_with</span>(<span class="st">&quot;outcome&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">factor</span>(gender), <span class="dt">age=</span><span class="kw">factor</span>(age), <span class="dt">race=</span><span class="kw">factor</span>(race))</code></pre></div>
+<p>Lastly, we will filter the <code>action</code> column to only include the correct answers, as that was the focus of the study.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingCorrect &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(action<span class="op">==</span><span class="st">&quot;Correct&quot;</span>)</code></pre></div>
+<p>There are of course numerous graphs we can construct, and we can choose to log-transform the mean reaction time or not. We will leave it as is for now as the data did not show any signs of extreme skewness. Here is a starting plot that shows the density distribution for <code>meanRT</code> for armed and unarmed objects, and with different graphs for each race and gender combination:</p>
+<pre><code>ggplot(targetingCorrect) +
+    aes(x=meanRT, color=object) +
+    geom_density() +
+    facet_grid(race~gender)</code></pre>
+<p>We can see that mean reaction times were slower for the unarmed objects.</p>
+<p>Let us compute some numerical summaries:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingCorrect <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(race, object, gender) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(meanRT),
+                   <span class="dt">se=</span><span class="kw">sd</span>(meanRT)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">n</span>()))</code></pre></div>
+<p>We can also plot these:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>object, <span class="dt">y=</span>meanRT, <span class="dt">color=</span>race) <span class="op">+</span>
+<span class="st">    </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span>mean_se, <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.2</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</code></pre></div>
+<p>We probably expected the marked difference in reaction times between armed and unarmed subjects. For female subjects, the race of the subject seems to play a small factor.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span>race<span class="op">*</span>object, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit1)
+<span class="kw">anova</span>(fit1)</code></pre></div>
+<p>We can see a significant overall effect, but we can also see that the interaction terms are not significant. We remove them from the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span>race<span class="op">+</span>object, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit2)
+<span class="kw">anova</span>(fit2)</code></pre></div>
+<p>We can compare the two models to see if there are differences, and there is no significant difference:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit1, fit2)</code></pre></div>
+<p>We can get some default diagnostics from plotting the fit:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(fit2)</code></pre></div>
+<p>The residuals appear to be normal and with constant variance. We can visualize their effect against the other predictors:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>object, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>race) <span class="op">+</span>
+<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>object) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="fl">0.1</span>))
+<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>object) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.1</span>))
+<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>gender, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span><span class="kw">interaction</span>(race, object)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.2</span>))</code></pre></div>
+<p>We can look at how <code>iat</code> might be related to those residuals, there’s clearly a relation there:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>iat, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>object) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_smooth</span>()</code></pre></div>
+<p>Now let’s add the subject’s gender into the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit3 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span>race<span class="op">+</span>object<span class="op">+</span>gender<span class="op">+</span>race<span class="op">:</span>gender<span class="op">+</span>object<span class="op">:</span>gender, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit3)
+<span class="kw">anova</span>(fit3)
+<span class="kw">anova</span>(fit2, fit3)</code></pre></div>
+<p>We see that the subject’s gender does not appear to be significant.</p>
+<p>Finally, we look at whether we should remove race from the model as well:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit4 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span>object, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit4)
+<span class="kw">anova</span>(fit4)
+<span class="kw">anova</span>(fit4, fit3)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit5 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span><span class="kw">poly</span>(iat, <span class="dv">2</span>)<span class="op">+</span>object, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit5)
+<span class="kw">anova</span>(fit5)</code></pre></div>
+<p>ggplot(targetingCorrect) + aes(x=race, y=meanRT, color=gender) + geom_point() + geom_line(aes(group=subject))</p>
+</section>
+</section>
+</body>
+</html>

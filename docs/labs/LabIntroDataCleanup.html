@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="lab-data-cleanup" class="level1">
+<h1>Lab: Data Cleanup</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
+<p>We can loosely split the “Data cleanup” part of a project in three stages:</p>
+<ul>
+<li>Loading the data from a spreadsheet file or some other kind of storage. The <code>readr</code> and <code>readxl</code> packages help us with this stage.</li>
+<li>“Tidying” the loaded data to ensure the data is structured in a way that facilitates analysis. This mainly means that each variable is in one column. For example instead of having measurements over 5 days split across 5 columns, there should instead be one column of 5 times as many observations, with a second column identifying the day index for each. The <code>tidyr</code> package provides methods that help with this stage.</li>
+<li>Manipulating the data in various ways to obtain summaries or prepare for graphing. The <code>dplyr</code> package offers a rich set of methods to help with that.</li>
+</ul>
+<p>All the packages mentioned above are part of the “<a href="https://www.tidyverse.org/">tidyverse</a>” package collection, and are automatically included in our <code>hanoverbase</code> package.</p>
+<section id="importing" class="level3">
+<h3>Importing</h3>
+<p>We start by importing the data from an external source. For this example, we will use the <a href="datasets/compression.xlsx" class="uri">datasets/compression.xlsx</a> spreadsheet. It might help to view the spreadsheet in Excel.</p>
+<p>In terms of providing us access to the data, the sheet is somewhat messy: It has the data spread over multiple tabs/sheets, and sheets often contain non-data components like summaries and graphs.</p>
+<p>We will start with reading the data from the first sheet, titled “Upper Arm Circ”. You will need to first have the dataset imported into your project directory (you did create a new project with its own project directory, right?). You can then click on the dataset to open up the import dialog. We will not fully use the import dialog, but it is a good starting point to look at the data.</p>
+<p>In the import dialog, you can select the sheet you want, here the “Upper Arm Circ”, from the “Sheet” drop down in the “Import Option” section. Then you would want to copy the couple of lines on the right, which do the import:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readxl)
+compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/statsLabPractice/compression/compression.xlsx&quot;</span>,
+    <span class="dt">sheet =</span> <span class="st">&quot;Upper Arm Circ&quot;</span>)</code></pre></div>
+<p>Then we would paste these lines in an r-chunk after canceling the import dialog. Remember that the first line loads a package for us, and only needs to be placed once.</p>
+<p>Then we need to change the second line, to make sure we only try to load the first 8 data points, and also improve the stored data set name:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.uac &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/statsLabPractice/compression/compression.xlsx&quot;</span>,
+    <span class="dt">sheet =</span> <span class="st">&quot;Upper Arm Circ&quot;</span>,
+    <span class="dt">range =</span> <span class="st">&quot;A1:O9&quot;</span>)</code></pre></div>
+<p>We learned about this extra parameter by reading the documentation for <code>read_excel</code>.</p>
+<p>Let us also load another one of the sheets:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.lac &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/statsLabPractice/compression/compression.xlsx&quot;</span>,
+    <span class="dt">sheet =</span> <span class="st">&quot;Lower Arm Circ&quot;</span>,
+    <span class="dt">range =</span> <span class="st">&quot;A1:O9&quot;</span>)</code></pre></div>
+<p>This shows the basics of importing data. You can explore the <code>readr</code> and <code>readxl</code> packages to find out more. Also check out the <code>haven</code> package for loading SPSS, Stata and SAS data. There are also ways to access a database directly; the package <a href="https://dbplyr.tidyverse.org/articles/dbplyr.html"><code>dbplyr</code></a> might be a good place to start for that.</p>
+</section>
+<section id="tidying" class="level3">
+<h3>Tidying</h3>
+<p>We will take various steps to “tidy” the data. Before we do that, let’s discuss the data a bit. The first column represents of course the subject ids, and each row of data corresponds to a subject. The “CS…” variables correspond to the subject using a “Compression Sleeve” while the “NT…” variables correspond to the subject receiving “Pneumatic Compression” therapy. the “…UAC…” part represents that these are “Upper Arm Circulation” measurements, and finally the remaining bits “PR, PO, 1, 2, 3, …” represent the time variable (pre-exercise, post-exercise, one day later etc).</p>
+<p>The data is what is known as a “wide” form: In a “tidy” version of the data the kind of treatment, the quantity being measured, and the time of observation would all be three separate factor variables and we would have a single measurement column. In effect all the measurements currently present in the sheet will be placed in one column, and various information that is currently coded in the variable names will instead be stored in different variables/columns specifically created for that purpose.</p>
+<p>We will now convert the data sheet in this form. The first step in doing so is to isolate the <code>CSU</code> columns as well as the subject column. We will use the <code>subset</code> method for that, which picks out a subset of the variables. There are various ways to specify which variables to select, and you can look at the documentation or cheatsheets for that.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.uac <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5)</code></pre></div>
+<p>We could have stored this result in a dataset, but we will instead add another process step in the pipeline, which does the transformation. It is called <code>gather</code>, and it simply collects some columns and puts them together into one column (the <code>-X__1</code> tells it to combine all the other columns except <code>X__1</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;time&quot;</span>, <span class="dt">value=</span><span class="st">&quot;value&quot;</span>, <span class="op">-</span>X__<span class="dv">1</span>)
+<span class="kw">View</span>(sleeve.uac)   <span class="co"># Do in console</span></code></pre></div>
+<p>Notice how the new <code>time</code> column contains the variable names, and we now have 7 times as many rows, one for each combination of a subject and a variable.</p>
+<p>Next we need to split the variable <code>time</code> three parts:</p>
+<ul>
+<li>The fact that it is a “compression sleeve” treatment</li>
+<li>The fact that it is the upper-arm</li>
+<li>The timing (pre, post, day 1 etc)</li>
+</ul>
+<p>The <code>separate</code> method helps us with this. Its syntax will look a bit weird. The second argument (<code>into=</code>) specifies the names to give to the three parts, while the third argument (<code>sep=</code>) specifies the cutoff points (after the first two letters, after the first 5 letters). This effectively splits each value like “CSUAPR” in three parts: the first two letters, the next three letters, and the rest.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac2 &lt;-<span class="st"> </span>sleeve.uac <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">separate</span>(time,
+                 <span class="dt">into=</span><span class="kw">c</span>(<span class="st">&quot;treatment&quot;</span>, <span class="st">&quot;measurement&quot;</span>, <span class="st">&quot;time&quot;</span>),
+                 <span class="dt">sep=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))
+<span class="kw">View</span>(sleeve.uac2)</code></pre></div>
+<p>Finally, we will fix the first column: First we want to change its name to “subject”, with the method “rename”:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac2 <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>)</code></pre></div>
+<p>And then change the strings “sub 1” into the numbers themselves, using <code>mutate</code>. For this to work, we also need to load a string-manipulation library called <code>stringr</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac3 &lt;-<span class="st"> </span>sleeve.uac2 <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))</code></pre></div>
+<p>We will likely need to repeat all these steps for each part of the dataset, and they will be more or less the same steps, so let’s see if we can make a function out of it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">convert.to.long &lt;-<span class="st"> </span><span class="cf">function</span>(df, middleLetters) {
+    df <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;time&quot;</span>, <span class="dt">value=</span><span class="st">&quot;value&quot;</span>, <span class="op">-</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">separate</span>(time,
+                 <span class="dt">into=</span><span class="kw">c</span>(<span class="st">&quot;treatment&quot;</span>, <span class="st">&quot;measurement&quot;</span>, <span class="st">&quot;time&quot;</span>),
+                 <span class="dt">sep=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span> <span class="op">+</span><span class="st"> </span>middleLetters)) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))
+}
+Notice that we used another variable, <span class="st">&quot;middleLetters&quot;</span>, to represent the number of letters used <span class="cf">for</span> the middle part of the <span class="kw">names</span> (<span class="cf">in</span> our case <span class="dv">3</span> <span class="cf">for</span> UAC). If we were to import the rest of the spreadsheets, we may need to use <span class="st">&quot;2&quot;</span> on some of those.</code></pre></div>
+<p>Then we could simply have done the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
+<p>We will now do the same for the other part, the NT columns:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pneumatic.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, NTUACPR<span class="op">:</span>NTUAC5) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
+<p>We will repeat this for the “lower-arm-circulation” variables:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.lac &lt;-<span class="st"> </span>compression.lac <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSLACPR<span class="op">:</span>CSLAC5) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)
+pneumatic.lac &lt;-<span class="st"> </span>compression.lac <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, NTLACPR<span class="op">:</span>NTLAC5) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
+<p>Now we have four data sets that all look similar in terms of the columns they contain etc. We would like to merge them together by simply placing them below each other and matching the columns. We can use the <code>bind_rows</code> method for this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sleeve.uac, pneumatic.uac, sleeve.lac, pneumatic.lac)</code></pre></div>
+<p>Now it is time to more properly code our factor variables, using <code>mutate</code>. In R, there are different “modes” for vectors/variables. One mode is “numeric” for scalar variables, another is “character” for strings. There is also “factor” which is what should be used for factor variables. A factor typically uses numbers for the underlying codes/levels, and it also contains a “value label” for each code/level. For example, if we take the treatment variable and turn it into a factor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subject<span class="op">$</span>treatment
+subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()</code></pre></div>
+<p>You will see the two results looking a bit differently. The important thing to know is that in order to do some of the standard statistical analysis steps, we need variables to be coded as “factors”:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
+    <span class="dt">subject =</span> <span class="kw">factor</span>(subject),
+    <span class="dt">treatment =</span> <span class="kw">recode_factor</span>(treatment, <span class="dt">CS=</span><span class="st">&quot;Compression Sleeve&quot;</span>, <span class="dt">NT=</span><span class="st">&quot;Pneumatic Compression&quot;</span>),
+    <span class="dt">measurement =</span> <span class="kw">recode_factor</span>(measurement, <span class="dt">UAC=</span><span class="st">&quot;Upper Arm Circ&quot;</span>, <span class="dt">LAC=</span><span class="st">&quot;Lower Arm Circ&quot;</span>),
+    <span class="dt">time =</span> <span class="kw">recode_factor</span>(time, <span class="dt">PR=</span><span class="st">&quot;Pre&quot;</span>, <span class="dt">PO=</span><span class="st">&quot;Post&quot;</span>, <span class="st">`</span><span class="dt">1</span><span class="st">`</span>=<span class="st">&quot;Day 1&quot;</span>, <span class="st">`</span><span class="dt">2</span><span class="st">`</span>=<span class="st">&quot;Day 2&quot;</span>,
+                               <span class="st">`</span><span class="dt">3</span><span class="st">`</span>=<span class="st">&quot;Day 3&quot;</span>, <span class="st">`</span><span class="dt">4</span><span class="st">`</span>=<span class="st">&quot;Day 4&quot;</span>, <span class="st">`</span><span class="dt">5</span><span class="st">`</span>=<span class="st">&quot;Day 5&quot;</span>)
+    )</code></pre></div>
+<p>We are now ready to do some work with this data. Here’s some examples of graph we can produce, you’ll see more about this sort of graph in the graphing section.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(alldata) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>value, <span class="dt">group=</span>subject, <span class="dt">color=</span>subject) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_path</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>treatment)
+
+<span class="kw">ggplot</span>(alldata) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>value, <span class="dt">group=</span>treatment, <span class="dt">col=</span>treatment) <span class="op">+</span>
+<span class="st">    </span><span class="kw">stat_summary</span>(<span class="dt">geom=</span><span class="st">&quot;pointrange&quot;</span>, <span class="dt">fun.data=</span>mean_se, <span class="dt">fatten=</span><span class="dv">3</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>,
+        <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.1</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.1</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>.)</code></pre></div>
+<p>Let us move on to doing some numerical work with this data. For instance we may want to compute the means and standard deviations for each day, for each treatment and for each type of measurements. In order to perform such computations, we need to first “group” the data by the grouping variables we want to use. The <code>group_by</code> method helps us with that. Then we can use the <code>summarize</code> function to produce numerical summaries per group.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">summaries &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(treatment, measurement, time) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(value),
+              <span class="dt">sd=</span><span class="kw">sd</span>(value),
+              <span class="dt">median=</span><span class="kw">median</span>(value),
+              <span class="dt">q1=</span><span class="kw">quantile</span>(value, <span class="fl">0.25</span>))</code></pre></div>
+<p>We could then visualize those summaries in some way:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(summaries) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>mean, <span class="dt">color=</span>treatment, <span class="dt">group=</span>treatment) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>.)</code></pre></div>
+<p>Let us try a more complicated transformation. Since different subjects start from different values at the pre-stage (you may have noticed that in the first graph you created earlier), we could try to normalize that initial amount, and compute the other values as relative to that that initial amount. What we need to do here is again group by the subject, treatment and measurement, but not time, and now within each category we need to mutate our values instead of summarizing:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">relativedata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(subject, treatment, measurement) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">relChange=</span>value<span class="op">/</span><span class="kw">first</span>(value))</code></pre></div>
+<p>We’ll also want to remove the “pre” entries, as they are no longer really applicable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">relativedata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(subject, treatment, measurement) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">relChange=</span>value<span class="op">/</span><span class="kw">first</span>(value)) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">filter</span>(time <span class="op">!=</span><span class="st"> &quot;Pre&quot;</span>)</code></pre></div>
+<p>Let’s repeat our earlier graphs now. For the second graph we’ll adjust the y-axis to show relative increase (more about this stuff no the graphics session):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(relativedata) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>relChange<span class="op">-</span><span class="dv">1</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">group=</span>subject)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>treatment) <span class="op">+</span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;relative change from pre&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent)
+
+<span class="kw">ggplot</span>(relativedata) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time , <span class="dt">y=</span>relChange<span class="op">-</span><span class="dv">1</span>, <span class="dt">group=</span>treatment, <span class="dt">col=</span>treatment) <span class="op">+</span>
+<span class="st">    </span><span class="kw">stat_summary</span>(<span class="dt">geom=</span><span class="st">&quot;pointrange&quot;</span>, <span class="dt">fun.data=</span>mean_se, <span class="dt">fatten=</span><span class="dv">3</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>,
+        <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.1</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.1</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>.) <span class="op">+</span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;relative change from pre&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent)</code></pre></div>
+</section>
+</section>
+</section>
+</body>
+</html>
