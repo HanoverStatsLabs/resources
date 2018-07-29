@@ -63,8 +63,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Manipulating the data in various ways to obtain summaries or prepare for graphing. The <code>dplyr</code> package offers a rich set of methods to help with that.</li>
 </ul>
 <p>All the packages mentioned above are part of the “<a href="https://www.tidyverse.org/">tidyverse</a>” package collection, and are automatically included in our <code>hanoverbase</code> package.</p>
-<section id="importing" class="level3">
-<h3>Importing</h3>
+<p>Here is a summary of some of the key methods we will learn about here:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">read_excel</td>
+<td style="text-align: left;">Read dataset from Excel spreadsheet</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">gather</td>
+<td style="text-align: left;">Turn multiple columns to one, use a 2nd variable for the column name</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">separate</td>
+<td style="text-align: left;">Split an entry into multiple parts and build different columns</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">rename</td>
+<td style="text-align: left;">Change the name of a variable</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">mutate</td>
+<td style="text-align: left;">Change or add a variable via computation using other variables</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">select</td>
+<td style="text-align: left;">Restrict the dataset to a subset of the variables</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">filter</td>
+<td style="text-align: left;">Only select certain rows based on some criterion</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">group_by</td>
+<td style="text-align: left;">Group the rows of a dataset according to a factor variable</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">summarize</td>
+<td style="text-align: left;">Produce a single value from each group in a grouped dataset</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">bind_rows</td>
+<td style="text-align: left;">Bind datasets together by putting one below the other</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">recode_factor</td>
+<td style="text-align: left;">Rearrange/rename a factor’s levels</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">factor</td>
+<td style="text-align: left;">Create a new factor or turn a character vector to factor</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="importing" class="level2">
+<h2>Importing</h2>
 <p>We start by importing the data from an external source. For this example, we will use the <a href="datasets/compression.xlsx" class="uri">datasets/compression.xlsx</a> spreadsheet. It might help to view the spreadsheet in Excel.</p>
 <p>In terms of providing us access to the data, the sheet is somewhat messy: It has the data spread over multiple tabs/sheets, and sheets often contain non-data components like summaries and graphs.</p>
 <p>We will start with reading the data from the first sheet, titled “Upper Arm Circ”. You will need to first have the dataset imported into your project directory (you did create a new project with its own project directory, right?). You can then click on the dataset to open up the import dialog. We will not fully use the import dialog, but it is a good starting point to look at the data.</p>
@@ -84,10 +138,10 @@ compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<sp
     <span class="dt">range =</span> <span class="st">&quot;A1:O9&quot;</span>)</code></pre></div>
 <p>This shows the basics of importing data. You can explore the <code>readr</code> and <code>readxl</code> packages to find out more. Also check out the <code>haven</code> package for loading SPSS, Stata and SAS data. There are also ways to access a database directly; the package <a href="https://dbplyr.tidyverse.org/articles/dbplyr.html"><code>dbplyr</code></a> might be a good place to start for that.</p>
 </section>
-<section id="tidying" class="level3">
-<h3>Tidying</h3>
+<section id="tidying" class="level2">
+<h2>Tidying</h2>
 <p>We will take various steps to “tidy” the data. Before we do that, let’s discuss the data a bit. The first column represents of course the subject ids, and each row of data corresponds to a subject. The “CS…” variables correspond to the subject using a “Compression Sleeve” while the “NT…” variables correspond to the subject receiving “Pneumatic Compression” therapy. the “…UAC…” part represents that these are “Upper Arm Circulation” measurements, and finally the remaining bits “PR, PO, 1, 2, 3, …” represent the time variable (pre-exercise, post-exercise, one day later etc).</p>
-<p>The data is what is known as a “wide” form: In a “tidy” version of the data the kind of treatment, the quantity being measured, and the time of observation would all be three separate factor variables and we would have a single measurement column. In effect all the measurements currently present in the sheet will be placed in one column, and various information that is currently coded in the variable names will instead be stored in different variables/columns specifically created for that purpose.</p>
+<p>The data is what is known as a “wide” form: In a “tidy” version of the data the kind of treatment, the quantity being measured, and the time of observation would all be three separate factor variables and we would have a single measurement column. In effect all the measurements currently present in the sheet will be placed in one column, and various information that is currently coded in the variable names will instead be stored in different variables/columns specifically created for that purpose. For instance there will be one variable to distinguish whether the measurement is during to the Compression Sleeve phase or during the Pneumatic Compression phase, another variable to describe what was measured (upper arm circ, lower arm circ etc), and another variable to distinguish which part of a phase we are in (pre/post/day 1 etc).</p>
 <p>We will now convert the data sheet in this form. The first step in doing so is to isolate the <code>CSU</code> columns as well as the subject column. We will use the <code>subset</code> method for that, which picks out a subset of the variables. There are various ways to specify which variables to select, and you can look at the documentation or cheatsheets for that.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5)</code></pre></div>
@@ -97,7 +151,7 @@ compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<sp
 <span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;time&quot;</span>, <span class="dt">value=</span><span class="st">&quot;value&quot;</span>, <span class="op">-</span>X__<span class="dv">1</span>)
 <span class="kw">View</span>(sleeve.uac)   <span class="co"># Do in console</span></code></pre></div>
 <p>Notice how the new <code>time</code> column contains the variable names, and we now have 7 times as many rows, one for each combination of a subject and a variable.</p>
-<p>Next we need to split the variable <code>time</code> three parts:</p>
+<p>Next we need to split the variable <code>time</code> into three parts:</p>
 <ul>
 <li>The fact that it is a “compression sleeve” treatment</li>
 <li>The fact that it is the upper-arm</li>
@@ -116,7 +170,10 @@ compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<sp
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac3 &lt;-<span class="st"> </span>sleeve.uac2 <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))</code></pre></div>
-<p>We will likely need to repeat all these steps for each part of the dataset, and they will be more or less the same steps, so let’s see if we can make a function out of it:</p>
+<section id="creating-a-custom-function-for-repeatable-steps" class="level3">
+<h3>Creating a custom function for repeatable steps</h3>
+<p>We will likely need to repeat all these steps for each part of the dataset, and they will be more or less the same steps, so let’s see if we can make a function out of it.</p>
+<p>In order to make a function, we need to determine what it is that may be changing each time we do this. These are then “parameters” for this function. In our case the one thing that is of course changing every time is the data frame, and we will use the <code>df</code> parameter name to refer to it. But if we look at some of the variable names in the other sheets, we will notice that the middle part of the name some times uses 2 letters and sometimes 3. So this would be another parameter we can provide, <code>middleLetters</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">convert.to.long &lt;-<span class="st"> </span><span class="cf">function</span>(df, middleLetters) {
     df <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;time&quot;</span>, <span class="dt">value=</span><span class="st">&quot;value&quot;</span>, <span class="op">-</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
@@ -125,12 +182,15 @@ compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<sp
                  <span class="dt">sep=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span> <span class="op">+</span><span class="st"> </span>middleLetters)) <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))
-}
-Notice that we used another variable, <span class="st">&quot;middleLetters&quot;</span>, to represent the number of letters used <span class="cf">for</span> the middle part of the <span class="kw">names</span> (<span class="cf">in</span> our case <span class="dv">3</span> <span class="cf">for</span> UAC). If we were to import the rest of the spreadsheets, we may need to use <span class="st">&quot;2&quot;</span> on some of those.</code></pre></div>
+}</code></pre></div>
 <p>Then we could simply have done the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
+<p>And if the variable names we wanted to use used a different number of “middle letters” we could provide that as a parameter. We can also set a “default value”:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">convert.to.long &lt;-<span class="st"> </span><span class="cf">function</span>(df, <span class="dt">middleLetters=</span><span class="dv">3</span>) {
+    ...</code></pre></div>
+<p>Then we do <code>convert.to.long()</code> it will have the same effect as <code>convert.to.long(3)</code>.</p>
 <p>We will now do the same for the other part, the NT columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pneumatic.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, NTUACPR<span class="op">:</span>NTUAC5) <span class="op">%&gt;%</span>
@@ -142,12 +202,21 @@ Notice that we used another variable, <span class="st">&quot;middleLetters&quot;
 pneumatic.lac &lt;-<span class="st"> </span>compression.lac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, NTLACPR<span class="op">:</span>NTLAC5) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
+</section>
+<section id="binding-data-sets-together" class="level3">
+<h3>Binding data sets together</h3>
 <p>Now we have four data sets that all look similar in terms of the columns they contain etc. We would like to merge them together by simply placing them below each other and matching the columns. We can use the <code>bind_rows</code> method for this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sleeve.uac, pneumatic.uac, sleeve.lac, pneumatic.lac)</code></pre></div>
-<p>Now it is time to more properly code our factor variables, using <code>mutate</code>. In R, there are different “modes” for vectors/variables. One mode is “numeric” for scalar variables, another is “character” for strings. There is also “factor” which is what should be used for factor variables. A factor typically uses numbers for the underlying codes/levels, and it also contains a “value label” for each code/level. For example, if we take the treatment variable and turn it into a factor:</p>
+<p>There are many tools that help with more complicated data merges, look at the <code>dplyr</code> cheatsheet for some examples.</p>
+</section>
+<section id="handling-factor-variables" class="level3">
+<h3>Handling factor variables</h3>
+<p>Now it is time to more properly code our factor variables, using <code>mutate</code>. In R, there are different <em>modes</em> for vectors/variables. One mode is <em>numeric</em> for scalar variables, another is <em>character</em> for strings. There is also <em>factor</em> which is what should be used for factor variables. A factor typically uses numbers for the underlying codes/levels, and it also contains a <em>value label</em> for each code/level. For example, if we take the treatment variable and turn it into a factor:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subject<span class="op">$</span>treatment
 subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()</code></pre></div>
-<p>You will see the two results looking a bit differently. The important thing to know is that in order to do some of the standard statistical analysis steps, we need variables to be coded as “factors”:</p>
+<p>As we may have briefly mentioned brefore, the dollar sign is used to pick out a column from a dataset. You may also use the <code>pluck</code> command, part of the <code>purrr</code> package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;treatment&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()</code></pre></div>
+<p>If you compare the outputs above, you will notice the results looking a tad different when we used the <code>factor</code> function. The important thing to know is that in order to do some of the standard statistical analysis steps, we need variables to be coded as “factors”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
     <span class="dt">subject =</span> <span class="kw">factor</span>(subject),
     <span class="dt">treatment =</span> <span class="kw">recode_factor</span>(treatment, <span class="dt">CS=</span><span class="st">&quot;Compression Sleeve&quot;</span>, <span class="dt">NT=</span><span class="st">&quot;Pneumatic Compression&quot;</span>),
@@ -155,7 +224,7 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
     <span class="dt">time =</span> <span class="kw">recode_factor</span>(time, <span class="dt">PR=</span><span class="st">&quot;Pre&quot;</span>, <span class="dt">PO=</span><span class="st">&quot;Post&quot;</span>, <span class="st">`</span><span class="dt">1</span><span class="st">`</span>=<span class="st">&quot;Day 1&quot;</span>, <span class="st">`</span><span class="dt">2</span><span class="st">`</span>=<span class="st">&quot;Day 2&quot;</span>,
                                <span class="st">`</span><span class="dt">3</span><span class="st">`</span>=<span class="st">&quot;Day 3&quot;</span>, <span class="st">`</span><span class="dt">4</span><span class="st">`</span>=<span class="st">&quot;Day 4&quot;</span>, <span class="st">`</span><span class="dt">5</span><span class="st">`</span>=<span class="st">&quot;Day 5&quot;</span>)
     )</code></pre></div>
-<p>We are now ready to do some work with this data. Here’s some examples of graph we can produce, you’ll see more about this sort of graph in the graphing section.</p>
+<p>We are now ready to do some work with this data. Here’s some examples of graphs we can produce, you’ll see more about this sort of graph in the <a href="LabIntroGgplot.html">graphing lab</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(alldata) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>value, <span class="dt">group=</span>subject, <span class="dt">color=</span>subject) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_path</span>() <span class="op">+</span>
@@ -167,7 +236,10 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
         <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.1</span>)) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.1</span>)) <span class="op">+</span>
 <span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>.)</code></pre></div>
-<p>Let us move on to doing some numerical work with this data. For instance we may want to compute the means and standard deviations for each day, for each treatment and for each type of measurements. In order to perform such computations, we need to first “group” the data by the grouping variables we want to use. The <code>group_by</code> method helps us with that. Then we can use the <code>summarize</code> function to produce numerical summaries per group.</p>
+</section>
+<section id="further-work-and-transformations" class="level3">
+<h3>Further work and transformations</h3>
+<p>Let us move on to doing some numerical work with this data. For instance we may want to compute the means and standard deviations for each day, for each treatment and for each type of measurement. In order to perform such computations, we need to first “group” the data by the grouping variables we want to use. The <code>group_by</code> method helps us with that. Then we can use the <code>summarize</code> function to produce numerical summaries per group.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">summaries &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">group_by</span>(treatment, measurement, time) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(value),
@@ -190,9 +262,10 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
 <p>Let’s repeat our earlier graphs now. For the second graph we’ll adjust the y-axis to show relative increase (more about this stuff no the graphics session):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(relativedata) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>relChange<span class="op">-</span><span class="dv">1</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">group=</span>subject)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">group=</span>subject, <span class="dt">color=</span>subject)) <span class="op">+</span>
 <span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>treatment) <span class="op">+</span>
 <span class="st">    </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;relative change from pre&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">guides</span>(<span class="dt">color=</span><span class="ot">FALSE</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent)
 
 <span class="kw">ggplot</span>(relativedata) <span class="op">+</span>
@@ -203,6 +276,93 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
 <span class="st">    </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>.) <span class="op">+</span>
 <span class="st">    </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;relative change from pre&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent)</code></pre></div>
+</section>
+</section>
+<section id="practice" class="level2">
+<h2>Practice</h2>
+<p>You likely have a dataset of your own that you might want to work with to practice the above. If you don’t, then here’s a possible project:</p>
+<ol type="1">
+<li>The <code>GapMinder</code> website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually a R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
+<ul>
+<li>The first step would be to access the data sets from the website, <code>https://www.gapminder.org/data/</code>. You can search for the requisite datasets there. You have two options: You can either download the file and include it in your project, or you can use the file’s URL directly into R. We will recommend this first path in this instance, but keep in mind that the second path is possible. We will give you details on which datasets to load a bit further down.</li>
+<li>Start by creating a new project. You may also want to start an RMarkdown document to keep your work organized.</li>
+</ul></li>
+<li>We will use the <code>life expectancy (years)</code> variable.
+<ul>
+<li>Search for the corresponding dataset, and dowload the file. Then upload the file into your project directory (you may want to rename it to something simpler), and import its first sheet into the project by clicking the uploaded file.</li>
+<li>Start by using <code>rename</code> to rename the first variable to say <code>country</code> or something similar.</li>
+<li>Use <code>gather</code> to turn all the different year variables into a single year. The resulting dataset should have three columns: country, year, and “life expectancy”. You can use <code>-country</code> as the column specification; this will tell <code>gather</code> to use all columns except for <code>country</code>. Also make sure to check the documentation and include a setting to “remove the missing values”.</li>
+</ul>
+One thing we have not covered before is using variable names with spaces in them, like <code>life expectancy</code> in this example. In many places, you will need to enclose them in backticks to make that work, like so <code>`life expectancy`</code>.</li>
+<li>We will now add another variable, the per-capita income. The variable you want is called “Income per person (GDP/capita, PPP$ inflation-adjusted)”. Follow much the same steps as in the previous point. You can call the values column whatever you want of course, but we will be using simply <code>income</code> for it.</li>
+<li><p>We will also want to get the total population of each country, stored in a dataset named <code>Population, total</code>. Use similar steps for it.</p>
+(Optional step) If you are feeling adventurous, you can pursue the possibility of writing a function to make these steps easier, since we more or less repeated the same steps three times.</li>
+<li><p>Now we want to bring these three datasets together, by matching entries on the country and year. the <code>inner_join</code> function can help you do that, make sure to look at its documentation. Store the result in a variable (we called it <code>gpdata</code>).</p>
+You have a choice to make here, actually, <code>inner_join</code> and <code>full_join</code>. <code>full_join</code> will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use <code>inner_join</code> instead, which will only keep the entries where both the income and the life expectancy are known.</li>
+<li><p>We need to change the “year” value into numeric values, as currently they are being treated as character values. You will need to use <code>mutate</code> and <code>as.numeric</code> for this.</p></li>
+</ol>
+<section id="a-challenge-matching-country-names" class="level4">
+<h4>A challenge: Matching Country Names</h4>
+<p>Warning: This section is somewhat challenging, as it attempts to reconcile differences in country names between different datasets. The end result is simply to have a <code>region</code> variable associated with each country. Feel free to skip this on a first go, and straight to the “practice continued” section.</p>
+<p>We will incorporate a variable for the various regions of the world. As this variable does not appear to be available in the gapminder data, we will need to get it from another source. In this instance, the world bank seems to include it in some of their available datasets: <a href="http://databank.worldbank.org/data/download/WDI_excel.zip" class="uri">http://databank.worldbank.org/data/download/WDI_excel.zip</a>. - Download the file and unzip it, then upload the corresponding Excel to your project folder. - The second sheet, named <code>country</code>, contains the information we need. Load that into a variable, we called it <code>wdi</code>. - Since we only care about the country name and continent, use <code>select</code> to only choose the four columns <code>Short Name</code>, <code>Table Name</code>, <code>Long Name</code>, <code>Region</code>.</p>
+<p>The challenging part now is to match the country names between the two datasets, and the conventions on naming some of the countries. For instance, let us start by making a list of all the countries in <code>gpdata</code> and in the <code>Short Name</code> and <code>Table Name</code> entries of the <code>wdi</code> data, and look at their difference:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpCountries &lt;-<span class="st"> </span>gpdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;country&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
+wdiCountries &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;Table Name&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
+<span class="kw">setdiff</span>(gpCountries, wdiCountries)   <span class="co"># names in gpCountries but not wdiCountries</span></code></pre></div>
+<p>We’ll see a number of countries missing that really shouldn’t be missing. We could also try to use the <code>Short Name</code> column instead, but if you do that you’ll notice that it too is missing some countries.</p>
+<p>We could of course simply edit the Excel sheet and change the country names. But then we may need to do that each time we want to update the data from the originals. Manually changing the Excel sheets is not very sustainable in the long run. So we will look for a programmatic way to do it. Here’s the steps we will take:</p>
+<ul>
+<li>We will create a new column <code>gpName</code> in the <code>wdi</code> data that contains the <code>Short Name</code> if that was in the <code>gpCountries</code> list, or the <code>Table Name</code> if <em>that</em> was in the <code>gpCountries</code> list, or otherwise it is <code>NA</code> (missing value).</li>
+<li>Next we will find out which countries in <code>gpdata</code> do not have a corresponding entry. Hopefully that will be a small list. We will then manually write a small dataset that contains an appropriate matching name for those countries, by inspecting the names that exist in the <code>Short Name</code> column.</li>
+<li>Then we will join this spreadsheet with the <code>wdi</code> to fill in the remaining <code>gpName</code> entries.</li>
+<li>Lastly, we will then join our <code>gpdata</code> with this updated <code>wdi</code> spreadsheet in order to get the continent names.</li>
+</ul>
+<p>So let’s start with the first part, adding a new column in <code>wdi</code>. We can use the <code>case_when</code> method for this: It tries a series of alternatives in turn and uses the first that matches:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wdi &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gpName =</span> <span class="kw">case_when</span>(
+  <span class="st">`</span><span class="dt">Table Name</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>gpCountries     <span class="op">~</span><span class="st"> `</span><span class="dt">Table Name</span><span class="st">`</span>,
+  <span class="st">`</span><span class="dt">Short Name</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>gpCountries     <span class="op">~</span><span class="st"> `</span><span class="dt">Short Name</span><span class="st">`</span>,
+  <span class="ot">TRUE</span>                              <span class="op">~</span><span class="st"> </span><span class="kw">as.character</span>(<span class="ot">NA</span>)))</code></pre></div>
+<p>Now we need to create a little dataset that contains these countries and their appropriate <code>wdi</code> entries. We will use the <code>tribble</code> command for that, which allows us to nicely align the values vertically. We do need to use the search feature in the data view in order to find what the appropriate names would be:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countryNames &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+  <span class="op">~</span>gpName, <span class="op">~</span><span class="st">`</span><span class="dt">Short Name</span><span class="st">`</span>,
+  <span class="st">&quot;Bahamas&quot;</span>, <span class="st">&quot;The Bahamas&quot;</span>,
+  <span class="st">&quot;Cape Verde&quot;</span>, <span class="st">&quot;Cabo Verde&quot;</span>,
+  <span class="st">&quot;Cote d&#39;Ivoire&quot;</span>, <span class="st">&quot;Côte d&#39;Ivoire&quot;</span>,
+  <span class="st">&quot;Gambia&quot;</span>, <span class="st">&quot;The Gambia&quot;</span>,
+  <span class="st">&quot;Hong Kong, China&quot;</span>, <span class="st">&quot;Hong Kong SAR, China&quot;</span>,
+  <span class="st">&quot;Lao&quot;</span>, <span class="st">&quot;Lao PDR&quot;</span>,
+  <span class="st">&quot;Macao, China&quot;</span>, <span class="st">&quot;Macao SAR, China&quot;</span>,
+  <span class="st">&quot;North Korea&quot;</span>, <span class="st">&quot;Dem. People&#39;s Rep. Korea&quot;</span>,
+  <span class="st">&quot;Sao Tome and Principe&quot;</span>, <span class="st">&quot;São Tomé and Principe&quot;</span>,
+  <span class="st">&quot;South Korea&quot;</span>, <span class="st">&quot;Korea&quot;</span>,
+  <span class="st">&quot;Syria&quot;</span>, <span class="st">&quot;Syrian Arab Republic&quot;</span>
+)</code></pre></div>
+<p>We could not find an entry for Taiwan in the <code>wdi</code> data. We will need to assign its region manually after we do all the needed joins.</p>
+<p>Now we want to join this variable into the <code>wdi</code> data. This is a bit tricky: A join sounds like the right thing to do, with <code>Short Name</code> being the common variable. But the way R does this is to create two separate columns: One for the <code>gpName</code>s from <code>wdi</code> and another for those from <code>countryNames</code>. We need to use <code>coalesce</code> along with <code>mutate</code> to merge the two together.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wdi2 &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">full_join</span>(countryNames, <span class="dt">by=</span><span class="st">&quot;Short Name&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gpName =</span> <span class="kw">coalesce</span>(gpName.x, gpName.y))
+<span class="kw">setdiff</span>(gpCountries, wdi2<span class="op">$</span>gpName)</code></pre></div>
+<p>You should now see the <code>setdiff</code> method return a <code>character(0)</code> value, meaning there are no entries. Good, that means each value in <code>gpCountries</code> is now accounted for in <code>wdi</code>. We will still need to deal with Taiwan.</p>
+<p>Now, we want to merge in the region values from <code>wdi</code> into our <code>gpdata</code> set. This will be a simple join, matching the <code>country</code> to the <code>gpName</code>. But we only want to bring in the <code>region</code> variable, so before joining we will select only a few columns from <code>wdi</code> (<code>left_join</code> here tells it to ignore entries in <code>wdi</code> that don’t have a matching value in <code>gpdata</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpdata &lt;-<span class="st"> </span>gpdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(gpName, Region),
+    <span class="dt">by=</span><span class="kw">c</span>(<span class="dt">country=</span><span class="st">&quot;gpName&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="dt">region=</span><span class="st">&quot;Region&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">region=</span><span class="kw">replace</span>(region, country<span class="op">==</span><span class="st">&quot;Taiwan&quot;</span>, <span class="st">&quot;East Asia &amp; Pacific&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">region=</span><span class="kw">factor</span>(region))</code></pre></div>
+<p>Notice the first <code>mutate</code> line above. It tells it to replace the <code>region</code> variable by using whatever was in the <code>region</code> variable before but whenever the country is Taiwan it should set the region to be East Asia and Pacific.</p>
+<p>And with that, we should be done: In order to check, try to use <code>group_by</code> region and <code>summarize</code> using <code>n_distinct</code> to count each country only once. If done correctly, this should give you a reasonable count of countries for each region (for example, 3 countries in north america).</p>
+</section>
+<section id="practice-continued" class="level4">
+<h4>Practice Continued</h4>
+<p>This ends the “data tidying part”. We can now do some analyses on these numbers.</p>
+<ol type="1">
+<li>Use <code>arrange</code> to reorder the values and discover what the most recent year in the data is. You can also find that out from the viewer, or you can use <code>summarize</code> or <code>pluck</code> along with the <code>max</code> function.</li>
+<li>Use <code>filter</code> to consider only the subset of the data that relates to the most recent year, then <code>arrange</code> to order the data according to income, and find the countries with the 5 highest and 5 lowest per capita incomes.</li>
+<li>For each country, determine the number of data entries present.</li>
+<li>Determine for each year the country with the highest per-capita income. You can do this with a <code>group_by</code> and a <code>filter</code>.</li>
+<li>(If you did the region part above) Compute total populations for each region of the world and each year.</li>
+<li>Compute total income for each row by multiplying together the population and income variables, and add that as a new variable.</li>
+</ol>
 </section>
 </section>
 </section>
