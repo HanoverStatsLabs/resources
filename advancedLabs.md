@@ -4,7 +4,7 @@ These labs focus on more advanced topics. They are presented in the order that w
 
 **NOTE**: All these links take you to HTML versions of the labs. But if you change the link extension to ".pdf", you will get a more print-friendly version.
 
-[Data Manipulation Lab](LabIntroDataCleanup)
+[Data Manipulation Lab](LabIntroDataCleanup.md)
   ~ Discusses various issues with loading a data set, cleaning up the data and preparing it for further analysis.
 
 [Advanced Graphing Lab](LabIntroGgplot.md)
