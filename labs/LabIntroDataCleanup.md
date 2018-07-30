@@ -29,7 +29,7 @@ Here is a summary of some of the key methods we will learn about here:
 
 ## Importing
 
-We start by importing the data from an external source. For this example, we will use the [datasets/compression.xlsx](datasets/compression.xlsx) spreadsheet. It might help to view the spreadsheet in Excel.
+We start by importing the data from an external source. For this example, we will use the [datasets/compression.xlsx](../datasets/compression.xlsx) spreadsheet. It might help to view the spreadsheet in Excel.
 
 In terms of providing us access to the data, the sheet is somewhat messy: It has the data spread over multiple tabs/sheets, and sheets often contain non-data components like summaries and graphs.
 
