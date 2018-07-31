@@ -62,9 +62,9 @@ You can see a list of all previously entered commands in the History pane, situa
 
 ### Scientific Notation
 
-To specify a large number such as 3.2 million, we generally use scientific notation. The multiplier goes first, then an `e` to separate the multipler from the exponent, then the actual exponent (desired power of 10). For example, since 2 million is $3.2 \times 10^6$, we need `3.2e6` to express the idea of 3.2 million.
+To specify a large number such as 3.2 million, we generally use scientific notation. The multiplier goes first, then an `e` to separate the multipler from the exponent, then the actual exponent (desired power of 10). For example, since 3.2 million is $3.2 \times 10^6$, we need `3.2e6` to express the idea of 3.2 million.
 
-Scientific notation is also helpful for indicating small values, such as 0.007 (7 thousands), using negative exponents:  `7e-3`. Try these for yourself in the console.
+Scientific notation is also helpful for indicating small values, such as 0.007 (7 thousandths), using negative exponents:  `7e-3`. Try these for yourself in the console.
 
 ### Variable Assignments
 
