@@ -4,8 +4,14 @@ body {
 
 pre {
    width: 98%;
-   margin-top: 0.1em;
+   margin-top: 0.2em;
+   margin-bottom: 0.2em;
    background: none;
+}
+
+code {
+   font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+   /*background-color: #EDEDED;*/
 }
 
 body {

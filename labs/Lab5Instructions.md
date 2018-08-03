@@ -30,15 +30,15 @@ We start similar to the last lab. We will start a new project based on a prepare
 - Press Tab to go to the next field --- it should auto-complete the directory name. Change it, if you want, to `lab_5_yourname`.
 - Make sure the parent directory is the folder where you want to keep your projects for this class.
 - Click `Create Project`.
-- Your Files pane should now show the files, in particular a file titled `Lab5Report.Rmd`. **Click the file name** to edit the file, and then **run all the R code chunks**: Run > Run A
-- **Edit the header section** to add your own title, name, and date.ll.
+- Your Files pane should now show the files, in particular a file titled `Lab5Report.Rmd`. **Click the file name** to edit the file, and then **run all the R code chunks**: Run > Run All.
+- **Edit the header section** to add your own title, name, and date.
 - Recall that we will mostly be editing this report file rather than working directly in the console. You may want to make the report window larger than the console window.
 
 ## Import and View Dataset
 
 - In your R Markdown report, make a new R code chunk below the existing chunks.  In the new chunk, use the `data` command (see Lab 1, for example) to load the dataset named `brfss`; **run this chunk**.
 - Use the `View` command *in the console* to see the data in the Preview window.  **Note**:  Do not put the `View` command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the `?` command should not be put into your R Markdown report.
-- You should see that the data has 24 variables and 10,0000 rows.
+- You should see that the data has 24 variables and 100,000 rows.
 - Use the `?` command *in the console* to view information about the brfss data file (the "codebook"):  `?brfss`
 
 ## Statistical Investigations
@@ -54,7 +54,7 @@ We start similar to the last lab. We will start a new project based on a prepare
 ## General Health
 
 1. Make a tally and a barchart (as you did for WeekDays in a previous lab) for the `genhealth` variable.  Which category of the variable is the most frequent?
-2. It would be useful to have **percentages** rather than raw counts in our tally.  Add a *command option* by inserting the code `, format="percent"` before the closing parentheses of the tally command, like this:
+2. It would be useful to have **percentages** rather than raw counts in our tally.  Add a *command option* by inserting the code `format="percent"` before the closing parentheses of the tally command, like this:
     ```r
     tally(~genhealth, data=brfss, format="percent")
     ```

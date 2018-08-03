@@ -80,7 +80,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 
 	For example, if we have bins of width 1.4 with the first bin starting at 0, then the breaks are at 0, 1.4, 2.8, 4.2, etc.  Notice that some bins have two whole numbers (2.8 to 4.2 has 3 and 4) while others have one whole number (1.4 to 2.8 has only 2). So the frequencies of the bins are not easily comparable.
 
-	Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain an whole number within their bounds.
+	Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain a whole number within their bounds.
 
 	To avoid these problems, we can put breaks specifically at all the ".5" marks on the axis. We use the `seq` command to create a sequence of numbers with a given start value, stop value, and step size.
 	```r

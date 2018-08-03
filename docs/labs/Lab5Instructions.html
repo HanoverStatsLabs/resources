@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:100' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
@@ -83,8 +83,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Press Tab to go to the next field — it should auto-complete the directory name. Change it, if you want, to <code>lab_5_yourname</code>.</li>
 <li>Make sure the parent directory is the folder where you want to keep your projects for this class.</li>
 <li>Click <code>Create Project</code>.</li>
-<li>Your Files pane should now show the files, in particular a file titled <code>Lab5Report.Rmd</code>. <strong>Click the file name</strong> to edit the file, and then <strong>run all the R code chunks</strong>: Run &gt; Run A</li>
-<li><strong>Edit the header section</strong> to add your own title, name, and date.ll.</li>
+<li>Your Files pane should now show the files, in particular a file titled <code>Lab5Report.Rmd</code>. <strong>Click the file name</strong> to edit the file, and then <strong>run all the R code chunks</strong>: Run &gt; Run All.</li>
+<li><strong>Edit the header section</strong> to add your own title, name, and date.</li>
 <li><p>Recall that we will mostly be editing this report file rather than working directly in the console. You may want to make the report window larger than the console window.</p></li>
 </ul>
 </section>
@@ -93,7 +93,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li>In your R Markdown report, make a new R code chunk below the existing chunks. In the new chunk, use the <code>data</code> command (see Lab 1, for example) to load the dataset named <code>brfss</code>; <strong>run this chunk</strong>.</li>
 <li>Use the <code>View</code> command <em>in the console</em> to see the data in the Preview window. <strong>Note</strong>: Do not put the <code>View</code> command in an R chunk, it will prevent your report from knitting/compiling. Similarly, the <code>?</code> command should not be put into your R Markdown report.</li>
-<li>You should see that the data has 24 variables and 10,0000 rows.</li>
+<li>You should see that the data has 24 variables and 100,000 rows.</li>
 <li>Use the <code>?</code> command <em>in the console</em> to view information about the brfss data file (the “codebook”): <code>?brfss</code></li>
 </ul>
 </section>
@@ -108,7 +108,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>General Health</h2>
 <ol type="1">
 <li>Make a tally and a barchart (as you did for WeekDays in a previous lab) for the <code>genhealth</code> variable. Which category of the variable is the most frequent?</li>
-<li><p>It would be useful to have <strong>percentages</strong> rather than raw counts in our tally. Add a <em>command option</em> by inserting the code <code>, format=&quot;percent&quot;</code> before the closing parentheses of the tally command, like this:</p>
+<li><p>It would be useful to have <strong>percentages</strong> rather than raw counts in our tally. Add a <em>command option</em> by inserting the code <code>format=&quot;percent&quot;</code> before the closing parentheses of the tally command, like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tally</span>(<span class="op">~</span>genhealth, <span class="dt">data=</span>brfss, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>)</code></pre></div>
 <p>What percent of respondents report being in either “Very good” or “Excellent” health? What percent of respondents did not answer the question (NA)?</p></li>
 </ol>

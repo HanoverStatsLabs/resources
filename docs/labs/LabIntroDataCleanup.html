@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:100' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
@@ -52,18 +52,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </script>
 </head>
 <body>
-<section id="lab-data-cleanup" class="level1">
-<h1>Lab: Data Cleanup</h1>
+<section id="lab-data-preparation" class="level1">
+<h1>Lab: Data Preparation</h1>
 <section id="introduction" class="level2">
 <h2>Introduction</h2>
-<p>We can loosely split the “Data cleanup” part of a project in three stages:</p>
+<p>We can loosely split the “Data preparation” part of a project into three stages:</p>
 <ul>
 <li>Loading the data from a spreadsheet file or some other kind of storage. The <code>readr</code> and <code>readxl</code> packages help us with this stage.</li>
 <li>“Tidying” the loaded data to ensure the data is structured in a way that facilitates analysis. This mainly means that each variable is in one column. For example instead of having measurements over 5 days split across 5 columns, there should instead be one column of 5 times as many observations, with a second column identifying the day index for each. The <code>tidyr</code> package provides methods that help with this stage.</li>
 <li>Manipulating the data in various ways to obtain summaries or prepare for graphing. The <code>dplyr</code> package offers a rich set of methods to help with that.</li>
 </ul>
 <p>All the packages mentioned above are part of the “<a href="https://www.tidyverse.org/">tidyverse</a>” package collection, and are automatically included in our <code>hanoverbase</code> package.</p>
-<p>Here is a summary of some of the key methods we will learn about here:</p>
+<p>Here is a summary of some of the key methods we will learn about in this lab:</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 <tr class="even">
 <td style="text-align: right;">gather</td>
-<td style="text-align: left;">Turn multiple columns to one, use a 2nd variable for the column name</td>
+<td style="text-align: left;">Turn multiple columns to one, use a 2nd variable for the column names</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">separate</td>
@@ -121,31 +121,40 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Importing</h2>
 <p>We start by importing the data from an external source. For this example, we will use the <a href="../datasets/compression.xlsx">datasets/compression.xlsx</a> spreadsheet. It might help to view the spreadsheet in Excel.</p>
 <p>In terms of providing us access to the data, the sheet is somewhat messy: It has the data spread over multiple tabs/sheets, and sheets often contain non-data components like summaries and graphs.</p>
-<p>We will start with reading the data from the first sheet, titled “Upper Arm Circ”. You will need to first have the dataset imported into your project directory (you did create a new project with its own project directory, right?). You can then click on the dataset to open up the import dialog. We will not fully use the import dialog, but it is a good starting point to look at the data.</p>
-<p>In the import dialog, you can select the sheet you want, here the “Upper Arm Circ”, from the “Sheet” drop down in the “Import Option” section. Then you would want to copy the couple of lines on the right, which do the import:</p>
+<p>Before we start, make sure to create a new RStudio project and to start a new R Markdown document in that project, and add a <code>library(hanoverbase)</code> R-chunk in it.</p>
+<p>We will start by reading the data from the first sheet, titled “Upper Arm Circ”. You will need to first have the dataset uploaded into your project directory. Use the “Upload” button in the “Files” pain for that. You can then click on the uploaded dataset to open up the import dialog. We will not fully use the import dialog, but it is a good starting point to look at the data.</p>
+<p>In the import dialog, you can select the sheet you want, here the “Upper Arm Circ”, from the “Sheet” drop down in the “Import Option” section. Then you should copy the couple of lines on the right, which provide syntax for the import. They will look something like this (the file path will be different depending on where you created your project):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readxl)
 compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/statsLabPractice/compression/compression.xlsx&quot;</span>,
     <span class="dt">sheet =</span> <span class="st">&quot;Upper Arm Circ&quot;</span>)</code></pre></div>
-<p>Then we would paste these lines in an r-chunk after canceling the import dialog. Remember that the first line loads a package for us, and only needs to be placed once.</p>
-<p>Then we need to change the second line, to make sure we only try to load the first 8 data points, and also improve the stored data set name:</p>
+<p>Now, paste these lines in an R-chunk after canceling the import dialog. Remember that the first line loads a package for us, and only needs to be present once in the RMarkdown file.</p>
+<p>Before running the chunk, we need to change the second command, to make sure we only try to load the first 8 data points, and also to improve the stored data set name:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.uac &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/statsLabPractice/compression/compression.xlsx&quot;</span>,
     <span class="dt">sheet =</span> <span class="st">&quot;Upper Arm Circ&quot;</span>,
     <span class="dt">range =</span> <span class="st">&quot;A1:O9&quot;</span>)</code></pre></div>
-<p>We learned about this extra parameter by reading the documentation for <code>read_excel</code>.</p>
-<p>Let us also load another one of the sheets:</p>
+<p>Notice the addition of the <code>range=&quot;A1:O9&quot;</code> parameter, to control the range that will be imported. We learned about this extra parameter by reading the documentation for <code>read_excel</code>.</p>
+<p>Let us also load another one of the sheets (you will need to fix the file path to match yours):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.lac &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/statsLabPractice/compression/compression.xlsx&quot;</span>,
     <span class="dt">sheet =</span> <span class="st">&quot;Lower Arm Circ&quot;</span>,
     <span class="dt">range =</span> <span class="st">&quot;A1:O9&quot;</span>)</code></pre></div>
-<p>This shows the basics of importing data. You can explore the <code>readr</code> and <code>readxl</code> packages to find out more. Also check out the <code>haven</code> package for loading SPSS, Stata and SAS data. There are also ways to access a database directly; the package <a href="https://dbplyr.tidyverse.org/articles/dbplyr.html"><code>dbplyr</code></a> might be a good place to start for that.</p>
+<p>This shows the basics of importing data from Excel. You can explore the <code>readr</code> and <code>readxl</code> packages to find out more. You start the exploration of an installed package by running <code>help(package=&quot;readr&quot;)</code>. This will give you a list of the functions in the package but also a link to user guides and “vignettes”, which are basically tutorials contained within the package. You can see all vignettes by typing <code>vignette()</code>, and you can open a specific vignette by calling the <code>vignette</code> function with the vignette name, like so: <code>vignette(&quot;readr&quot;)</code></p>
+<p>Also check out the <code>haven</code> package for loading SPSS, Stata and SAS data directly. There are also ways to access a database directly; the package <a href="https://dbplyr.tidyverse.org/articles/dbplyr.html"><code>dbplyr</code></a> might be a good place to start for that.</p>
 </section>
 <section id="tidying" class="level2">
 <h2>Tidying</h2>
-<p>We will take various steps to “tidy” the data. Before we do that, let’s discuss the data a bit. The first column represents of course the subject ids, and each row of data corresponds to a subject. The “CS…” variables correspond to the subject using a “Compression Sleeve” while the “NT…” variables correspond to the subject receiving “Pneumatic Compression” therapy. the “…UAC…” part represents that these are “Upper Arm Circulation” measurements, and finally the remaining bits “PR, PO, 1, 2, 3, …” represent the time variable (pre-exercise, post-exercise, one day later etc).</p>
-<p>The data is what is known as a “wide” form: In a “tidy” version of the data the kind of treatment, the quantity being measured, and the time of observation would all be three separate factor variables and we would have a single measurement column. In effect all the measurements currently present in the sheet will be placed in one column, and various information that is currently coded in the variable names will instead be stored in different variables/columns specifically created for that purpose. For instance there will be one variable to distinguish whether the measurement is during to the Compression Sleeve phase or during the Pneumatic Compression phase, another variable to describe what was measured (upper arm circ, lower arm circ etc), and another variable to distinguish which part of a phase we are in (pre/post/day 1 etc).</p>
-<p>We will now convert the data sheet in this form. The first step in doing so is to isolate the <code>CSU</code> columns as well as the subject column. We will use the <code>subset</code> method for that, which picks out a subset of the variables. There are various ways to specify which variables to select, and you can look at the documentation or cheatsheets for that.</p>
+<p>We will take various steps to “tidy” the data. Before we do that, let’s discuss the data a bit. At this point you should use <code>View</code> in the console to view the two datasets we imported.</p>
+<ul>
+<li>The first column represents the subject ids, and each row of data corresponds to a subject.</li>
+<li>The “CS…” variables correspond to the subject using a “Compression Sleeve” while the “NT…” variables correspond to the subject receiving “Pneumatic Compression” therapy.</li>
+<li>The “…UAC…” part of the variable names represents that these are “Upper Arm Circumference” measurements.</li>
+<li>Finally, the remaining bits “PR, PO, 1, 2, 3, …” represent the time variable (pre-exercise, post-exercise, one day later, etc).</li>
+</ul>
+<p>The data is in what is known as a “wide” form: In a “tidy” version of the data the kind of treatment, the quantity being measured, and the time of observation would all be three separate factor variables and we would have a single column for the measurement. In effect all the measurements currently present in the sheet will be placed in one column, and various information that is currently coded in the variable names will instead be stored in different variables/columns specifically created for that purpose. For instance there will be one variable to distinguish whether the measurement was done during the Compression Sleeve phase or during the Pneumatic Compression phase, another variable to describe what was measured (upper arm circ, lower arm circ etc), and another variable to distinguish which stage of a phase we are in (pre/post/day 1 etc).</p>
+<p>We will now convert the data sheet into this form. Here as well as in many places later on we will be building a command iteratively, adding once step at a time. What you see in each of the following couple of code chunks is how the commands looks as it evolves, and therefore they will all correspond to the same chunk in your document, as it changes over time.</p>
+<p>The first step in converting the data to a tidy form is to isolate the <code>CSU</code> columns as well as the subject column. We will use the <code>subset</code> method for that, which picks out a subset of the variables. There are various ways to specify which variables to select, and you can look at the documentation or cheatsheets for more information.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5)</code></pre></div>
-<p>We could have stored this result in a dataset, but we will instead add another process step in the pipeline, which does the transformation. It is called <code>gather</code>, and it simply collects some columns and puts them together into one column (the <code>-X__1</code> tells it to combine all the other columns except <code>X__1</code>):</p>
+<p>We could have stored this result in a dataset, but we will instead add another process step in the pipeline, which does the transformation. This step is called <code>gather</code>, and it simply collects some columns and puts them together into one column (the <code>-X__1</code> tells it to combine all the other columns except the one named <code>X__1</code>). We also stored the result in a variable called <code>sleeve.uac</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;time&quot;</span>, <span class="dt">value=</span><span class="st">&quot;value&quot;</span>, <span class="op">-</span>X__<span class="dv">1</span>)
@@ -157,23 +166,25 @@ compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<sp
 <li>The fact that it is the upper-arm</li>
 <li>The timing (pre, post, day 1 etc)</li>
 </ul>
-<p>The <code>separate</code> method helps us with this. Its syntax will look a bit weird. The second argument (<code>into=</code>) specifies the names to give to the three parts, while the third argument (<code>sep=</code>) specifies the cutoff points (after the first two letters, after the first 5 letters). This effectively splits each value like “CSUAPR” in three parts: the first two letters, the next three letters, and the rest.</p>
+<p>The <code>separate</code> method helps us with this. Its syntax will look a bit weird. The second argument (<code>into=</code>) specifies the names to give to the three parts, while the third argument (<code>sep=</code>) specifies the cutoff points (after the first two letters, after the first five letters). This effectively splits each value like “CSUAPR” in three parts: the first two letters, the next three letters, and the rest.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac2 &lt;-<span class="st"> </span>sleeve.uac <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">separate</span>(time,
                  <span class="dt">into=</span><span class="kw">c</span>(<span class="st">&quot;treatment&quot;</span>, <span class="st">&quot;measurement&quot;</span>, <span class="st">&quot;time&quot;</span>),
                  <span class="dt">sep=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))
 <span class="kw">View</span>(sleeve.uac2)</code></pre></div>
-<p>Finally, we will fix the first column: First we want to change its name to “subject”, with the method “rename”:</p>
+<p>Finally, we will fix the first column. First we want to change its name to <code>subject</code>, with the method <code>rename</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac2 <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>)</code></pre></div>
-<p>And then change the strings “sub 1” into the numbers themselves, using <code>mutate</code>. For this to work, we also need to load a string-manipulation library called <code>stringr</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac3 &lt;-<span class="st"> </span>sleeve.uac2 <span class="op">%&gt;%</span>
+<p>And then change the character string values of the <code>subject</code> variable (like “sub 1”) into the numbers themselves, using <code>mutate</code>. For this to work, we also need to load a string-manipulation library called <code>stringr</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
+sleeve.uac3 &lt;-<span class="st"> </span>sleeve.uac2 <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))</code></pre></div>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))
+<span class="kw">View</span>(sleeve.uac3)   ## Do in the console</code></pre></div>
 <section id="creating-a-custom-function-for-repeatable-steps" class="level3">
 <h3>Creating a custom function for repeatable steps</h3>
 <p>We will likely need to repeat all these steps for each part of the dataset, and they will be more or less the same steps, so let’s see if we can make a function out of it.</p>
-<p>In order to make a function, we need to determine what it is that may be changing each time we do this. These are then “parameters” for this function. In our case the one thing that is of course changing every time is the data frame, and we will use the <code>df</code> parameter name to refer to it. But if we look at some of the variable names in the other sheets, we will notice that the middle part of the name some times uses 2 letters and sometimes 3. So this would be another parameter we can provide, <code>middleLetters</code>.</p>
+<p>In order to make a function, we need to determine what it is that may be changing each time we do this. These are then “parameters” for this function. In our case the one thing that is of course changing every time is the data frame, and we will use the <code>df</code> parameter name to refer to it. But if we look at some of the variable names in the other sheets, we notice that the middle part of the name sometimes uses two letters and sometimes three. So this would be another parameter we can provide, called for example <code>middleLetters</code>. We will call our function <code>convert.to.long</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">convert.to.long &lt;-<span class="st"> </span><span class="cf">function</span>(df, middleLetters) {
     df <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;time&quot;</span>, <span class="dt">value=</span><span class="st">&quot;value&quot;</span>, <span class="op">-</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
@@ -183,19 +194,21 @@ compression &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<sp
 <span class="st">        </span><span class="kw">rename</span>(<span class="dt">subject=</span>X__<span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">mutate</span>(<span class="dt">subject =</span> <span class="kw">str_extract</span>(subject, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>))
 }</code></pre></div>
+<p>The <code>\\d+</code> part is a <a href="https://stringr.tidyverse.org/articles/regular-expressions.html">regular expression</a> which tells R to match a sequence of one or more digits.</p>
 <p>Then we could simply have done the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSUACPR<span class="op">:</span>CSUAC5) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
-<p>And if the variable names we wanted to use used a different number of “middle letters” we could provide that as a parameter. We can also set a “default value”:</p>
+<p>Remember that we use the pipe <code>%&gt;%</code> this fills in the first parameter, so we only had to provide the second parameter, <code>middleLetters</code>. Go ahead and replace the work you did with <code>sleeve.uac</code>, <code>sleeve.uac2</code> and <code>sleeve.uac3</code> with this single chunk above.</p>
+<p>And if the variable names we wanted to use had a different number of “middle letters” we could provide that as a parameter. We can also set a “default value”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">convert.to.long &lt;-<span class="st"> </span><span class="cf">function</span>(df, <span class="dt">middleLetters=</span><span class="dv">3</span>) {
     ...</code></pre></div>
-<p>Then we do <code>convert.to.long()</code> it will have the same effect as <code>convert.to.long(3)</code>.</p>
+<p>Then, if we do <code>convert.to.long()</code>, it will have the same effect as <code>convert.to.long(3)</code>.</p>
 <p>We will now do the same for the other part, the NT columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pneumatic.uac &lt;-<span class="st"> </span>compression.uac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, NTUACPR<span class="op">:</span>NTUAC5) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)</code></pre></div>
-<p>We will repeat this for the “lower-arm-circulation” variables:</p>
+<p>Repeat this for the “lower-arm-circumference” variables:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sleeve.lac &lt;-<span class="st"> </span>compression.lac <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(X__<span class="dv">1</span>, CSLACPR<span class="op">:</span>CSLAC5) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">convert.to.long</span>(<span class="dv">3</span>)
@@ -206,17 +219,19 @@ pneumatic.lac &lt;-<span class="st"> </span>compression.lac <span class="op">%&g
 <section id="binding-data-sets-together" class="level3">
 <h3>Binding data sets together</h3>
 <p>Now we have four data sets that all look similar in terms of the columns they contain etc. We would like to merge them together by simply placing them below each other and matching the columns. We can use the <code>bind_rows</code> method for this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sleeve.uac, pneumatic.uac, sleeve.lac, pneumatic.lac)</code></pre></div>
-<p>There are many tools that help with more complicated data merges, look at the <code>dplyr</code> cheatsheet for some examples.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sleeve.uac, pneumatic.uac, sleeve.lac, pneumatic.lac)
+<span class="kw">View</span>(alldata)   <span class="co"># Do in console</span></code></pre></div>
+<p>There are many tools that help with more complicated data merges; look at the <code>dplyr</code> cheatsheet for some examples.</p>
 </section>
 <section id="handling-factor-variables" class="level3">
 <h3>Handling factor variables</h3>
-<p>Now it is time to more properly code our factor variables, using <code>mutate</code>. In R, there are different <em>modes</em> for vectors/variables. One mode is <em>numeric</em> for scalar variables, another is <em>character</em> for strings. There is also <em>factor</em> which is what should be used for factor variables. A factor typically uses numbers for the underlying codes/levels, and it also contains a <em>value label</em> for each code/level. For example, if we take the treatment variable and turn it into a factor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subject<span class="op">$</span>treatment
-subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()</code></pre></div>
-<p>As we may have briefly mentioned brefore, the dollar sign is used to pick out a column from a dataset. You may also use the <code>pluck</code> command, part of the <code>purrr</code> package:</p>
+<p>Now it is time to more properly code our factor variables, using <code>mutate</code>. In R, there are different <em>modes</em> for vectors/variables. One mode is <em>numeric</em> for scalar variables, another is <em>character</em> for strings. There is also <em>factor</em> which is what should be used for factor variables. A factor typically uses numbers for the underlying codes/levels, and it also contains a <em>value label</em> for each code/level. For example, take the treatment variable and turn it into a factor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata<span class="op">$</span>treatment
+alldata<span class="op">$</span>treatment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()</code></pre></div>
+<p>If you compare the outputs above, you will notice the results looking a tad different when we used the <code>factor</code> function. The important thing to know is that in order to do some of the standard statistical analysis steps, we need variables to be coded as “factors”.</p>
+<p>As we may have briefly mentioned brefore, the dollar sign is used to pick out a column from a dataset. As an alternative, you may also use the <code>pluck</code> command, part of the <code>purrr</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;treatment&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()</code></pre></div>
-<p>If you compare the outputs above, you will notice the results looking a tad different when we used the <code>factor</code> function. The important thing to know is that in order to do some of the standard statistical analysis steps, we need variables to be coded as “factors”:</p>
+<p>Now let us code our categorical/factor variables as factors. There are two methods that can help with that. <code>factor</code> can be used if we are happy with the current value labels used, while <code>recode_factor</code> allows us to provide custom value labels. We use both of these methods in the code chunk below:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alldata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
     <span class="dt">subject =</span> <span class="kw">factor</span>(subject),
     <span class="dt">treatment =</span> <span class="kw">recode_factor</span>(treatment, <span class="dt">CS=</span><span class="st">&quot;Compression Sleeve&quot;</span>, <span class="dt">NT=</span><span class="st">&quot;Pneumatic Compression&quot;</span>),
@@ -224,7 +239,8 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
     <span class="dt">time =</span> <span class="kw">recode_factor</span>(time, <span class="dt">PR=</span><span class="st">&quot;Pre&quot;</span>, <span class="dt">PO=</span><span class="st">&quot;Post&quot;</span>, <span class="st">`</span><span class="dt">1</span><span class="st">`</span>=<span class="st">&quot;Day 1&quot;</span>, <span class="st">`</span><span class="dt">2</span><span class="st">`</span>=<span class="st">&quot;Day 2&quot;</span>,
                                <span class="st">`</span><span class="dt">3</span><span class="st">`</span>=<span class="st">&quot;Day 3&quot;</span>, <span class="st">`</span><span class="dt">4</span><span class="st">`</span>=<span class="st">&quot;Day 4&quot;</span>, <span class="st">`</span><span class="dt">5</span><span class="st">`</span>=<span class="st">&quot;Day 5&quot;</span>)
     )</code></pre></div>
-<p>We are now ready to do some work with this data. Here’s some examples of graphs we can produce, you’ll see more about this sort of graph in the <a href="LabIntroGgplot.html">graphing lab</a>.</p>
+<p>The backticks around the numerical levels <code>1</code>, <code>2</code> etc may seem weird. Whenever a value needs to be used on the left-hand-side of an equals sign, and it is not a “proper name” (meaning starts with a letter and has no spaces or other punctually), we need to enclose it in backticks. We will use this approach again later on when we have a situation with one of the names being the two words <code>life expectancy</code>.</p>
+<p>We are now ready to do some work with this data. Here are two examples of graphs we can produce; you’ll see more about this sort of graph in the <a href="LabIntroGgplot.html">graphing lab</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(alldata) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>value, <span class="dt">group=</span>subject, <span class="dt">color=</span>subject) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_path</span>() <span class="op">+</span>
@@ -245,21 +261,26 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
 <span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(value),
               <span class="dt">sd=</span><span class="kw">sd</span>(value),
               <span class="dt">median=</span><span class="kw">median</span>(value),
-              <span class="dt">q1=</span><span class="kw">quantile</span>(value, <span class="fl">0.25</span>))</code></pre></div>
+              <span class="dt">q1=</span><span class="kw">quantile</span>(value, <span class="fl">0.25</span>))
+summaries</code></pre></div>
 <p>We could then visualize those summaries in some way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(summaries) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>mean, <span class="dt">color=</span>treatment, <span class="dt">group=</span>treatment) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_grid</span>(measurement<span class="op">~</span>.)</code></pre></div>
-<p>Let us try a more complicated transformation. Since different subjects start from different values at the pre-stage (you may have noticed that in the first graph you created earlier), we could try to normalize that initial amount, and compute the other values as relative to that that initial amount. What we need to do here is again group by the subject, treatment and measurement, but not time, and now within each category we need to mutate our values instead of summarizing:</p>
+<p>Let us try a more complicated transformation. Since different subjects start from different values at the pre-stage (you may have noticed that in the first graph you created earlier), we could try to normalize all the measurements for a given subject relative to the initial amount for that subject. So what we will do is the following:</p>
+<ul>
+<li>We will group our data by <code>subject</code>, <code>treatment</code> and <code>measurement</code>. Then each group contains the 7 measurements for a particular subject, during a particular treatment and a particular kind of measurements.</li>
+<li><p>Within each group, we can use the <code>first</code> function to get the first value, which should be the <code>Pre</code>-treatment value. We then want to divide all the values by it (we could instead have subtracted). We will use this transformation to create a new variable, called <code>relChange</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">relativedata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(subject, treatment, measurement) <span class="op">%&gt;%</span>
-<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">relChange=</span>value<span class="op">/</span><span class="kw">first</span>(value))</code></pre></div>
-<p>We’ll also want to remove the “pre” entries, as they are no longer really applicable:</p>
+<span class="kw">group_by</span>(subject, treatment, measurement) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">relChange=</span>value<span class="op">/</span><span class="kw">first</span>(value))</code></pre></div>
+<p>We will also want to remove the “pre” entries, as they are no longer informative:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">relativedata &lt;-<span class="st"> </span>alldata <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(subject, treatment, measurement) <span class="op">%&gt;%</span>
-<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">relChange=</span>value<span class="op">/</span><span class="kw">first</span>(value)) <span class="op">%&gt;%</span>
-<span class="st">        </span><span class="kw">filter</span>(time <span class="op">!=</span><span class="st"> &quot;Pre&quot;</span>)</code></pre></div>
-<p>Let’s repeat our earlier graphs now. For the second graph we’ll adjust the y-axis to show relative increase (more about this stuff no the graphics session):</p>
+<span class="kw">group_by</span>(subject, treatment, measurement) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">relChange=</span>value<span class="op">/</span><span class="kw">first</span>(value)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(time <span class="op">!=</span><span class="st"> &quot;Pre&quot;</span>)</code></pre></div></li>
+</ul>
+<p>Let us repeat our earlier graphs now. We will adjust the y-axis to show relative increase as a percent (more about this stuff in the advanced graphics session):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(relativedata) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>relChange<span class="op">-</span><span class="dv">1</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">group=</span>subject, <span class="dt">color=</span>subject)) <span class="op">+</span>
@@ -282,24 +303,31 @@ subject<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
 <h2>Practice</h2>
 <p>You likely have a dataset of your own that you might want to work with to practice the above. If you don’t, then here’s a possible project:</p>
 <ol type="1">
-<li>The <code>GapMinder</code> website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually a R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
+<li>The <a href="www.gapminder.org">GapMinder</a> website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually an R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
 <ul>
-<li>The first step would be to access the data sets from the website, <code>https://www.gapminder.org/data/</code>. You can search for the requisite datasets there. You have two options: You can either download the file and include it in your project, or you can use the file’s URL directly into R. We will recommend this first path in this instance, but keep in mind that the second path is possible. We will give you details on which datasets to load a bit further down.</li>
 <li>Start by creating a new project. You may also want to start an RMarkdown document to keep your work organized.</li>
+<li>Next we will access the data sets from the website, <code>https://www.gapminder.org/data/</code>. On that page you can see a list of datasets, and you can use the search box at the upper right of the first table to search for a variable of interest (we will discuss what those are for us in a moment). You have two options: You can either download the file and include it in your project, or you can use the file’s URL directly into R. We will recommend the first approach in this instance, but keep in mind that the second path is possible.</li>
 </ul></li>
 <li>We will use the <code>life expectancy (years)</code> variable.
 <ul>
-<li>Search for the corresponding dataset, and dowload the file. Then upload the file into your project directory (you may want to rename it to something simpler), and import its first sheet into the project by clicking the uploaded file.</li>
-<li>Start by using <code>rename</code> to rename the first variable to say <code>country</code> or something similar.</li>
+<li>Search for the corresponding dataset, and download the file. Then upload the file into your project directory (you may want to rename it to something simpler), and import its first sheet into the project by clicking the uploaded file.</li>
+<li>Start by using <code>rename</code> to rename the first variable to <code>country</code> or something similar.</li>
 <li>Use <code>gather</code> to turn all the different year variables into a single year. The resulting dataset should have three columns: country, year, and “life expectancy”. You can use <code>-country</code> as the column specification; this will tell <code>gather</code> to use all columns except for <code>country</code>. Also make sure to check the documentation and include a setting to “remove the missing values”.</li>
 </ul>
-One thing we have not covered before is using variable names with spaces in them, like <code>life expectancy</code> in this example. In many places, you will need to enclose them in backticks to make that work, like so <code>`life expectancy`</code>.</li>
+One thing we have not covered before is using variable names with spaces in them, like <code>life expectancy</code> in this example. In many places, you will need to enclose them in backticks to make that work, like so: <code>`life expectancy`</code>
+<ul>
+<li>Notice that the <code>year</code> variable in the result is treated as “character”. We really would prefer it to be treated as numeric, so add a <code>convert=TRUE</code> parameter to the <code>gather</code> function, which will tell the system to try to convert the key column (<code>year</code>) to whatever is more meaningful given what the values are. Look at the documentation of <code>gather</code> for details. (We could also have used a <code>mutate</code> step with the <code>as.numeric</code> function to post-process the <code>year</code> column.)</li>
+<li>Once you are satisfied that the output looks as expected, store it in some variable (e.g. maybe named <code>lifeExpectancy</code>?).</li>
+</ul></li>
 <li>We will now add another variable, the per-capita income. The variable you want is called “Income per person (GDP/capita, PPP$ inflation-adjusted)”. Follow much the same steps as in the previous point. You can call the values column whatever you want of course, but we will be using simply <code>income</code> for it.</li>
-<li><p>We will also want to get the total population of each country, stored in a dataset named <code>Population, total</code>. Use similar steps for it.</p>
+<li><p>We will also want to get the total population of each country, stored in a dataset named “Population, total”. Use similar steps for it.</p>
 (Optional step) If you are feeling adventurous, you can pursue the possibility of writing a function to make these steps easier, since we more or less repeated the same steps three times.</li>
-<li><p>Now we want to bring these three datasets together, by matching entries on the country and year. the <code>inner_join</code> function can help you do that, make sure to look at its documentation. Store the result in a variable (we called it <code>gpdata</code>).</p>
-You have a choice to make here, actually, <code>inner_join</code> and <code>full_join</code>. <code>full_join</code> will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use <code>inner_join</code> instead, which will only keep the entries where both the income and the life expectancy are known.</li>
-<li><p>We need to change the “year” value into numeric values, as currently they are being treated as character values. You will need to use <code>mutate</code> and <code>as.numeric</code> for this.</p></li>
+<li><p>Now we want to bring these three datasets together, by matching entries on the country and year. The <code>inner_join</code> function can help you do that; make sure to look at its documentation, or the <code>dplyr</code> cheatsheet. Store the result in a variable (we called it <code>gpdata</code>).</p>
+<p>You’ll need to do this in two steps, as <code>inner_join</code> only joins two datasets at a time. So you’ll start with one dataset, pipe it into an <code>inner_join</code> with the second dataset, and then pipe the result into another <code>inner_join</code> with the third dataset. So your code might look something like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpdata &lt;-<span class="st"> </span>lifeExpectancy <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">inner_join</span>(income, <span class="dt">by=</span>....) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">inner_join</span>(population, <span class="dt">by=</span>....)</code></pre></div>
+<p>You have a choice to make here, actually, <code>inner_join</code> vs <code>full_join</code>. <code>full_join</code> will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use <code>inner_join</code> instead, which will only keep the entries where both the income and the life expectancy are known.</p></li>
 </ol>
 <section id="a-challenge-matching-country-names" class="level4">
 <h4>A challenge: Matching Country Names</h4>
@@ -309,7 +337,7 @@ You have a choice to make here, actually, <code>inner_join</code> and <code>full
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpCountries &lt;-<span class="st"> </span>gpdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;country&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
 wdiCountries &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;Table Name&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
 <span class="kw">setdiff</span>(gpCountries, wdiCountries)   <span class="co"># names in gpCountries but not wdiCountries</span></code></pre></div>
-<p>We’ll see a number of countries missing that really shouldn’t be missing. We could also try to use the <code>Short Name</code> column instead, but if you do that you’ll notice that it too is missing some countries.</p>
+<p>We will see a number of countries missing that really shouldn’t be missing. We could also try to use the <code>Short Name</code> column instead, but if you do that you’ll notice that it too is missing some countries.</p>
 <p>We could of course simply edit the Excel sheet and change the country names. But then we may need to do that each time we want to update the data from the originals. Manually changing the Excel sheets is not very sustainable in the long run. So we will look for a programmatic way to do it. Here’s the steps we will take:</p>
 <ul>
 <li>We will create a new column <code>gpName</code> in the <code>wdi</code> data that contains the <code>Short Name</code> if that was in the <code>gpCountries</code> list, or the <code>Table Name</code> if <em>that</em> was in the <code>gpCountries</code> list, or otherwise it is <code>NA</code> (missing value).</li>

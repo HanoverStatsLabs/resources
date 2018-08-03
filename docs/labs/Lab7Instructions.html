@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:100' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
@@ -152,17 +152,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <section id="mortality-and-gun-ownership" class="level3">
 <h3>Mortality and Gun Ownership</h3>
 <p>We wonder if countries with high gun ownership rates also have high gun-related mortality rates. We can investigate this with a scatterplot. We start by making a scatterplot for <code>mort_rate</code> (y) vs. <code>own_rate</code> (x). We attach the name <code>graph1</code> to the plot so that we can recall the plot in the future:</p>
-<pre><code>```r
-graph1 &lt;- xyplot(mort_rate~own_rate, data=guns)
-graph1     # this is just to display the graph
-```</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">graph1 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
+graph1     <span class="co"># this is just to display the graph</span></code></pre></div>
 <ol start="4" type="1">
 <li><p>Based on the scatterplot we just made, describe the overall pattern (including direction, if any) of the data and identify any unusual points.</p></li>
 <li><p>We’ll do some modeling without removing any observations to start with. Let’s start with a smooth fit curve. Recall that to see all of the available color names in R, you can run the command <code>colors()</code> in the console.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.loess</span>(x, y, <span class="dt">col=</span><span class="st">&quot;your color here&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>), <span class="dt">plot=</span>graph1)</code></pre></div>
 <p>Does it look like a linear model is a good fit for these data? Explain.</p></li>
 <li><p>Let’s see what a linear model looks like on this plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;your color here&quot;</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladd</span>(<span class="kw">panel.lmline</span>(x, y, <span class="dt">col=</span><span class="st">&quot;your color here&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>))</code></pre></div>
 <p>In order to find the equation of our linear model, we need to calculate the slope and intercept. And to assess how well the model fits the data, we should calculate the square of the correlation (R-square linear).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mort_rate<span class="op">~</span>own_rate, <span class="dt">data=</span>guns)
 <span class="kw">coefficients</span>(fit1)

@@ -102,10 +102,10 @@ To get warmed up and familiarize ourselves with the variables, we will start wit
 
 We wonder if countries with high gun ownership rates also have high gun-related mortality rates.  We can investigate this with a scatterplot. We start by making a scatterplot for `mort_rate` (y) vs. `own_rate` (x). We attach the name `graph1` to the plot so that we can recall the plot in the future:
 
-    ```r
-    graph1 <- xyplot(mort_rate~own_rate, data=guns)
-    graph1     # this is just to display the graph
-    ```
+```r
+graph1 <- xyplot(mort_rate~own_rate, data=guns)
+graph1     # this is just to display the graph
+```
 
 4. Based on the scatterplot we just made, describe the overall pattern (including direction, if any) of the data and identify any unusual points.
 
@@ -120,7 +120,7 @@ We wonder if countries with high gun ownership rates also have high gun-related 
 6. Let's see what a linear model looks like on this plot:
 
     ```r
-    ladd(panel.lmline(x, y, col="your color here"))
+    ladd(panel.lmline(x, y, col="your color here", lwd=2))
     ```
 
     In order to find the equation of our linear model, we need to calculate the slope and intercept. And to assess how well the model fits the data, we should calculate the square of the correlation (R-square linear).

@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:100' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
@@ -131,7 +131,7 @@ heightSubset &lt;-<span class="st"> </span>brfss <span class="op">%&gt;%</span>
 </ol></li>
 <li><p>When working with whole number data such as <code>height</code>, we have to take care with our histogram bins / number of breaks, since whole number data can interact badly with the breakpoints for creating the histogram bins.</p>
 <p>For example, if we have bins of width 1.4 with the first bin starting at 0, then the breaks are at 0, 1.4, 2.8, 4.2, etc. Notice that some bins have two whole numbers (2.8 to 4.2 has 3 and 4) while others have one whole number (1.4 to 2.8 has only 2). So the frequencies of the bins are not easily comparable.</p>
-<p>Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain an whole number within their bounds.</p>
+<p>Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain a whole number within their bounds.</p>
 <p>To avoid these problems, we can put breaks specifically at all the “.5” marks on the axis. We use the <code>seq</code> command to create a sequence of numbers with a given start value, stop value, and step size.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myBreaks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span>lowCutoff <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">to=</span>highCutoff <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">by=</span><span class="dv">1</span>)
 myBreaks        <span class="co"># this just prints the sequence of numbers</span>
