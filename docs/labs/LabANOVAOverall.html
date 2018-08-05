@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:100' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
@@ -52,13 +52,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </script>
 </head>
 <body>
-<section id="lab-complete-anova-lab" class="level1">
-<h1>Lab: Complete ANOVA lab</h1>
+<section id="advanced-lab-3-linear-modeling-and-anova" class="level1">
+<h1>Advanced Lab 3: Linear Modeling and ANOVA</h1>
 <section id="introduction" class="level2">
 <h2>Introduction</h2>
-<p>In this lab we will work on a complete problem based on ANOVA, from start to finish. We will load the data, clean it up, produce some graphs, and run appropriate analyses.</p>
+<p>In this lab we will study key linear modeling techniques. We will also practice some data cleanup and import steps.</p>
+<p>To begin with, our data is in an SPSS file, which</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
-targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span class="st">&quot;~/statsLabPractice/targetting/targeting.sav&quot;</span>)
+targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span class="st">&quot;targeting.sav&quot;</span>)
 <span class="co"># View(targeting)</span></code></pre></div>
 <p>Factor variables:</p>
 <ul>
@@ -66,6 +67,9 @@ targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span c
 <li>object (armed/unarmed): Coded in the variable name but implicitly</li>
 <li>shot action taken (correct/incorrect): Coded in the variable name but implicitly</li>
 </ul>
+</section>
+<section id="cleaning-up-the-dataset" class="level2">
+<h2>Cleaning up the dataset</h2>
 <p>Let’s take a look at the variables:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(targeting)</code></pre></div>
 <p>We will only need the first 12 variables, the remaining are computed quantities. We start by <code>gather</code>ing the 8 columns that contain observations (don’t worry about the warning):</p>
@@ -105,6 +109,7 @@ targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span c
 <li>We should fix the names of some of the variables. We will use <code>rename</code> for that.</li>
 <li>We should drop the <code>outcome</code> column as it is no longer needed. We will use <code>select</code> for that.</li>
 <li>The <code>gender</code>, <code>race</code> and <code>age</code> variables need to be coded as factors. We will use <code>mutate</code> and <code>factor</code> for that (we would use <code>recode_factor</code> if we wanted to change the names of the labels, but we don’t).</li>
+<li>There are some missing values in the <code>meanRT</code> variable. As this variable will be our focus, we will omit those values with a filter.</li>
 </ul>
 <p>This can all be done in a series of pipelined steps.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span>
@@ -113,14 +118,178 @@ targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span c
            <span class="dt">gender=</span><span class="st">&quot;gender_response&quot;</span>,
            <span class="dt">age=</span><span class="st">&quot;age_response&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">starts_with</span>(<span class="st">&quot;outcome&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">factor</span>(gender), <span class="dt">age=</span><span class="kw">factor</span>(age), <span class="dt">race=</span><span class="kw">factor</span>(race))</code></pre></div>
-<p>Lastly, we will filter the <code>action</code> column to only include the correct answers, as that was the focus of the study.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingCorrect &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(action<span class="op">==</span><span class="st">&quot;Correct&quot;</span>)</code></pre></div>
-<p>There are of course numerous graphs we can construct, and we can choose to log-transform the mean reaction time or not. We will leave it as is for now as the data did not show any signs of extreme skewness. Here is a starting plot that shows the density distribution for <code>meanRT</code> for armed and unarmed objects, and with different graphs for each race and gender combination:</p>
-<pre><code>ggplot(targetingCorrect) +
-    aes(x=meanRT, color=object) +
-    geom_density() +
-    facet_grid(race~gender)</code></pre>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">factor</span>(gender), <span class="dt">age=</span><span class="kw">factor</span>(age), <span class="dt">race=</span><span class="kw">factor</span>(race)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(meanRT))</code></pre></div>
+<p>There are of course numerous graphs we can construct and analyses we can perform, and we can choose to log-transform the mean reaction time or not.</p>
+</section>
+<section id="linear-modeling" class="level2">
+<h2>Linear Modeling</h2>
+<section id="basic-constant-fit" class="level3">
+<h3>Basic (constant) fit</h3>
+<p>We are looking for a linear regression model to understand the mean reaction time in terms of given inputs. Let us start with the simplest such model, often referred to as the “null model”, where we would like to predict the <code>meanRT</code> using no predictors at all. In that case all we can do is try to predict a single value, and then account for errors and variability around that value. Our model in formulas would look like this: <span class="math display">\[\textrm{meantRT} = \beta_0 + \epsilon\]</span> where the <span class="math inline">\(\beta_0\)</span> is a parameter we need to choose, and <span class="math inline">\(\epsilon\)</span> is the error we are making (different for each point). The key question to address here is how to determine the “best value” for the parameter <span class="math inline">\(\beta_0\)</span>.</p>
+<p>In linear regression we choose the parameters so as to “minimize” the “residual sum of squares”, the sum of the squared residuals: <span class="math display">\[\textrm{RSS} = \sum \epsilon_i^2\]</span> In our case it can be seen easily that the choice of parameter value that minimizes this sum is to set the parameter to equal the mean <span class="math inline">\(\beta_0 = \textrm{mean(y)}\)</span>. We can then use that to compute the RSS:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>meanRT <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean</span>()
+rss &lt;-<span class="st"> </span><span class="kw">sum</span>((targetingFinal<span class="op">$</span>meanRT <span class="op">-</span>m)<span class="op">^</span><span class="dv">2</span>)</code></pre></div>
+<p>So we can see there is a total variability of <span class="math inline">\(924812\)</span> to account for. Since we will often find ourselves computing the “sum of squared deviations”, by subtracting the mean from a variable, then squaring, then summing all the values, let us simplify matters by writing a small function that computes the squared deviations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sq.devs &lt;-<span class="st"> </span><span class="cf">function</span> (x) { (x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span> }
+rss &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>meanRT <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()</code></pre></div>
+<p>We could get the same number using R’s modeling machinery: The <code>1</code> on the right-hand-side represents that we fit a constant model. Here we are telling</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit0 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span><span class="dv">1</span>, <span class="dt">data=</span>targetingFinal)
+<span class="kw">summary</span>(fit0)
+<span class="kw">deviance</span>(fit0)    <span class="co"># Essentially the sum of squared deviations/residuals.</span></code></pre></div>
+<p>This null model is kind of a baseline against which we can compare our other models. This is essentially the worst possible model; any other model should be doing better by comparison.</p>
+<p>There is a slightly different approach to the least squares method described above, proves to be easier to generalize to other settings. It roughly works as follows:</p>
+<ul>
+<li>We assume that the residuals are independent of each other and are all distributed identically, following a normal distribution centered at <span class="math inline">\(0\)</span> and with some standard deviation <span class="math inline">\(\sigma\)</span>. In that case for each data point <span class="math inline">\(x_i\)</span> the predicted values would also follow a normal distribution centered at <span class="math inline">\(\beta_0+\beta_1\times x_i\)</span>.</li>
+<li>Therefore for each data pair <span class="math inline">\((x_i, y_i)\)</span> we can discuss the <em>likelihood/probability</em> that the <span class="math inline">\(y_i\)</span> would take this value, assuming the normal distribution and for given values for <span class="math inline">\(\beta_0, \beta_1\)</span>.</li>
+<li>We can then multiply all those likelihoods together, since the observations were independent, to get an <em>overall likelihood</em>. This is basically a number determining how how likely we are to observe this set of values given some fixed values for the parameters.</li>
+<li>We now can choose the parameters that maximize this likelihood. This is known as the <strong>maximum likelihood estimate</strong></li>
+</ul>
+<p>It turns out that for linear regression, the solution to these two problems is exactly the same. So we can think of the coefficients provided by a linear regression fit in these two slightly different ways:</p>
+<ul>
+<li>They are those parameter values that minimize the overall error phrased as an RSS.</li>
+<li>They are also those parameter values that maximize the likelihood of the values that we observed.</li>
+</ul>
+</section>
+<section id="linear-fit-one-scalar-variable" class="level3">
+<h3>Linear fit, one scalar variable</h3>
+<p>Now we want to look at to what extent the <code>iat</code> score influences the mean reaction time <code>meanRT</code>. The iat score is the <a href="https://en.wikipedia.org/wiki/Implicit-association_test"><em>implicit-association test</em></a>, which measures “the strength of a person’s automatic associations between mental representations of objects in memory”. We have other variables in our dataset and later on we will want to consider their effect. We start by looking at the relation between <code>meanRT</code> and <code>iat</code>. A graph is a good start, this would be an point plot and we will add a smooth line to it.</p>
+<p><strong>Do this now</strong>, use <code>ggplot</code> to draw a scatterplot of the <code>iat</code> score in the x-axis and the <code>meanRT</code> in the y-axis, and use <code>geom_smooth</code> to add a smooth line through the fit. How would you describe the influence of <code>iat</code> on <code>meanRT</code>?</p>
+<p>In a linear model we seek a formula that would describe in a linear way the response variable from the independent variables, accounting for a possible error. So the equation we are after would look like so:</p>
+<p><span class="math display">\[\textrm{meanRT} = \beta_0 + \beta_1 \times \textrm{iat} + \epsilon\]</span></p>
+<p>The linear part <span class="math inline">\(\beta_0 + \beta_1 \times \textrm{iat}\)</span> provides our <em>predicted value</em>, while the <span class="math inline">\(\epsilon\)</span> term indicates the error we are making (called <em>residual</em>). In typical linear modeling there are numerous questions we like to ask:</p>
+<ol type="1">
+<li>Since we have many choices for the parameters <span class="math inline">\(\beta_i\)</span>, how do we define “the best choice”?</li>
+<li>How can we assess whether the structural form of the model is reasonable?</li>
+<li>How do we determine how volatile our coefficients are to the variability in our data?</li>
+<li>How can we use the model to make predictions, and what kind of error do we expect on those predictions?</li>
+<li>How can we compare our model to other models?</li>
+</ol>
+<p>We essentially answered question 1 earlier. We saw there were two different ways to compute the best choice, and in the standard setting of a linear model they both result in the same estimates. Let us now construct a linear fit in R for the <code>iat</code> variable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span>iat, <span class="dt">data=</span>targetingFinal)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<p>The output of this summary view tends to contain a lot of information. For now the one key piece of information is the fit coefficients, namely <span class="math inline">\(\beta_0 = 492.223\)</span> and <span class="math inline">\(\beta_1=10.965\)</span>. Therefore we are claiming that we have a model relationship that looks like so: <span class="math display">\[\textrm{meanRT} = 492.223 + 10.965 \times \textrm{iat} + \epsilon\]</span> For instance, let us try to predict what the <code>meanRT</code> should be when <code>iat</code> equals <span class="math inline">\(1\)</span>. We can do this either by direct computation using the above linear equation, or by using the <code>predict</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit, <span class="kw">data.frame</span>(<span class="dt">iat=</span><span class="dv">1</span>))
+<span class="fl">482.223</span><span class="op">+</span><span class="fl">19.965</span><span class="op">*</span><span class="dv">1</span></code></pre></div>
+<p>One of the questions we’ll want to answer later on is how reliable this prediction is, we will return to that later.</p>
+<p>For now let us discuss how good this model fit is. There are numerous questions we could ask. A natural first question is how well the model manages to explain the variation in <code>meanRT</code> as a result of the variation in <code>iat</code>.</p>
+<p>We can break the variation in <code>meanRT</code> in two parts:</p>
+<ul>
+<li>Variation due to the variation in <code>iat</code> (or all the predictors in general if we have multiple predictors).</li>
+<li>Variation due to randomness, measured by the residuals.</li>
+</ul>
+<p>In the null/constant model we discussed earlier, there was essentially no variation due to the predictors; it was all due to randomness.</p>
+<p>It turns out that these two variations are sort of “orthogonal” to each other, and we have a formula that essentially says that the sum of these two variabilities equals the total variability. We can see this in R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT<span class="op">~</span>iat, <span class="dt">data=</span>targetinFinal)
+variability.meanRT &lt;-<span class="st"> </span>targetinFinal<span class="op">$</span>meanRT <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
+residual.sum.squares &lt;-<span class="st"> </span><span class="kw">resid</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
+variability.predicted &lt;-<span class="st"> </span><span class="kw">predict</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
+variability.predicted
+residual.sum.squares
+<span class="co"># The following two are equal</span>
+variability.predicted <span class="op">+</span><span class="st"> </span>residual.sum.squares
+variability.meanRT</code></pre></div>
+<p>So this breaks down the variance in two parts: The explained part and the unexplained part. In our case we can see that the explained part is such a small part of the whole: <span class="math display">\[\frac{6273.656}{924811.7} = 0.006783712 = 0.68\%\]</span> This is the same as the <span class="math inline">\(r^2\)</span> and is extremely small in this case, indicating that our model explains very little of the variability in <code>meanRT</code>.</p>
+<p>This doesn’t yet mean the model is “bad”: Maybe that’s as much of the variability as we can explain from <code>iat</code>, and all the rest is just “noise” or depends on other variables. So we pose the question: If a linear equation in <code>iat</code> doesn’t help much, what is <em>the best we could possibly hope to do using just <code>iat</code> as a predictor</em>?</p>
+<p>Let us see how we could try to measure this: For each value of <span class="math inline">\(x\)</span> there is only one corresponding prediction we can make. But we may have multiple <span class="math inline">\(y\)</span> values for the same <span class="math inline">\(x\)</span>. Whatever the variability of those values is, there is no way that we could do better than that, by just using <span class="math inline">\(x\)</span>, because we can only make one prediction for each <span class="math inline">\(x\)</span>.</p>
+<p>Now as our <span class="math inline">\(x\)</span> is scalar, it is fairly unlikely that we would see multiple <span class="math inline">\(y\)</span>s for the same <span class="math inline">\(x\)</span>. We could however “fake” it by breaking <span class="math inline">\(x\)</span> into many small pieces, and assume that our prediction is more or less constant within each of those pieces. In effect we will imagine that our regression line is stepwise with really small steps. Then we’ll measure the error we make in each step. We can’t really have a function that jumps a lot within one of these steps, as they are so small. Here’s how we can compute something like that:</p>
+<ul>
+<li>Cut <code>iat</code> into small pieces and create a new variable from that.</li>
+<li>Group the data set based on the levels of this new variable.</li>
+<li>Measure the variability on each of those levels.</li>
+<li>Add all those together.</li>
+</ul>
+<p>The <code>dplyr</code> machinery can help us do all that:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targeting2 <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">iat.binned=</span><span class="kw">cut_width</span>(iat, <span class="fl">0.01</span>)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(iat.binned) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(
+        <span class="dt">sq.devs =</span> <span class="kw">sq.devs</span>(meanRT) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>(),
+        <span class="dt">count =</span> <span class="kw">n</span>()
+    ) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>(sq.devs))</code></pre></div>
+<p>We get as an answer <span class="math inline">\(623859.5\)</span>. This suggests that there is a great amount of variability of <code>meanRT</code>, namely <span class="math inline">\(\frac{623859.5}{924811.7} = 67.5\%\)</span> that we cannot really hope to explain with any regression model that uses <code>iat</code> only. Still, we could in theory have explained up to <span class="math inline">\(33.5\%\)</span>, yet our model does considerably worse.</p>
+<p>Whether we can do better with <code>iat</code> or not, it is clear that the linear model we have above will not do. It turns out that adding a quadratic term might be desirable, but we will return to that topic later.</p>
+</section>
+<section id="linear-fit-one-factor" class="level3">
+<h3>Linear fit, one factor</h3>
+<p>Let us now consider a factor variable and look at its effect on the <code>meanRT</code>. A factor variable can make a single prediction for each factor level, and so it may be able to do better than the initial null model, which was only making a single prediction. Let’s consider the <code>object</code> variable, which refers to whether the “target object” was armed or unarmed. We might expect faster reaction times if the target is armed. We start with a plot:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(object, meanRT) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p>We’re curious if there’s a difference in the mean reaction times between the two groups, and they seem to be fairly close to each other. Let us use <code>dplyr</code> to compute some numerical summaries for each group:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(object) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(meanRT),
+              <span class="dt">sd  =</span> <span class="kw">sd</span>(meanRT),
+              <span class="dt">n   =</span> <span class="kw">n</span>(),
+              <span class="dt">se  =</span> <span class="kw">sd</span>(meanRT)<span class="op">/</span><span class="kw">sqrt</span>(n))</code></pre></div>
+<p>We can see a slight difference in the standard deviations, though rather small given their scales, and we can see the two means fairly close to each other. We can see that the standard errors within each category are somewhere in the 3-4 range, indicating that the mean difference of close to 17 is considerable.</p>
+<p>We could use the means to make one prediction for each of the two values. Lets take a look at a model fit:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(meanRT <span class="op">~</span><span class="st"> </span>object, <span class="dt">data=</span>targetingFinal)
+<span class="kw">summary</span>(fit2)
+<span class="kw">coef</span>(fit2)</code></pre></div>
+<p>We can see that the model output has treated the “Armed” case as a baseline, and the intercept represents its value. The “Unarmed” case is then considered as an additive factor on that. So the predicted value for the “Armed” case would be <code>coef(fit2)[1] = 489</code> and the predicted value for the “Unarmed” case would be <code>coef(fit2)[1] + coef(fit2)[2] = 506.3</code>. These are of course the same values we saw with dplyr.</p>
+<p>Notice the p-value of <span class="math inline">\(0.000495\)</span> which appears in two places. It is the P-value for an F test that measures if our model is better than the null model, i.e. than the case where the values for armed and unarmed were the same. Or it can be thought of as the P-value for a t test on whether the term <code>objectUnarmed</code> is non-zero.</p>
+</section>
+<section id="the-f-statistic" class="level3">
+<h3>The F statistic</h3>
+<p>In general, if we have two models <span class="math inline">\(M_1\)</span> and <span class="math inline">\(M_2\)</span> with <span class="math inline">\(M_2\)</span> being the larger model, with degrees of freedom <span class="math inline">\(df_1\)</span> and <span class="math inline">\(df_2\)</span> respectively, then we can consider the difference between the residual sums of squares of the two models, scaled by the difference in the degrees of freedom, divided by the scaled residual for the larger model: <span class="math display">\[\frac{(\textrm{RSS}(M_1) - \textrm{RSS}(M_2) )/(df_1-df_2)}{\textrm{RSS}(M_2)/df_2}\]</span> Assuming that the larger model <span class="math inline">\(M_2\)</span> does not provide any improvement over the smaller model, this number follows an <span class="math inline">\(F_{df_1, df_2}\)</span> distribution.</p>
+<p>As an example in our case, we have our larger model <span class="math inline">\(M_2\)</span> that uses <code>object</code> to determine <code>meanRT</code>, and we want to compare it to the null model, which uses just the constant. We have <span class="math inline">\(df_2=n-2\)</span> and <span class="math inline">\(df_1=1\)</span>. We can directly compute the sums of squared residuals of the two models:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rss1 &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit0) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
+rss2 &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
+n &lt;-<span class="st"> </span><span class="kw">nrow</span>(targetingFinal)
+df1 &lt;-<span class="st"> </span>n<span class="op">-</span><span class="dv">1</span>
+df2 &lt;-<span class="st"> </span>n<span class="op">-</span><span class="dv">2</span>
+fstat &lt;-<span class="st"> </span>((rss1<span class="op">-</span>rss2)<span class="op">/</span>(df1<span class="op">-</span>df2)) <span class="op">/</span><span class="st"> </span>(rss2<span class="op">/</span>df2)
+fstat; df1<span class="op">-</span>df2; df2
+<span class="kw">pf</span>(fstat, df1<span class="op">-</span>df2, df2, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)</code></pre></div>
+<p>The last line tells R to compute the upper-tail probability for the value <code>fstat</code> in an F distribution with <code>df1-df2</code> and <code>df2</code> degrees of freedom.</p>
+<p>You may be familiar with these computations under a different terminology. The demoninator can be interpreted as the <strong>within-groups variability</strong>, while the numerator can be interpreted as the <strong>between-groups variability</strong>. Let’s check this in our instance: We can define the between-groups variability as follows: For each point we consider the difference between the mean of the group the point belongs to from the overall mean, then we look at the sum of squares of these differences. In R this would be:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">totalMean=</span><span class="kw">mean</span>(meanRT)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(object) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">groupMean=</span><span class="kw">mean</span>(meanRT)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>((groupMean<span class="op">-</span>totalMean)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
+<p>The idea of the test is that if the model with <code>object</code> is not a considerable improvement over the model without <code>object</code>, then the between-groups variability will be small compared to the within-groups variability.</p>
+<p>Of course, instead of doing all this by hand, the <code>summary</code> method for the fit does the work for is:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(fit2)</code></pre></div>
+<p>We can also see the same computation in the <code>anova</code> function, which compares two models via the method described above:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit0, fit2)</code></pre></div>
+<p>Analogous tests can be performed on the coefficients of the fit directly, using the <span class="math inline">\(t\)</span> distribution. Testing for a coefficient equaling 0 is equivalent to an F-test where we compare the full model with the smaller model without that coefficient. In the cases we have seen so far, this coincides with the test of the full model against the null model.</p>
+</section>
+<section id="factors-with-multiple-levels" class="level3">
+<h3>Factors with multiple levels</h3>
+<p>Let us briefly discuss a case with a factor that has more than two levels. Such a factor will add one more parameter, hence one less degree of freedom. This would present an opportunity to discuss how factor levels may be coded and their various effects, and it will also be an opportunity to demonstrate the package <code>ggally</code> for producing some interesting plots. We will use the <code>iris</code> data set, which contains measurements on the petal and sepal lengths and widths of 150 different iris plants, from three different species. The <code>GGally</code> package offers us a nice visualization of the whole dataset. You will need to install it, via the <code>Packages</code> pane. Make sure you spell it correctly, with two capital Gs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(GGally)
+iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(Petal.Width), <span class="dt">sd=</span><span class="kw">sd</span>(Petal.Width), <span class="dt">n=</span><span class="kw">n</span>())
+<span class="kw">ggpairs</span>(iris, <span class="kw">aes</span>(<span class="dt">color =</span> Species))</code></pre></div>
+<p>Looking at this plot, we can see that each species distinguishes itself in some way. For example the <code>setosa</code> irises have unusually small petal lengths and widths, while the <code>virginica</code> irises tend to have relatively large petal lengths and widths.</p>
+<p>For practice, let us set up a model to fit the petal width against the species:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisFit &lt;-<span class="st"> </span><span class="kw">lm</span>(Petal.Width<span class="op">~</span>Species, <span class="dt">data=</span> iris)
+<span class="kw">summary</span>(irisFit)</code></pre></div>
+<p>We see in this example that R has set up the <code>setosa</code> species as a baseline, and has introduced two additive coefficients, one for <code>versicolor</code> and one for <code>virginica</code>. So we can see that the average petal width for setosas is <span class="math inline">\(0.246\)</span>, while for versicolors it would be <span class="math inline">\(0.246+1.08=1.326\)</span>, and for virginicas it would be <span class="math inline">\(0.246+1.78=2.026\)</span>.</p>
+<p>We can also see a very small p-value for the F statistic, meaning that the species variable definitely has a significant effect. We also notice the t-tests for the two terms against the base point of setosa. We will come back to those in a minute, but first we should consider the coding of the levels of a factor variable.</p>
+<section id="factor-codings" class="level4">
+<h4>Factor Codings</h4>
+<p>What we see in use here is what is known as <strong>treatment coding</strong>, with one baseline entry, typically representing the control group, and a 0/1 coding for each of the subsequent levels. You can also use <strong>Helmert coding</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisHelmert &lt;-<span class="st"> </span><span class="kw">lm</span>(Petal.Width<span class="op">~</span>Species, <span class="dt">data=</span> iris, <span class="dt">contrasts=</span><span class="kw">list</span>(<span class="dt">Species=</span><span class="st">&quot;contr.helmert&quot;</span>))
+<span class="kw">summary</span>(irisHelmert)</code></pre></div>
+<p>Here the first coefficient represents the overall mean, <span class="math inline">\(1.2\)</span>, while the second coefficient represents how much higher the versicolor</p>
+<p>Care should be taken when considering these, as the p-values for the t-tests are harder to interpret.</p>
+<p>Another alternative is <strong>sum coding</strong></p>
+</section>
+</section>
+</section>
+<section id="cleanup" class="level2">
+<h2>CLEANUP</h2>
+<p>We will leave it as is for now as the data did not show any signs of extreme skewness. Here is a starting plot that shows the density distribution for <code>meanRT</code> for armed and unarmed objects, and with different graphs for each race and gender combination:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>meanRT, <span class="dt">color=</span>object) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_density</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(race<span class="op">~</span>gender)</code></pre></div>
 <p>We can see that mean reaction times were slower for the unarmed objects.</p>
 <p>Let us compute some numerical summaries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingCorrect <span class="op">%&gt;%</span>

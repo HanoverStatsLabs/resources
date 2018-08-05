@@ -52,8 +52,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </script>
 </head>
 <body>
-<section id="lab-data-preparation" class="level1">
-<h1>Lab: Data Preparation</h1>
+<section id="advanced-lab-1-data-preparation" class="level1">
+<h1>Advanced Lab 1: Data Preparation</h1>
 <section id="introduction" class="level2">
 <h2>Introduction</h2>
 <p>We can loosely split the “Data preparation” part of a project into three stages:</p>
@@ -240,7 +240,7 @@ alldata<span class="op">$</span>treatment <span class="op">%&gt;%</span><span cl
                                <span class="st">`</span><span class="dt">3</span><span class="st">`</span>=<span class="st">&quot;Day 3&quot;</span>, <span class="st">`</span><span class="dt">4</span><span class="st">`</span>=<span class="st">&quot;Day 4&quot;</span>, <span class="st">`</span><span class="dt">5</span><span class="st">`</span>=<span class="st">&quot;Day 5&quot;</span>)
     )</code></pre></div>
 <p>The backticks around the numerical levels <code>1</code>, <code>2</code> etc may seem weird. Whenever a value needs to be used on the left-hand-side of an equals sign, and it is not a “proper name” (meaning starts with a letter and has no spaces or other punctually), we need to enclose it in backticks. We will use this approach again later on when we have a situation with one of the names being the two words <code>life expectancy</code>.</p>
-<p>We are now ready to do some work with this data. Here are two examples of graphs we can produce; you’ll see more about this sort of graph in the <a href="LabIntroGgplot.html">graphing lab</a>.</p>
+<p>We are now ready to do some work with this data. Here are two examples of graphs we can produce; you’ll see more about this sort of graph in the <a href="LabIntroggplot.html">graphing lab</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(alldata) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">y=</span>value, <span class="dt">group=</span>subject, <span class="dt">color=</span>subject) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_path</span>() <span class="op">+</span>
@@ -301,9 +301,9 @@ summaries</code></pre></div>
 </section>
 <section id="practice" class="level2">
 <h2>Practice</h2>
-<p>You likely have a dataset of your own that you might want to work with to practice the above. If you don’t, then here’s a possible project:</p>
+<p>You likely have a dataset of your own that you might want to work with to practice the above. If you don’t, then here’s a possible project (make sure to start a new project either way):</p>
 <ol type="1">
-<li>The <a href="www.gapminder.org">GapMinder</a> website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually an R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
+<li>The <a href="https://www.gapminder.org">GapMinder</a> website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually an R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
 <ul>
 <li>Start by creating a new project. You may also want to start an RMarkdown document to keep your work organized.</li>
 <li>Next we will access the data sets from the website, <code>https://www.gapminder.org/data/</code>. On that page you can see a list of datasets, and you can use the search box at the upper right of the first table to search for a variable of interest (we will discuss what those are for us in a moment). You have two options: You can either download the file and include it in your project, or you can use the file’s URL directly into R. We will recommend the first approach in this instance, but keep in mind that the second path is possible.</li>
@@ -322,37 +322,60 @@ One thing we have not covered before is using variable names with spaces in them
 <li>We will now add another variable, the per-capita income. The variable you want is called “Income per person (GDP/capita, PPP$ inflation-adjusted)”. Follow much the same steps as in the previous point. You can call the values column whatever you want of course, but we will be using simply <code>income</code> for it.</li>
 <li><p>We will also want to get the total population of each country, stored in a dataset named “Population, total”. Use similar steps for it.</p>
 (Optional step) If you are feeling adventurous, you can pursue the possibility of writing a function to make these steps easier, since we more or less repeated the same steps three times.</li>
-<li><p>Now we want to bring these three datasets together, by matching entries on the country and year. The <code>inner_join</code> function can help you do that; make sure to look at its documentation, or the <code>dplyr</code> cheatsheet. Store the result in a variable (we called it <code>gpdata</code>).</p>
+<li><p>Now we want to bring these three datasets together, by matching entries on the country and year. The <code>inner_join</code> function can help you do that; make sure to look at its documentation, or the <code>dplyr</code> cheatsheet. Store the result in a variable (we called it <code>gapdata</code>).</p>
 <p>You’ll need to do this in two steps, as <code>inner_join</code> only joins two datasets at a time. So you’ll start with one dataset, pipe it into an <code>inner_join</code> with the second dataset, and then pipe the result into another <code>inner_join</code> with the third dataset. So your code might look something like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpdata &lt;-<span class="st"> </span>lifeExpectancy <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapdata &lt;-<span class="st"> </span>lifeExpectancy <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">inner_join</span>(income, <span class="dt">by=</span>....) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">inner_join</span>(population, <span class="dt">by=</span>....)</code></pre></div>
-<p>You have a choice to make here, actually, <code>inner_join</code> vs <code>full_join</code>. <code>full_join</code> will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use <code>inner_join</code> instead, which will only keep the entries where both the income and the life expectancy are known.</p></li>
+<p>You have a choice to make here, actually, <code>inner_join</code> vs <code>full_join</code>. If you use <code>full_join</code>, you will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use <code>inner_join</code> instead, which will only keep the entries where both the income and the life expectancy are known.</p>
+<p>If you have done this correctly, you should be seeing about <span class="math inline">\(15,000\)</span> observations on $5% variables.</p></li>
 </ol>
-<section id="a-challenge-matching-country-names" class="level4">
-<h4>A challenge: Matching Country Names</h4>
-<p>Warning: This section is somewhat challenging, as it attempts to reconcile differences in country names between different datasets. The end result is simply to have a <code>region</code> variable associated with each country. Feel free to skip this on a first go, and straight to the “practice continued” section.</p>
-<p>We will incorporate a variable for the various regions of the world. As this variable does not appear to be available in the gapminder data, we will need to get it from another source. In this instance, the world bank seems to include it in some of their available datasets: <a href="http://databank.worldbank.org/data/download/WDI_excel.zip" class="uri">http://databank.worldbank.org/data/download/WDI_excel.zip</a>. - Download the file and unzip it, then upload the corresponding Excel to your project folder. - The second sheet, named <code>country</code>, contains the information we need. Load that into a variable, we called it <code>wdi</code>. - Since we only care about the country name and continent, use <code>select</code> to only choose the four columns <code>Short Name</code>, <code>Table Name</code>, <code>Long Name</code>, <code>Region</code>.</p>
-<p>The challenging part now is to match the country names between the two datasets, and the conventions on naming some of the countries. For instance, let us start by making a list of all the countries in <code>gpdata</code> and in the <code>Short Name</code> and <code>Table Name</code> entries of the <code>wdi</code> data, and look at their difference:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpCountries &lt;-<span class="st"> </span>gpdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;country&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
-wdiCountries &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;Table Name&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
-<span class="kw">setdiff</span>(gpCountries, wdiCountries)   <span class="co"># names in gpCountries but not wdiCountries</span></code></pre></div>
-<p>We will see a number of countries missing that really shouldn’t be missing. We could also try to use the <code>Short Name</code> column instead, but if you do that you’ll notice that it too is missing some countries.</p>
-<p>We could of course simply edit the Excel sheet and change the country names. But then we may need to do that each time we want to update the data from the originals. Manually changing the Excel sheets is not very sustainable in the long run. So we will look for a programmatic way to do it. Here’s the steps we will take:</p>
+<section id="some-questions-to-try-out" class="level3">
+<h3>Some questions to try out</h3>
+<p>This ends the “data tidying part”, except for one more challenging addition that we’ll discuss after these problems. We can now do some analyses on these numbers.</p>
+<ol type="1">
+<li>Use <code>arrange</code> (maybe along with <code>head</code> or <code>tail</code>) to reorder the rows in the gapdata and discover what the most recent year in the data is. You can also find that out from the viewer, or you can use <code>summarize</code> or <code>pluck</code> along with the <code>max</code> function.</li>
+<li>Use <code>filter</code> to consider only the subset of the data that relates to the most recent year, then <code>arrange</code> to order the data according to income, and find the countries with the 5 highest and 5 lowest per capita incomes.</li>
+<li>For each country, determine how many rows of data we have for that country, and visualize the results with an appropriate graph.</li>
+<li>Determine for each year the country with the highest per-capita income. You can do this with a <code>group_by</code> and a <code>filter</code>.</li>
+<li>Compute the total world population per year.</li>
+<li>Compute total income for each row by multiplying together the population and income variables, and add that as a new variable.</li>
+</ol>
+</section>
+<section id="a-challenge-matching-country-names" class="level3">
+<h3>A challenge: Matching Country Names</h3>
+<p>Warning: This section is somewhat challenging, as it attempts to reconcile differences in country names between different datasets. The end result is simply to have a <code>region</code> variable associated with each country. Feel free to skip this on a first go.</p>
+<p>We will incorporate a variable for the various regions of the world. As this variable does not appear to be available in the GapMinder data, we will need to get it from another source. In this instance, the World Bank seems to include it in some of their available datasets:</p>
+<blockquote>
+<p><a href="http://databank.worldbank.org/data/download/WDI_excel.zip" class="uri">http://databank.worldbank.org/data/download/WDI_excel.zip</a></p>
+</blockquote>
 <ul>
-<li>We will create a new column <code>gpName</code> in the <code>wdi</code> data that contains the <code>Short Name</code> if that was in the <code>gpCountries</code> list, or the <code>Table Name</code> if <em>that</em> was in the <code>gpCountries</code> list, or otherwise it is <code>NA</code> (missing value).</li>
-<li>Next we will find out which countries in <code>gpdata</code> do not have a corresponding entry. Hopefully that will be a small list. We will then manually write a small dataset that contains an appropriate matching name for those countries, by inspecting the names that exist in the <code>Short Name</code> column.</li>
-<li>Then we will join this spreadsheet with the <code>wdi</code> to fill in the remaining <code>gpName</code> entries.</li>
-<li>Lastly, we will then join our <code>gpdata</code> with this updated <code>wdi</code> spreadsheet in order to get the continent names.</li>
+<li>Download the file and extra the contained Excel file, then upload it to your project folder.</li>
+<li>The second sheet, named <code>country</code>, contains the information we need. Load that into a variable, we called it <code>wdi</code>.</li>
+<li>Since we only care about the country name and region, use <code>select</code> to only choose the four columns <code>Short Name</code>, <code>Table Name</code>, <code>Long Name</code>, <code>Region</code>.</li>
 </ul>
-<p>So let’s start with the first part, adding a new column in <code>wdi</code>. We can use the <code>case_when</code> method for this: It tries a series of alternatives in turn and uses the first that matches:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wdi &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gpName =</span> <span class="kw">case_when</span>(
-  <span class="st">`</span><span class="dt">Table Name</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>gpCountries     <span class="op">~</span><span class="st"> `</span><span class="dt">Table Name</span><span class="st">`</span>,
-  <span class="st">`</span><span class="dt">Short Name</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>gpCountries     <span class="op">~</span><span class="st"> `</span><span class="dt">Short Name</span><span class="st">`</span>,
-  <span class="ot">TRUE</span>                              <span class="op">~</span><span class="st"> </span><span class="kw">as.character</span>(<span class="ot">NA</span>)))</code></pre></div>
-<p>Now we need to create a little dataset that contains these countries and their appropriate <code>wdi</code> entries. We will use the <code>tribble</code> command for that, which allows us to nicely align the values vertically. We do need to use the search feature in the data view in order to find what the appropriate names would be:</p>
+<p>The challenging part now is to match the country names between the two datasets, which can be different due to different conventions on naming some of the countries. For instance, let us start by making a list of all the countries in <code>gapdata</code> and in the <code>Table Name</code> entry of the <code>wdi</code> data, and look at their difference:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapCountries &lt;-<span class="st"> </span>gapdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;country&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
+wdiCountries &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;Table Name&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unique</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()
+<span class="kw">setdiff</span>(gapCountries, wdiCountries)   <span class="co"># names in gapCountries but not wdiCountries</span></code></pre></div>
+<p>You should see a number of countries in that list, meaning that they don’t show up as such in <code>wdiCountries</code>, but that really must be somewhere there, maybe with a different representation. We could also try to use the <code>Short Name</code> column instead, but if you do that you’ll notice that it too is missing some countries.</p>
+<p>Before we move on, you might want to <code>View</code> the <code>wdi</code> data and search for those missing countries in the data view, to see how they show up.</p>
+<p>We could of course simply edit the Excel sheet and change the country names. But then we may need to do that each time we want to update the data from the originals. Manually changing the Excel sheets is unsustainable in the long run. So we will look for a programmatic way to do it. Here are the steps we will take:</p>
+<ul>
+<li>We first create a new column in the <code>wdi</code> data to hold either the <code>Table Name</code> or the <code>Short Name</code>, whichever one actually matches the country name in the <code>gapData</code>. We will call this new column <code>gapName</code>.</li>
+<li>Next we will find out which countries in <code>gapdata</code> do not have a corresponding entry in the <code>gapName</code> column. Hopefully that will be a small list. We will then manually create a small dataset that contains an appropriate matching name for each of those countries, by inspecting the names that exist in the <code>Table Name</code> column.</li>
+<li>Then we will join this dataset with the <code>wdi</code> to fill in the remaining <code>gapName</code> entries.</li>
+<li>Lastly, we will join our <code>gapdata</code> with this updated <code>wdi</code> dataset in order to get the region names into the <code>gapdata</code>.</li>
+</ul>
+<p>So let’s start with the first part, adding a new column in <code>wdi</code>. We can use the <code>case_when</code> method for this: It tries a series of alternatives in turn and uses the first one that matches:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wdi &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gapName =</span> <span class="kw">case_when</span>(
+  <span class="st">`</span><span class="dt">Table Name</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>gapCountries   <span class="op">~</span><span class="st"> `</span><span class="dt">Table Name</span><span class="st">`</span>,
+  <span class="st">`</span><span class="dt">Short Name</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>gapCountries   <span class="op">~</span><span class="st"> `</span><span class="dt">Short Name</span><span class="st">`</span>,
+  <span class="ot">TRUE</span>                             <span class="op">~</span><span class="st"> </span><span class="kw">as.character</span>(<span class="ot">NA</span>)))
+<span class="kw">setdiff</span>(gapCountries, wdi<span class="op">$</span>gapName)</code></pre></div>
+<p>So there are 12 countries in the <code>gapdata</code> which do not yet have a matching <code>gapName</code> in the <code>wdi</code> data. Let’s make a small dataset that contains these countries and their appropriate <code>wdi</code> entries. We will use the <code>tribble</code> command for that, which allows us to nicely align the values vertically. We used the search feature in the data view in order to find what the appropriate names would be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countryNames &lt;-<span class="st"> </span><span class="kw">tribble</span>(
-  <span class="op">~</span>gpName, <span class="op">~</span><span class="st">`</span><span class="dt">Short Name</span><span class="st">`</span>,
+  <span class="op">~</span>gapName, <span class="op">~</span><span class="st">`</span><span class="dt">Short Name</span><span class="st">`</span>,
   <span class="st">&quot;Bahamas&quot;</span>, <span class="st">&quot;The Bahamas&quot;</span>,
   <span class="st">&quot;Cape Verde&quot;</span>, <span class="st">&quot;Cabo Verde&quot;</span>,
   <span class="st">&quot;Cote d&#39;Ivoire&quot;</span>, <span class="st">&quot;Côte d&#39;Ivoire&quot;</span>,
@@ -366,31 +389,34 @@ wdiCountries &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><sp
   <span class="st">&quot;Syria&quot;</span>, <span class="st">&quot;Syrian Arab Republic&quot;</span>
 )</code></pre></div>
 <p>We could not find an entry for Taiwan in the <code>wdi</code> data. We will need to assign its region manually after we do all the needed joins.</p>
-<p>Now we want to join this variable into the <code>wdi</code> data. This is a bit tricky: A join sounds like the right thing to do, with <code>Short Name</code> being the common variable. But the way R does this is to create two separate columns: One for the <code>gpName</code>s from <code>wdi</code> and another for those from <code>countryNames</code>. We need to use <code>coalesce</code> along with <code>mutate</code> to merge the two together.</p>
+<p>Now we want to join the <code>countryNames</code> dataset into the <code>wdi</code> data. This is a bit tricky: A join sounds like the right thing to do, with <code>Short Name</code> being the common variable. But the way R does this is to create two separate columns, one for the <code>gapName</code>s from <code>wdi</code> and another for those from <code>countryNames</code>. We need to use <code>coalesce</code> along with <code>mutate</code> to merge the two together (you mean want to check out the <code>coalesce</code> function’s documentation and possibly look at the result with just the <code>full_join</code> to see why the <code>mutate</code> step is needed).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wdi2 &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">full_join</span>(countryNames, <span class="dt">by=</span><span class="st">&quot;Short Name&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gpName =</span> <span class="kw">coalesce</span>(gpName.x, gpName.y))
-<span class="kw">setdiff</span>(gpCountries, wdi2<span class="op">$</span>gpName)</code></pre></div>
-<p>You should now see the <code>setdiff</code> method return a <code>character(0)</code> value, meaning there are no entries. Good, that means each value in <code>gpCountries</code> is now accounted for in <code>wdi</code>. We will still need to deal with Taiwan.</p>
-<p>Now, we want to merge in the region values from <code>wdi</code> into our <code>gpdata</code> set. This will be a simple join, matching the <code>country</code> to the <code>gpName</code>. But we only want to bring in the <code>region</code> variable, so before joining we will select only a few columns from <code>wdi</code> (<code>left_join</code> here tells it to ignore entries in <code>wdi</code> that don’t have a matching value in <code>gpdata</code>):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gpdata &lt;-<span class="st"> </span>gpdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(wdi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(gpName, Region),
-    <span class="dt">by=</span><span class="kw">c</span>(<span class="dt">country=</span><span class="st">&quot;gpName&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gapName =</span> <span class="kw">coalesce</span>(gapName.x, gapName.y))
+<span class="kw">setdiff</span>(gapCountries, wdi2<span class="op">$</span>gapName)</code></pre></div>
+<p>You should now see the <code>setdiff</code> method return only Taiwan. Good, that means each value in <code>gapCountries</code> is now accounted for in <code>wdi</code>. We will still need to deal with Taiwan.</p>
+<p>Now, we want to merge in the region values from <code>wdi</code> into our <code>gapdata</code> set. This will simply be a join, matching the <code>country</code> to the <code>gapName</code>. But we only want to bring in the <code>region</code> variable, so before joining we will select only a few columns from <code>wdi2</code> (<code>left_join</code> here tells it to ignore entries in <code>wdi2</code> that don’t have a matching value in <code>gapdata</code> but to include entries in <code>gapdata</code> that don’t have matching value in <code>wdi2</code>. This way Taiwan is not left out):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapdata &lt;-<span class="st"> </span>gapdata <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">left_join</span>(wdi2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(gapName, Region),
+        <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;country&quot;</span>=<span class="st">&quot;gapName&quot;</span>))
+<span class="co"># Now some cleanup and adding Taiwan</span>
+gapdata &lt;-<span class="st"> </span>gapdata <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">rename</span>(<span class="dt">region=</span><span class="st">&quot;Region&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">region=</span><span class="kw">replace</span>(region, country<span class="op">==</span><span class="st">&quot;Taiwan&quot;</span>, <span class="st">&quot;East Asia &amp; Pacific&quot;</span>)) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">region=</span><span class="kw">factor</span>(region))</code></pre></div>
+<p>The <code>by</code> part of the <code>left_join</code> method might look different than before. This is because the two columns we wish to join on have different names in the two datasets. The <code>by=c(&quot;country&quot;=&quot;gapName&quot;)</code> syntax tells it to match the <code>country</code> variable in the first dataset to the <code>gapName</code> variable in the second dataset.</p>
 <p>Notice the first <code>mutate</code> line above. It tells it to replace the <code>region</code> variable by using whatever was in the <code>region</code> variable before but whenever the country is Taiwan it should set the region to be East Asia and Pacific.</p>
-<p>And with that, we should be done: In order to check, try to use <code>group_by</code> region and <code>summarize</code> using <code>n_distinct</code> to count each country only once. If done correctly, this should give you a reasonable count of countries for each region (for example, 3 countries in north america).</p>
+<p>Phew, and with that, we should be done! In order to check, try to use <code>group_by</code> region and <code>summarize</code> using <code>n_distinct</code> to count each country only once. If done correctly, this should give you a reasonable count of countries for each region (for example, 3 countries in North America).</p>
+<p>As practice, you can now compute total populations for each region of the world for each year.</p>
 </section>
-<section id="practice-continued" class="level4">
-<h4>Practice Continued</h4>
-<p>This ends the “data tidying part”. We can now do some analyses on these numbers.</p>
-<ol type="1">
-<li>Use <code>arrange</code> to reorder the values and discover what the most recent year in the data is. You can also find that out from the viewer, or you can use <code>summarize</code> or <code>pluck</code> along with the <code>max</code> function.</li>
-<li>Use <code>filter</code> to consider only the subset of the data that relates to the most recent year, then <code>arrange</code> to order the data according to income, and find the countries with the 5 highest and 5 lowest per capita incomes.</li>
-<li>For each country, determine the number of data entries present.</li>
-<li>Determine for each year the country with the highest per-capita income. You can do this with a <code>group_by</code> and a <code>filter</code>.</li>
-<li>(If you did the region part above) Compute total populations for each region of the world and each year.</li>
-<li>Compute total income for each row by multiplying together the population and income variables, and add that as a new variable.</li>
-</ol>
+<section id="addendum-saving-data" class="level3">
+<h3>Addendum: Saving data</h3>
+<p>Phew, after all this work we should save this dataset for future use. We can of course save it as a csv file, which would be convenient if you wanted to share it with non-R users. We can do that with the <code>write_csv</code> and <code>write_excel_csv</code> methods. You should prefer these methods to the similarly named <code>write.csv</code> and <code>write.excel</code>, and you can look at their documentation for details. An example call might be:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()    <span class="co"># Check to see what the current directory is. This is where files will be saved</span>
+<span class="kw">write_csv</span>(gapdata, <span class="st">&quot;gapdata.csv&quot;</span>, <span class="dt">na=</span><span class="st">&quot;&quot;</span>)</code></pre></div>
+<p>Another option is to save the data set as an R object. You can in fact save any kind of R object, for instance model fits, summary results etc. You can do this with the <code>save</code> command, and the objects can be then loaded back via the <code>load</code> command:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(gapdata, <span class="dt">file=</span><span class="st">&quot;gapdata.RData&quot;</span>)</code></pre></div>
+<p>It is conventional to use <code>RData</code> for the extension of such a file.</p>
+<p>We should point out however, that sharing data this way does not show the work that was used to produce those data, compared to providing an RMarkdown file or an R script, which both show all the processing steps.</p>
 </section>
 </section>
 </section>

@@ -25,5 +25,6 @@ While there are a large number of resources available for R, the following form 
 ## Datasets
 
 - [compression.xlsx](datasets/compression.xlsx) Data on the effects of various compression techniques, collected by Shelby Williamson for her senior thesis project at Hanover College, under the supervision of Molly Winke.
+- [targeting.sav](datasets/targeting.sav) Data from the "Tuttle Shooting Decisions Study", provided by Kati Tuttle.
 
 ## Other links

@@ -52,38 +52,52 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </script>
 </head>
 <body>
-<section id="lab-introduction-to-ggplot" class="level1">
-<h1>Lab: Introduction to ggplot</h1>
+<section id="advanced-lab-2-introduction-to-ggplot" class="level1">
+<h1>Advanced Lab 2: Introduction to ggplot</h1>
 <section id="introduction" class="level2">
 <h2>Introduction</h2>
 <p>In this lab we will delve more deeply into the <a href="https://ggplot2.tidyverse.org/">ggplot2</a> graphics package and how we can use it to create elaborate graphs.</p>
 <p><code>ggplot2</code> builds on the idea of a <a href="http://vita.had.co.nz/papers/layered-grammar.html">grammar of graphics</a>. The basic concept in the grammar of graphics is that we build a graph iteratively by specifying various components of it:</p>
-<dl>
-<dt>data</dt>
-<dd>We start each graph by simply specifying the data set to be used.
-</dd>
-<dt>aesthetics</dt>
-<dd>Determine which variables will be shown on the graph and how. For example one variable could be assigned to correspond to the x axis, another to correspond to a color, one to correspond to size and so on.
-</dd>
-<dt>geometries</dt>
-<dd>Usually abbreviated as <strong>geom</strong>s determine the kinds of shapes we want to have included in the graph (points, lines, bars etc). We can have multiple geoms on the same graph, creating various <em>layers</em>.
-</dd>
-<dt>stats</dt>
-<dd>Determine what statistic of the variable will be visualized. This often is done at the same time as specifying a geom, but it can also be done separately.
-</dd>
-<dt>facets</dt>
-<dd>Determine if we should create separate panels based on the levels of a factor variable. These would be called “panel variables” in SPSS.
-</dd>
-<dt>scales</dt>
-<dd>Control how data values are mapped to visual values. Often default scales work just fine, but some times you may want to adjust those, especially when you choose colors to represent a variable’s levels.
-</dd>
-<dt>annotations</dt>
-<dd>Can be used to add text and similar elements to a graph.
-</dd>
-<dt>themes</dt>
-<dd>Control the overall graph appearance (axes ticks, labels, legend etc).
-</dd>
-</dl>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 81%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">data</td>
+<td style="text-align: left;">Specify the the data set to be used.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">aesthetics</td>
+<td style="text-align: left;">Determine which variables will be shown on the graph and how. For example one variable could be assigned to correspond to the x axis, another to correspond to a color, one to correspond to size and so on. Aesthetics can either be <strong>mapped</strong> to variables, using the <code>aes(...)</code> syntax, or they can be <strong>set</strong> to constant values, e.g. <code>geom_smooth(color=&quot;red&quot;)</code>, as part of a specific component indicating the aesthetic to be used for that component.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">geometries</td>
+<td style="text-align: left;">Usually abbreviated as <strong>geom</strong>s. Determine the kinds of shapes we want to have included in the graph (points, lines, bars etc). We can have multiple geoms on the same graph, creating various <em>layers</em>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">stats</td>
+<td style="text-align: left;">Determine what statistic of the variable will be visualized. This often is done at the same time as specifying a geom, but it can also be done separately.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">facets</td>
+<td style="text-align: left;">Determine if we should create separate panels based on the levels of a factor variable. These would be called “panel variables” in SPSS.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">scales</td>
+<td style="text-align: left;">Control how data values are mapped to visual values. Often default scales work just fine, but some times you may want to adjust those, especially when you choose colors to represent a variable’s levels.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">annotations</td>
+<td style="text-align: left;">Add text and similar elements to a graph.</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">themes</td>
+<td style="text-align: left;">Control the overall graph appearance (axes ticks, labels, legend etc).</td>
+</tr>
+</tbody>
+</table>
 <p>This will all make more sense as we move along.</p>
 <p>You can load <code>ggplot2</code> itself directly, or you can load it as part of the <code>hanoverbase</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(hanoverbase)</code></pre></div>
@@ -96,80 +110,84 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ?diamonds        <span class="co"># If you want to open up the dataset documentation</span></code></pre></div>
 <p>We would like to investigate how the color relates to the price of the diamonds. We start by defining the dataset to use:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds)</code></pre></div>
-<p>This will not show much (and empty plot), but it tells ggplot to use the <code>diamonds</code> dataset. Next we will specify the “aesthetics”: In this case we will tell it to use <code>color</code> for the x axis and <code>price</code> for the y axis:</p>
+<p>This will not show much (an empty plot), but it tells ggplot to use the <code>diamonds</code> dataset. Next we will specify the “aesthetics”; in this case we will tell it to use the <code>color</code> variable for the x-axis and the <code>price</code> variable for the y-axis:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price)</code></pre></div>
-<p>Notice the syntax: We add new components to our graph via the “plus” operation.</p>
+<p>Notice the syntax: we add new components to our graph via the “plus” operation.</p>
 <p>This should have produced axes, but it has plotted no data yet. This is because we have not specified any geom layer yet. But specifying the aesthetics was enough for <code>ggplot</code> to work out some scales for the axes.</p>
-<p>We now add a <code>geom</code> layer with another “plus”. We will spread this onto a new line to keep the lines short. To do that, you need to end each previous line with the plus sign, go remind R that there is more to this command.</p>
+<p>We now add a <code>geom</code> layer with another “plus”. We will spread this onto a new line to keep the lines short. To do that, you need to end each previous line with the plus sign, to instruct R that there is more to this command.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
-<p>Note that the price seems to increase as the color gets <em>worse</em> (J is worse than D). This sounds opposite to what it should be, and we’ll examine that later. If you’d like to see a different kind of plot before moving on, try having <code>violin</code> instead of <code>boxplot</code> in the above expression.</p>
-<p>Now let us add one more layer, namely a point for each color, representing the mean price:</p>
+<p>Note that the price tends to increase as the color gets <em>worse</em> (J is worse than D). This sounds opposite to what it should be, and we’ll examine that later. If you’d like to see a different kind of plot before moving on, try using <code>violin</code> instead of <code>boxplot</code> in the above expression.</p>
+<p>Now let’s add one more layer, namely a point for each color, representing the mean price:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>)</code></pre></div>
 <p>Things just got a lot more complicated in the code! Let’s walk through it.</p>
-<p>We are here telling the graph to add “points” (<code>geom_point</code>) where it uses a specific <code>stat</code> function, namely “summary” to compute the <code>y</code> coordinates of these points. The default <code>stat</code> is the identity, which would plot the points exactly where they are. This <code>summary</code> stat instead will take all <code>y</code> values for the same <code>x</code> value, and <em>summarize</em> them using the provided function, <code>mean</code>, specified via the <code>fun.y</code> argument. Under the hood, the system actually calls the function <code>stat_summary</code>, and you can look at its documentation for more details.</p>
-<p>The remaining parameters merely customize the look and feel of the points, namely a specific color and fill value for all the points, and a size for the points.</p>
+<p>We are here telling the graph to add “points” (<code>geom_point</code>), where it uses a specific <code>stat</code> function, namely “summary”, to compute the <code>y</code> coordinates of these points. The default <code>stat</code> is the identity, which would not work very well here (but give it a go!); it would in effect plot a point for every data row, at the corresponding x and y coordinates. It will in effect be drawing a scatterplot. This <code>summary</code> stat will instead take all <code>y</code> values for the same <code>x</code> value, and <em>summarize</em> them using the provided function, <code>mean</code>, specified via the <code>fun.y</code> argument. Under the hood the system actually calls the function <code>stat_summary</code>, and you can look at its documentation for more details.</p>
+<p>The remaining parameters merely customize the look and feel of the points, namely a specific border <em>color</em> and <em>fill</em> value for all the points, and a <em>size</em> for the points.</p>
 <p>Let’s also add lines connecting the means:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>, <span class="dt">fun.y=</span>mean, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>)</code></pre></div>
-<p>This is similar, except for one new bit, namely the <code>group=1</code> argument. <code>geom_line</code> and other line-drawing geoms need to be told a way to decide which group of values is part of the same line. The <code>group</code> parameter specifies exactly that. In this instance we tell it that all values should correspond to the same group, namely group “1”. Oftentimes in other graphs we may have subjects with a specific i.d., and then we would specify <code>group=subject</code> or something similar. Or we might have some data on the economies of countries over many years, and we want one line drawn for each country. We would then use <code>group=country</code>.</p>
-<p>As the price range is quite skewed, let us adjust the y scale to use a logarithmic scale:</p>
+<p>This is similar, except for one new bit, namely the <code>group=1</code> argument. <code>geom_line</code> and other line-drawing geoms need to be told a way to decide which group of values is part of the same line/path. The <code>group</code> parameter specifies exactly that; all points with the same group value will be joined together. In this instance we tell it that all values should correspond to the same group, namely group “1”. Oftentimes in other graphs we may have subjects with a specific ID, and then we would specify <code>group=subject</code> or something similar. Or we might have some data on the economies of countries over many years, and we want one line drawn for each country; we would then use <code>group=country</code>.</p>
+<p>Note that we added the <code>geom_line</code> <em>before</em> the <code>geom_point</code>. The elements will be drawn in that order, and that order may affect the appearance.</p>
+<p>As the distribution of <code>price</code>s is quite skewed, let’s adjust the y scale to use a logarithmic scale:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>, <span class="dt">fun.y=</span>mean, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_y_log10</span>()</code></pre></div>
-<p>This performed a log transform on the prices <em>before</em> it computed the boxplot, then drew the graph with a logarithmic y-scale but showing the actual price values there. This is important to keep in mind, these scale transformations occur <em>before</em> and statistics are performed on the values. This may not be what you want, and we will see later how we can change the scale on a graph <em>after</em> all computations are performed.</p>
-<p>Next, let us specify some more tick marks. We do this by setting the <code>breaks</code> parameter of the scale transform (the values we specify are our un-transformed values):</p>
+<p>This performed a log transform on the prices <em>before</em> it computed the boxplot, then drew the graph with a logarithmic y-scale but showing the original price values there. This is important to keep in mind: these scale transformations occur <em>before</em> any statistics are performed on the values. This may not always be what you want, and we will see later how we can change the scale on a graph <em>after</em> all computations are performed.</p>
+<p>Next, let’s specify some more tick marks. We do this by setting the <code>breaks</code> parameter of the scale transform (the values we specify are our un-transformed values):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>, <span class="dt">fun.y=</span>mean, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">3000</span>, <span class="dv">5000</span>, <span class="dv">70000</span>, <span class="dv">9000</span>, <span class="dv">11000</span>, <span class="dv">13000</span>))</code></pre></div>
-<p>Now, let us use a custom theme to change the look and feel of the graph. We’ll remove the vertical grid lines, set the background to white and the horizontal grid lines to light green:</p>
+<span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1000</span>, <span class="dv">13000</span>, <span class="dt">by=</span><span class="dv">2000</span>))</code></pre></div>
+<p>Now, let’s use a custom theme to change the look and feel of the graph. We’ll remove the vertical grid lines, set the background to white and the horizontal grid lines to light green:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>, <span class="dt">fun.y=</span>mean, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">3000</span>, <span class="dv">5000</span>, <span class="dv">70000</span>, <span class="dv">9000</span>, <span class="dv">11000</span>, <span class="dv">13000</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1000</span>, <span class="dv">13000</span>, <span class="dt">by=</span><span class="dv">2000</span>)) <span class="op">+</span>
 <span class="st">    </span><span class="kw">theme_light</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">theme</span>(
         <span class="dt">panel.grid.major.y =</span> <span class="kw">element_line</span>(<span class="dt">color=</span><span class="st">&quot;lightgreen&quot;</span>),
         <span class="dt">panel.grid.major.x =</span> <span class="kw">element_blank</span>()
     )</code></pre></div>
 <p>We added two components here: <code>theme_light()</code> set some default settings for a light-colored theme, while <code>theme(...)</code> refined the theme settings further.</p>
-<p>It’s worth mentioning that you can save any part of this graph-building process, and reuse it in other graphs. For example, we can create our own theme and store in a variable:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ourTheme &lt;-<span class="st"> </span><span class="kw">theme_light</span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw">theme</span>(
-        <span class="dt">panel.grid.major.y =</span> <span class="kw">element_line</span>(<span class="dt">color=</span><span class="st">&quot;lightgreen&quot;</span>),
-        <span class="dt">panel.grid.major.x =</span> <span class="kw">element_blank</span>()
-    )
+<p>It’s worth mentioning that you can save any part of this graph-building process, and reuse it in other graphs. For example, we can create our own theme and store in a variable. In order to do that, we place the components we want to use into a <em>list</em>. ggplot2 will unpack the list and put the components with pluses, when needed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ourTheme &lt;-<span class="st"> </span><span class="kw">list</span>(
+  <span class="kw">theme_light</span>(),
+  <span class="kw">theme</span>(
+      <span class="dt">panel.grid.major.y =</span> <span class="kw">element_line</span>(<span class="dt">color=</span><span class="st">&quot;lightgreen&quot;</span>),
+      <span class="dt">panel.grid.major.x =</span> <span class="kw">element_blank</span>()
+  )
+)
 
 <span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>, <span class="dt">fun.y=</span>mean, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">3000</span>, <span class="dv">5000</span>, <span class="dv">70000</span>, <span class="dv">9000</span>, <span class="dv">11000</span>, <span class="dv">13000</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1000</span>, <span class="dv">13000</span>, <span class="dt">by=</span><span class="dv">2000</span>)) <span class="op">+</span>
 <span class="st">    </span>ourTheme</code></pre></div>
-<p>We can also save our own boxplot with the extra mean lines added. For that we will need to to store the three components that we want to include into a list. ggplot2 will unpack the list and put the components with pluses:</p>
+<p>A <code>list</code> is a bit like <code>c</code>, but can actually contain any kinds of elements, even other sublists. <code>c</code> on the other hand is really only meant for concatenating like items to produce a sequence of homogeneous values.</p>
+<p>We can also save our own boxplot with the extra mean lines added:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">boxplotWithMeans &lt;-<span class="st"> </span><span class="kw">list</span>(
     <span class="kw">geom_boxplot</span>(),
     <span class="kw">geom_line</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>, <span class="dt">fun.y=</span>mean, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>),
     <span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&quot;summary&quot;</span>, <span class="dt">fun.y=</span>mean, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>)
 )
 
-priceLogScale &lt;-<span class="st"> </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">3000</span>, <span class="dv">5000</span>, <span class="dv">70000</span>, <span class="dv">9000</span>, <span class="dv">11000</span>, <span class="dv">13000</span>))
+priceLogScale &lt;-<span class="st"> </span><span class="kw">scale_y_log10</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1000</span>, <span class="dv">13000</span>, <span class="dt">by=</span><span class="dv">2000</span>))
 
 <span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
@@ -180,43 +198,49 @@ priceLogScale &lt;-<span class="st"> </span><span class="kw">scale_y_log10</span
 </section>
 <section id="scatterplots-and-faceting" class="level2">
 <h2>Scatterplots and faceting</h2>
-<p>Let us now examine the relation between price and carats:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(carat, price)) <span class="op">+</span>
+<p>Let’s now examine the relation between price and carats:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(carat, price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>()</code></pre></div>
 <p>This relation will look better in logarithmic scale:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(carat, price)) <span class="op">+</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(carat, price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_x_log10</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_y_log10</span>()</code></pre></div>
-<p>Before moving on, let us store the basic parameters and scaling in an intermediate variable, so we don’t have to type them every time:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(carat, price)) <span class="op">+</span>
+<p>Before moving on, let’s store the basic parameters and scaling in an intermediate variable, so we don’t have to type them every time:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(carat, price) <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_x_log10</span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw">scale_y_log10</span>()
 
-caratVsPricePlot <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</code></pre></div>
-<p>Let us try to add a transparency to each point: <code>r caratVsPricePlot + geom_point(alpha=0.3)` `` Or we can try to use single dots for each point rather than circles:</code>r caratVsPricePlot + geom_point(shape=“.”) ```</p>
-<p>Given the large number of values in this example, a better approach is to use bin2d, which is like a two-dimensional histogram: It breaks the area in small rectangles, counts the number of points that fall in each rectangle, then uses color intensity to signify areas with more values:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot <span class="op">+</span><span class="st"> </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>)</code></pre></div>
-<p>Now let us add a linear regression line with error estimates:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot <span class="op">+</span>
+priceVsCaratPlot <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</code></pre></div>
+<p>Let’s try to add a transparency to each point:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">alpha=</span><span class="fl">0.3</span>)</code></pre></div>
+<p>Or we can try to use single dots for each point rather than circles:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">shape=</span><span class="st">&quot;.&quot;</span>)</code></pre></div>
+<p>Given the large number of data points in this plot, a better approach is to use <code>bin2d</code>, which is like a two-dimensional histogram; it breaks the area in small rectangles, counts the number of points that fall in each rectangle, then uses color intensity to signify areas with more values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span><span class="st"> </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>)</code></pre></div>
+<p>Now let’s add a linear regression line with error estimates:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_lm</span>(<span class="dt">interval=</span><span class="st">&quot;prediction&quot;</span>)</code></pre></div>
-<p>Or we might prefer a “smooth” line fit instead:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot <span class="op">+</span>
+<p>Or we might prefer to fit a smooth line instead:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
 <p>We will now use facets to create a panelled graph and investigate this relation based on a third variable (e.g. cut, clarity, or color):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot <span class="op">+</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>cut)</code></pre></div>
 <p>We can do two factors:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot <span class="op">+</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>cut <span class="op">+</span><span class="st"> </span>clarity)</code></pre></div>
-<p>With two factors, it is best to use <code>facet_grid</code> (we also used <code>ggtitle</code> to add a title):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caratVsPricePlot <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>cut <span class="op">+</span><span class="st"> </span>color)</code></pre></div>
+<p>With two factors, it is best to use <code>facet_grid</code> (we also used the <code>ggtitle</code> annotation to add a title):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priceVsCaratPlot <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bin2d</span>(<span class="dt">bins=</span><span class="dv">50</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">facet_grid</span>(cut <span class="op">~</span><span class="st"> </span>color) <span class="op">+</span>
@@ -225,39 +249,48 @@ caratVsPricePlot <span class="op">+</span><span class="st"> </span><span class="
 </section>
 <section id="barcharts-for-categorical-variables" class="level2">
 <h2>Barcharts for categorical variables</h2>
-<p>We can use barcharts to investigate relations between the categorical variables. Let’s start with individual barcharts. Here we look at a bar chart of the <code>color</code> variable:</p>
+<p>We can use bar charts to investigate relations between the categorical variables. Let’s start with individual bar charts. Here we look at a bar chart of the <code>color</code> variable:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color)</code></pre></div>
-<p>Question: How would we add color to the bars?</p>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p>We can add different colors depending on which diamond color the bar represents. This requires a new aesthetic:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill=</span>color))</code></pre></div>
-<p>Let us briefly talk about choosing the color palette to use. This is basically setting a <strong>scale</strong> for the fill variable. It would be a discrete scale. There are four different ways of specifying a discrete color scale:</p>
+<p>Note that the <code>aes</code> here shows up within the <code>geom_bar</code>. This means that it would only affect that <code>geom_bar</code> and not other <code>geom</code>s that we might add.</p>
+<p>Note also the difference between the two examples. In the first we used <code>fill=&quot;blue&quot;</code> to specify a fixed fill color for all bar charts. In the second, we wanted the fill color to actually correspond to a variable in the data set. This required an “aesthetic” specification.</p>
+<p>Let’s briefly talk about choosing the color palette to use. This is basically setting a <strong>scale</strong> for the fill variable. These would be added as new components, via the “plus” operator. It would be a discrete scale. There are four different ways of specifying a discrete color scale:</p>
 <ul>
-<li>Directly listing the colors: <code>scale_fill_manual(values=c(&quot;blue&quot;, &quot;green&quot;, &quot;orange&quot;, &quot;red&quot;, &quot;magenta&quot;, &quot;purple&quot;, &quot;pink&quot;))</code></li>
-<li>Using one of the preset “color brewer” palettes <code>scale_fill_brewer(palette=&quot;Set1&quot;)</code> (see options with <code>display.brewer.all()</code>)</li>
-<li>Using a grey-scale: <code>scale_fill_grey(start=0.3, end=0.7)</code></li>
-<li>Using a scale based on the HCL color wheel: <code>scale_fill_hue</code></li>
+<li><p>Directly listing the colors:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>,
+                           <span class="st">&quot;magenta&quot;</span>, <span class="st">&quot;purple&quot;</span>, <span class="st">&quot;pink&quot;</span>))</code></pre></div></li>
+<li><p>Using one of the preset “color brewer” palettes (see options with <code>display.brewer.all()</code>)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Set1&quot;</span>)</code></pre></div></li>
+<li><p>Using a grey-scale:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_fill_grey</span>(<span class="dt">start=</span><span class="fl">0.3</span>, <span class="dt">end=</span><span class="fl">0.7</span>)</code></pre></div></li>
+<li><p>Using a scale based on the HCL color wheel:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_fill_hue</span>(<span class="dt">l =</span> <span class="dv">40</span>)</code></pre></div></li>
 </ul>
 <p><strong>Practice</strong>: Try adding one of these now.</p>
-<p>Let us compare two categorical variables, say <code>cut</code> and <code>clarity</code>:</p>
+<p>Let’s compare two categorical variables, say <code>cut</code> and <code>clarity</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">fill=</span>clarity) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>cut, <span class="dt">fill=</span>clarity) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bar</span>()</code></pre></div>
-<p>Let’s make it stacked:</p>
+<p>Let’s we could have specifically specified that it is stacked:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">fill=</span>clarity) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>cut, <span class="dt">fill=</span>clarity) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;stack&quot;</span>)</code></pre></div>
 <p>And now 100% stacked:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">fill=</span>clarity) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>cut, <span class="dt">fill=</span>clarity) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;fill&quot;</span>)</code></pre></div>
+<p>We could have done a clustered bar chart using <code>position=&quot;dodge&quot;</code>.</p>
 <p>You can also try to combine this with a facet:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>cut, <span class="dt">fill=</span>clarity) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;fill&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>color)</code></pre></div>
-<p>We can also add lines at the bar locations, to follow the trends (not meant as an example of a good graph, just of the possibilities):</p>
+<p>We can also add lines at the bar locations, to follow the trends (not meant as an example of a good graph, just an illustration of the package’s capabilities):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>cut, <span class="dt">fill=</span>clarity) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;fill&quot;</span>) <span class="op">+</span>
@@ -277,61 +310,73 @@ caratVsPricePlot <span class="op">+</span><span class="st"> </span><span class="
 <h2>Pie Charts</h2>
 <p>Creating a pie chart is somewhat more elaborate. The main idea is as follows: We create a bar chart of one stacked bar, and then we make a change to polar coordinates, which wraps the y axis into a circle. This will in effect use the y axis as an angle specification, and the x axis as a radius specification.</p>
 <p>To be clear, we are not advocating use of pie charts; there are typically better ways to demonstrate the needed information. But examining how to do pie charts in <code>ggplot2</code> does demonstrate some interesting and useful ideas.</p>
-<p>As a first step, let us create a bar chart of one stacked bar based on cut. Each bar chart however needs an x variable. We “fake” such a variable by using <code>factor(1)</code>, which creates a single common level (labeled <code>1</code>) for all the data rows.</p>
+<p>As a first step, let’s create a bar chart of one stacked bar based on cut. Each bar chart however needs an x variable. We “fake” such a variable by using <code>factor(1)</code>, which creates a single common level (labeled <code>1</code>) for all the data rows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
-<span class="st">     </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut) <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_bar</span>()</code></pre></div>
-<p>The current graph has extra spaces on the bar sides, which is the default behavior for bar charts as the bars are not supposed to connect to each other. In our case this extra space will present problems when we turn the graph to polar coordinates, as it will create a whole in the middle. We will therefore eliminate the space by specifying the bar width. We will also remove the extraneous top and bottom spacing by setting the <code>expand</code> parameter of the <code>y</code> scale, which tells the scale how much to expand beyond its range of values (typically a minimum of 4% expansion is advisable, but again for pie charts that would cause problems):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut)) <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">width=</span><span class="dv">1</span>) <span class="op">+</span>
-<span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>))</code></pre></div>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_bar</span>()</code></pre></div>
+<p>The current graph has extra space on the bar sides, which is the default behavior for bar charts as the bars are not supposed to connect to each other. In our case this extra space will present problems when we turn the graph to polar coordinates, as it will create a hole in the middle. We will therefore eliminate the space by specifying the bar width. We will also remove the extraneous top and bottom spacing by setting the <code>expand</code> parameter of the <code>y</code> scale, which tells the scale how much to expand beyond its range of values (typically a minimum of 4% expansion is advisable, but again for pie charts that would cause problems):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">width=</span><span class="dv">1</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>))</code></pre></div>
 <p>Next we will remove the axis labeling and ticks, by specifying a theme:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut)) <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">width=</span><span class="dv">1</span>) <span class="op">+</span>
-<span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="op">+</span>
-<span class="st">     </span><span class="kw">theme_void</span>()</code></pre></div>
-<p>Lastly, we turn into polar coordinates. We also add borders to the bars/slices. We will store the graph in a variable for later use.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ourPieChart &lt;-
-<span class="st">     </span><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut)) <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">width=</span><span class="dv">1</span>, <span class="dt">color=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size=</span><span class="fl">0.2</span>) <span class="op">+</span>
-<span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="op">+</span>
-<span class="st">     </span><span class="kw">theme_void</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">coord_polar</span>(<span class="dt">theta=</span><span class="st">&quot;y&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">width=</span><span class="dv">1</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_void</span>()</code></pre></div>
+<p>Lastly, we convert to polar coordinates. We also add borders to the bars/slices. We will store the graph in a variable for later use.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ourPieChart &lt;-<span class="st"> </span><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">fill=</span>cut) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">width=</span><span class="dv">1</span>, <span class="dt">color=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size=</span><span class="fl">0.2</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_void</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">coord_polar</span>(<span class="dt">theta=</span><span class="st">&quot;y&quot;</span>)
 ourPieChart</code></pre></div>
-<p>To add percentages, a lot more work needs to be done. We can obtain the percentages as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds<span class="op">$</span>cut <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">prop.table</span>()</code></pre></div>
 <p>To incorporate the percentages as slice labels, we need a bit more work. We start by creating a new data frame that computes the needed counts and proportions:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cutCounts &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cut) <span class="op">%&gt;%</span>
-<span class="st">             </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>(), <span class="dt">percent=</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">n</span>()<span class="op">/</span><span class="kw">nrow</span>(diamonds))
+<span class="st">             </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span>
+<span class="st">             </span><span class="kw">mutate</span>(<span class="dt">percent =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>count <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(count))
 cutCounts</code></pre></div>
 <p>We will want to format that percent so that it has fewer digits and a percent symbol after it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cutCounts &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cut) <span class="op">%&gt;%</span>
-<span class="st">             </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>(), <span class="dt">percent=</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">n</span>()<span class="op">/</span><span class="kw">nrow</span>(diamonds)) <span class="op">%&gt;%</span>
+<span class="st">             </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span>
+<span class="st">             </span><span class="kw">mutate</span>(<span class="dt">percent =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>count <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(count)) <span class="op">%&gt;%</span>
 <span class="st">             </span><span class="kw">mutate</span>(<span class="dt">percent =</span> <span class="kw">format</span>(percent, <span class="dt">digits =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span>
 <span class="st">             </span><span class="kw">mutate</span>(<span class="dt">percent =</span> <span class="kw">paste</span>(percent, <span class="st">&quot;%&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))
 cutCounts</code></pre></div>
-<p>Then we add a new geom to our graph, which draws from this new different dataset rather than the dataset used in the pie chart:</p>
+<p>Then we add a new geom to our graph, which draws from the <code>cutCounts</code> dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ourPieChart <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_text</span>(<span class="dt">data=</span>cutCounts,
+<span class="st">    </span><span class="kw">geom_text</span>(cutCounts,
               <span class="kw">aes</span>(<span class="dt">x=</span><span class="fl">1.2</span>, <span class="dt">y=</span>count, <span class="dt">label=</span>percent),
               <span class="dt">position=</span><span class="kw">position_stack</span>(<span class="dt">vjust=</span><span class="fl">0.5</span>))</code></pre></div>
 </section>
 <section id="solving-the-mystery" class="level2">
 <h2>Solving the mystery</h2>
-<p>So let us try to now answer the question on why diamonds with worse color/clarity are actually more expensive. The answer lies in the effect of the diamond size (carat) on the price: Bigger diamonds are more expensive but also harder to get in the best color/clarity.</p>
-<p>So we would like to condition on the size as we examine the relationship between price and color. In order to do that we would need to “bin” the <code>carat</code> variable to turn into a categorical variable. We will do this in a moment.</p>
-<p>First let us restrict the carat range to exclude outliers. Here is the carat range:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x=</span>carat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">40</span>)</code></pre></div>
+<p>So let’s now try to answer the question of why diamonds with worse color/clarity are actually more expensive. The answer lies in the effect of the diamond size (carat) on the price: bigger diamonds are more expensive but also harder to get in the best color/clarity.</p>
+<p>So we would like to condition on the size as we examine the relationship between price and color. In order to do that we need to “bin” the <code>carat</code> variable to turn it into a categorical variable. We will do this in a moment.</p>
+<p>First let’s restrict the carat range to exclude outliers. Here is the carat range:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>carat) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">40</span>)</code></pre></div>
 <p>We will restrict our analysis to diamonds up to 2.5 carats. The <code>filter</code> method from <code>dplyr</code> can help us here.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span> (carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>), <span class="kw">aes</span>(<span class="dt">x=</span>carat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">40</span>)</code></pre></div>
-<p>Let us look at how these are distributed amongst the different colors:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>carat, <span class="dt">fill=</span>color)) <span class="op">+</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span> (carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">        </span><span class="kw">aes</span>(<span class="dt">x=</span>carat) <span class="op">+</span>
+<span class="st">        </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">40</span>)</code></pre></div>
+<p>Let’s look at how these are distributed amongst the different colors:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">        </span><span class="kw">aes</span>(<span class="dt">x=</span>carat, <span class="dt">fill=</span>color) <span class="op">+</span>
 <span class="st">        </span><span class="kw">geom_density</span>() <span class="op">+</span>
 <span class="st">        </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Blues&quot;</span>)</code></pre></div>
 <p>This graph shows us the overlapping density curves for each color. A better view will stack the curves (you can also try <code>position=&quot;stack&quot;</code> if you like):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>carat, <span class="dt">fill=</span>color)) <span class="op">+</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">        </span><span class="kw">aes</span>(<span class="dt">x=</span>carat, <span class="dt">fill=</span>color) <span class="op">+</span>
 <span class="st">        </span><span class="kw">geom_density</span>(<span class="dt">position=</span><span class="st">&quot;fill&quot;</span>) <span class="op">+</span>
 <span class="st">        </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Blues&quot;</span>)</code></pre></div>
 <p>We can see from this graph that most of the best-color diamonds are small.</p>
@@ -342,53 +387,68 @@ cutCounts</code></pre></div>
 <li><code>cut_width</code> lets you specify how wide the bins will be.</li>
 <li><code>cut_number</code> lets you specify a uniform bin frequency.</li>
 </ul>
-<p>Now we will facet the graph based on a carat grouping, using the <code>cut_interval</code> method:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price)) <span class="op">+</span>
+<p>Let’s facet the a boxplot of <code>price</code> vs <code>color</code> based on a <code>carat</code> grouping, using the <code>cut_interval</code> method:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">        </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">        </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">        </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="kw">cut_interval</span>(carat, <span class="dv">6</span>))</code></pre></div>
 <p>The vast difference in value ranges on the various panels makes it hard to clearly see the patterns. To that end, we would like to set each panel to have independent scales. reading the documentation of <code>facet_wrap</code> we learn about the <code>scales</code> parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price)) <span class="op">+</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(carat <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2.5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">        </span><span class="kw">aes</span>(<span class="dt">x=</span>color, <span class="dt">y=</span>price) <span class="op">+</span>
 <span class="st">        </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
 <span class="st">        </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="kw">cut_interval</span>(carat, <span class="dv">6</span>), <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p>We may return to this example in our regression session.</p>
+<p><strong>Practice:</strong> Make a similar paneled boxplot using <code>cut</code> in place of <code>color</code>. Adjust the x-axis labels (45 degree angle).</p>
 </section>
 <section id="further-practice" class="level2">
 <h2>Further Practice</h2>
-<p>In this section we will list a series of practice questions based off of the <code>gpdata</code> dataset from the previous session. If you do not have that dataset available, you can download the data from this file: <a href="../datasets/gpdata.RData">datasets/gpdata.RData</a>. Save the file and then upload it to your project directory, and use a command like <code>load(&quot;gpdata.RData&quot;)</code> within R to load the data into the environment. The <code>load</code> and <code>save</code> methods allow us to store R objects like that and load them on the other at a later time. They store information in an internal R-specific data format that is not human-readable, so for data sets it is best to use something like <code>write_csv</code> or <code>write_excel_csv</code> to export the data in a more broadly shareable format.</p>
-<p>The following questions assume that you have the <code>gpdata</code> dataset active.</p>
+<p>In this section we provide a series of practice questions based on the <code>gapdata</code> dataset from the previous session. If you do not have that dataset available, you can download the data from this file: <a href="../datasets/gapdata.RData">datasets/gapdata.RData</a>. Save the file and then upload it to your project directory, and use a command like <code>load(&quot;gapdata.RData&quot;)</code> within R to load the data into the environment.</p>
+<p>The <code>load</code> and <code>save</code> methods allow us to store R objects and reload them at a later time. They store information in an internal R-specific data format that is not human-readable, so for data sets it is best to use something like <code>write_csv</code> or <code>write_excel_csv</code> to export the data in a more broadly shareable format.</p>
+<p>The following questions assume that you have the <code>gapdata</code> dataset active.</p>
 <ol type="1">
 <li>Filter the data to focus on the most recent year, and draw a scatterplot of <code>life expectancy</code> compared to <code>income</code>, with the <code>population</code> determining the point size and with <code>region</code> determining the point <code>fill</code>. Use <code>shape=21</code> to have points that allow a boundary color via <code>color=&quot;black&quot;</code> for example, as well as an interior/fill color via <code>fill=region</code>. You should try to do this in steps:
 <ul>
-<li>Get a basic point graph of life expectancy against income, using <code>geom_point</code>.</li>
-<li>Add logarithmic scale on x.</li>
-<li>Add a <code>fill=region</code> aesthetic.</li>
-<li>Change the shape to 21, and add a fixed <code>color=&quot;black&quot;</code> setting to the <code>geom_point</code>.</li>
+<li>Get a basic point graph of life expectancy against income for 2015, using <code>geom_point</code>.</li>
+<li>Add a logarithmic scale on x (should be the income variable).</li>
+<li>Add a <code>fill=region</code> aesthetic to <code>geom_point</code>. This will not really have a visible effect until the next step.</li>
+<li>Add a <code>shape=21</code> setting to <code>geom_point</code>.</li>
 <li>Set the size aesthetic to equal the population.</li>
-<li>The population will now show up on the legend, and we may or may not want to have that. We can control this via a <code>scale_size_continuous</code> layer. For example <code>scale_size_continuous(guide=&quot;none&quot;)</code> will remove it from the legend.</li>
+<li>Try a different color palette, such as <code>scale_color_brewer(palette=&quot;Set1&quot;)</code>.</li>
+<li>Because <code>population</code> is used in an aesthetic, the population will now show up on the legend, and we may or may not want to do that. We can control this via a <code>scale_size_continuous</code> layer. For example <code>scale_size_continuous(guide=&quot;none&quot;)</code> will remove it from the legend.</li>
 </ul></li>
-<li>Still focusing on the most recent year, use <code>group_by</code> and <code>summarize</code> to compute average life expectancy, population and income values for each region, then draw a similar graph to the previous exercise.</li>
-<li>Group by region and year, and then use <code>summarize</code> as in 2. Use <code>arrange</code> to make sure the data is in chronological order. Then draw a similar graph as 2, but now including all the years. You can also add a <code>geom_line</code> component, using <code>group=region</code>, to show the evolution of these averages over time. Make sure to include it in the code before the <code>geom_point</code>. You will also want to set <code>size=1</code> or something like that to keep the lines small.</li>
-<li>Use <code>filter(country %in% c(&quot;Colombia&quot;, &quot;Honduras&quot;, &quot;Nicaragua&quot;, &quot;Haiti&quot;,  &quot;Mexico&quot;))</code> to restrict <code>gpdata</code> to these countries (you can add more if you like but there are some interesting patterns in the above), then arrange by year and graph life expectancy against year, using line plots grouped and colored by country. You should notice spikes in the graph at two particular points in time, related to natural disasters (one earthquake, one hurricane).</li>
+<li>Still focusing on the most recent year, use <code>group_by</code> and <code>summarize</code> to compute average life expectancy, population and income values for each region. Draw a similar graph to the previous exercise using this grouped data, making any necessary adjustments to the variable names. The resulting graph should have one point per region.</li>
+<li>Now, including <em>all</em> the years, group by region and year, and then use <code>summarize</code> as in 2. Use <code>arrange</code> to make sure the data is in chronological order. Then draw a similar graph as 2, but now including all the years. You can also add a <code>geom_line</code> component, using <code>group=region</code>, to show the evolution of these averages over time. Make sure to include it in the code before the <code>geom_point</code>. You can adjust the lines sizes by setting the <code>size</code> parameter.</li>
+<li>Use <code>filter(country %in% c(&quot;Colombia&quot;, &quot;Honduras&quot;, &quot;Nicaragua&quot;, &quot;Haiti&quot;,  &quot;Mexico&quot;))</code> to restrict <code>gapdata</code> to these countries (you can add more if you like but there are some interesting patterns in the above), then arrange by year and graph life expectancy against year, using line plots grouped and colored by country. You should notice spikes in the graph at two particular points in time, related to natural disasters (one earthquake, one hurricane). You may want to filter further, to focus on the years since 1990.</li>
 <li>Carry out a similar graph where we use <code>filter(region==&quot;South Asia&quot;)</code>. You should see a another number of interesting spikes related to natural disasters.</li>
-<li>A nice graph of life expectancy can be drawn for the middle east regions:
+<li>A nice graph of life expectancy vs year can be drawn for the middle east region:
 <ul>
-<li>Filter the data with <code>filter(region==&quot;Middle East &amp; North Africa&quot;)</code>, an restrict to years since 1980.</li>
+<li>Filter the data with <code>filter(region==&quot;Middle East &amp; North Africa&quot;)</code>, and restrict to years since 1980.</li>
 <li>Draw line and point plots (you may need to adjust the point size), colored and grouped by country, and using country as a <code>facet_wrap</code>. You should see some interesting patterns, both of spikes and of small slope. You may want to add a <code>theme(legend.position=&quot;none&quot;)</code> layer to omit the legend.</li>
 </ul></li>
-<li>For this exercise we will follow a more complex process: We start by computing for each country the relative increase in per-capita income from 2000 to 2010. This is mostly <code>dplyr</code> work:
+<li>For this exercise, we start by computing for each country the relative increase in per-capita income from 2000 to 2010. This is mostly <code>dplyr</code> work. Since this rather complex, you should pause after after each step to run the code and examine the results. You can pipe the result to a <code>View</code> for a quick look at it.
 <ul>
 <li>Filter the data to only include those two years. The predicate <code>year %in% c(2000, 2010)</code> can be used for that.</li>
 <li>Select the <code>country</code>, <code>region</code>, <code>income</code> and <code>year</code> variables only.</li>
-<li>Use the <code>spread</code> method to turn the <code>income</code> variable back in two columns, one for each year. The <code>spread</code> method expects two arguments, the “key” to use for the column names (here <code>year</code>) and the “value” from which to draw the values (here <code>income</code>).</li>
-<li>Use <code>mutate</code> to create a new variable that computes the relative increase from 2000 to 2010.</li>
+<li>Use the <code>spread</code> method to spread the <code>income</code> information over two columns, one for each year. The <code>spread</code> method expects two arguments, the “key” to use for the column names (here <code>year</code>) and the “value” from which to draw the values (here <code>income</code>).</li>
+<li>Use <code>mutate</code> to create a new variable, <code>relincr</code> that computes the relative increase in income from 2000 to 2010.</li>
 <li>Arrange the resulting data on this new variable.</li>
-<li>You may want to store the result of this process in a variable for easier future access.</li>
-<li>You may want to start with a basic histogram of the relative increases, and notice a number of countries at 1 or more.</li>
+<li>Give this result the <code>relIncreases</code> name for easier future use.</li>
+</ul>
+<p>Now we will make some graphs using this <code>relIncreases</code> dataset.</p>
+<ul>
+<li>Start with a basic histogram of the relative increases, and notice a number of countries at 1 (100%) or more, meaning that the income more than doubled in that decade.</li>
 <li>You may also want to try <code>geom_dotplot(binwidth=0.05)</code>.</li>
-<li>Another interesting plot is a <code>geom_point</code> where we use <code>reorder(country, relincr)</code> as a <code>y</code> aesthetic (<code>relincr</code> is our name for the relative increase variable, yours may vary). You may also want to facet wrap by the region and using <code>scales=&quot;free_y&quot;</code> on it. Another possible facet is by <code>cut_number(relincr, 3)</code> to split the range of values into three pieces with equal number of elements.</li>
-<li><p>Here’s one possible end result graph to check out:</p>
+<li>Now make a plot of <code>relIncreases</code> using <code>geom_point</code>, using <code>reorder(country, relincr)</code> as a y-aesthetic to order the countries by their increase. Give <code>geom_point</code> an aesthetic to color the points by region. Use custom figure size (R chunk option) to get a better view.
+<ul>
+<li>Variation 1: Add a facet_wrap by region with scales=“free_y” to allow each y-scale to vary independently of the others.</li>
+<li>Variation 2: Add a facet_grid by region: <code>facet_grid(region~., scales=&quot;free_y&quot;, space=&quot;free_y&quot;)</code>. Notice how the output from facet_grid differs from that of facet_wrap.</li>
+<li>Variation 3: Add a facet_wrap by <code>cut_number(relincr)</code> to split the range of values into three bins of equal frequency and display the resulting data in three panels.</li>
+</ul></li>
+<li><p>Finally, here’s one possible end result graph to check out:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">relIncreases <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span>
 <span class="st">        </span><span class="kw">aes</span>(<span class="dt">x=</span>relincr, <span class="dt">y=</span><span class="kw">reorder</span>(country, relincr), <span class="dt">color=</span>region) <span class="op">+</span>
@@ -398,6 +458,365 @@ cutCounts</code></pre></div>
 <span class="st">        </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</code></pre></div></li>
 </ul></li>
 </ol>
+</section>
+<section id="appendix" class="level2">
+<h2>Appendix</h2>
+<section id="available-aesthetics" class="level3">
+<h3>Available Aesthetics</h3>
+<p>You can learn more about the available aesthetics for each kind of geom <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html">here</a>. Inside an <code>aes</code> call these can be bound to data variables. Outside of it they can be given specific values.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">color</td>
+<td style="text-align: left;">The color of the elements (boundary color when applicable)</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">fill</td>
+<td style="text-align: left;">The fill color for elements that allow it</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">size</td>
+<td style="text-align: left;">The relative size of the element</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">stroke</td>
+<td style="text-align: left;">The size of line strokes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">shape</td>
+<td style="text-align: left;">The shape of the points</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">weight</td>
+<td style="text-align: left;">The weight to assign to counts in bar charts</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">group</td>
+<td style="text-align: left;">The values to use to group points that are part of the same line</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">linetype</td>
+<td style="text-align: left;">The type of line to be drawn (solid, dashed etc)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">linejoin</td>
+<td style="text-align: left;">The way that the line segments are to join where they meet</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">lineend</td>
+<td style="text-align: left;">The way that the line segments end</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">x</td>
+<td style="text-align: left;">The values assigned to the x-axis</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">y</td>
+<td style="text-align: left;">The values assigned to the y-axis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">xend</td>
+<td style="text-align: left;">The x coordinate of the end of the segment</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">yend</td>
+<td style="text-align: left;">The y coordinate of the end of the segment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">label</td>
+<td style="text-align: left;">The label to be used for text elements</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">family</td>
+<td style="text-align: left;">The font family to use</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">fontface</td>
+<td style="text-align: left;">The emphasis that is put on the font (normal, italic, bold)</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">hjust</td>
+<td style="text-align: left;">Horizontal justification of the text center relative to coordinates</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">vjust</td>
+<td style="text-align: left;">Vertical justification of the text center relative to coordinates</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="available-geometries" class="level3">
+<h3>Available Geometries</h3>
+<p>See <a href="https://ggplot2.tidyverse.org/reference/index.html#section-layer-geoms">this page</a> for a full list and more details. This is by no means a complete list, check the webpage for more.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Empty Graph</td>
+<td style="text-align: left;"><code>geom_blank</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Reference Lines</td>
+<td style="text-align: left;"><code>geom_abline</code>, <code>geom_hline</code>, <code>geom_vline</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Bar Chart</td>
+<td style="text-align: left;"><code>geom_bar</code>, <code>geom_col</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2d bin count heatmap</td>
+<td style="text-align: left;"><code>geom_bin2d</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Box and whiskers plot</td>
+<td style="text-align: left;"><code>geom_boxplot</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2d Contours</td>
+<td style="text-align: left;"><code>geom_contour</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Point Plot</td>
+<td style="text-align: left;"><code>geom_point</code>, <code>geom_count</code>, <code>geom_jitter</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Density Plot</td>
+<td style="text-align: left;"><code>geom_density</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Dot Plot</td>
+<td style="text-align: left;"><code>geom_dotplot</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Horizontal Error Bar</td>
+<td style="text-align: left;"><code>geom_errorbarh</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Histogram</td>
+<td style="text-align: left;"><code>geom_histogram</code>, <code>geom_freqpoly</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Vertical Intervals and Error Bars</td>
+<td style="text-align: left;"><code>geom_crossbar</code>, <code>geom_errorbar</code>, <code>geom_linerange</code>, <code>geom_pointrange</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Maps</td>
+<td style="text-align: left;"><code>geom_map</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Line Plot</td>
+<td style="text-align: left;"><code>geom_path</code>, <code>geom_line</code>, <code>geom_step</code>, <code>geom_segment</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Fits</td>
+<td style="text-align: left;"><code>geom_smooth</code>, <code>geom_lm</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="some-extra-stats" class="level3">
+<h3>Some extra Stats</h3>
+<p>Most <code>stat</code> functions are simply tied to a geom and used that way. But some stats are worth mentioning:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><code>stat_ecdf</code></td>
+<td style="text-align: left;">Compute empirical cumulative distribution</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>stat_ellipse</code></td>
+<td style="text-align: left;">Compute normal confidence ellipses</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>stat_function</code></td>
+<td style="text-align: left;">Compute function for each x value</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>stat_identity</code></td>
+<td style="text-align: left;">Leave data as is</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>stat_summary_2d</code></td>
+<td style="text-align: left;">Bin and summarise in 2d (rectangle)</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>stat_summary_hex</code></td>
+<td style="text-align: left;">Bin and summarise in 2d (hexagons)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>stat_summary</code></td>
+<td style="text-align: left;">Summarise y values at unique x</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>stat_summary_bin</code></td>
+<td style="text-align: left;">Summarise y values at binned x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>stat_unique</code></td>
+<td style="text-align: left;">Remove duplicates</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="positioning-adjustments" class="level3">
+<h3>Positioning adjustments</h3>
+<p>These are useful for moving objects around to avoid their overlaps. This is all from <a href="https://ggplot2.tidyverse.org/reference/index.html#section-layer-position-adjustment">this page</a>.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><code>position_dodge</code>, <code>position_dodge2</code></td>
+<td style="text-align: left;">Dodge overlapping objects side-to-side</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>position_identity</code></td>
+<td style="text-align: left;">Don’t adjust position</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>position_jitter</code></td>
+<td style="text-align: left;">Jitter points to avoid overplotting</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>position_jitterdodge</code></td>
+<td style="text-align: left;">Simultaneously dodge and jitter</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>position_nudge</code></td>
+<td style="text-align: left;">Nudge points a fixed distance</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>position_stack</code>, <code>position_fill</code></td>
+<td style="text-align: left;">Stack overlapping objects on top of each another</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="annotations" class="level3">
+<h3>Annotations</h3>
+<p><a href="https://ggplot2.tidyverse.org/reference/index.html#section-layer-annotations">Annotations</a> use fixed values, rather than data points.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Reference Lines</td>
+<td style="text-align: left;"><code>geom_abline</code>, <code>geom_hline</code>, <code>geom_vline</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Generic annotation layer</td>
+<td style="text-align: left;"><code>annotate</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Log tick marks</td>
+<td style="text-align: left;"><code>annotation_logticks</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Maps</td>
+<td style="text-align: left;"><code>annotation_map</code>, <code>borders</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Rectangular Tiling</td>
+<td style="text-align: left;"><code>annotation_raster</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="scales" class="level3">
+<h3>Scales</h3>
+<p>See <a href="https://ggplot2.tidyverse.org/reference/index.html#section-scales">here</a>. Each <code>color</code> method also has a corresponding <code>fill</code> method, and each <code>x</code> has a corresponding <code>y</code>.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Axis Labels, Legend, Titles</td>
+<td style="text-align: left;"><code>labs</code>, <code>xlab</code>, <code>ylab</code>, <code>ggtitle</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Scale Limits</td>
+<td style="text-align: left;"><code>lims</code>, <code>xlim</code>, <code>ylim</code>, <code>expand_limits</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Transparency Scales</td>
+<td style="text-align: left;"><code>scale_alpha</code>, <code>scale_alpha_continuous</code>, <code>scale_alpha_discrete</code>, <code>scale_alpha_ordinal</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Color Brewer Package Scales</td>
+<td style="text-align: left;"><code>scale_color_brewer</code>, <code>scale_fill_brewer</code>, <code>scale_color_distiller</code>, <code>scale_fill_distiller</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Continuous Color Scales</td>
+<td style="text-align: left;"><code>scale_color_continuous</code>, <code>scale_fill_continuous</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Position Scales</td>
+<td style="text-align: left;"><code>scale_x_continuous</code>, <code>scale_x_log10</code>, <code>scale_x_reverse</code>, <code>scale_x_sqrt</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Date/Time Scales</td>
+<td style="text-align: left;"><code>scale_x_date</code>, <code>scale_x_datetime</code>, <code>scale_x_time</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Discrete Data Scales</td>
+<td style="text-align: left;"><code>scale_x_discrete</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Gradient Color Scales</td>
+<td style="text-align: left;"><code>scale_color_gradient</code>, <code>scale_color_gradient2</code>, <code>scale_color_gradientn</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Gray Scale</td>
+<td style="text-align: left;"><code>scale_color_grey</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Hue</td>
+<td style="text-align: left;"><code>scale_color_hue</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Line Patterms</td>
+<td style="text-align: left;"><code>scale_linetype</code>, <code>scale_linetype_continuous</code>, <code>scale_linetype_discrete</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Manual Scales</td>
+<td style="text-align: left;"><code>scale_color_manual</code>, <code>scale_size_manual</code>, <code>scale_shape_manual</code>, etc</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Shape Scale</td>
+<td style="text-align: left;"><code>scale_shape</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Radius Scales</td>
+<td style="text-align: left;"><code>scale_radius</code>, <code>scale_size</code>, <code>scale_size_area</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="coordinate-systems" class="level3">
+<h3>Coordinate Systems</h3>
+<p>See <a href="https://ggplot2.tidyverse.org/reference/index.html#section-coordinate-systems">here</a></p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Cartesian coordinates</td>
+<td style="text-align: left;"><code>coord_cartesian</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Cartesian coordinates with fixed “aspect ratio”</td>
+<td style="text-align: left;"><code>coord_fixed</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Cartesian coordinates with x and y flipped</td>
+<td style="text-align: left;"><code>coord_flip</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Map projections</td>
+<td style="text-align: left;"><code>coord_map</code> <code>coord_quickmap</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Polar coordinates</td>
+<td style="text-align: left;"><code>coord_polar</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Transformed Cartesian coordinate system</td>
+<td style="text-align: left;"><code>coord_trans</code></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 </section>
 </body>

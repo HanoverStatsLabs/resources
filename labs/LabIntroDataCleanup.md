@@ -1,4 +1,4 @@
-# Lab: Data Preparation
+# Advanced Lab 1: Data Preparation
 
 ## Introduction
 
@@ -205,7 +205,7 @@ alldata <- alldata %>% mutate(
 ```
 The backticks around the numerical levels `1`, `2` etc may seem weird. Whenever a value needs to be used on the left-hand-side of an equals sign, and it is not a "proper name" (meaning starts with a letter and has no spaces or other punctually), we need to enclose it in backticks. We will use this approach again later on when we have a situation with one of the names being the two words `life expectancy`.
 
-We are now ready to do some work with this data. Here are two examples of graphs we can produce; you'll see more about this sort of graph in the [graphing lab](LabIntroGgplot.md).
+We are now ready to do some work with this data. Here are two examples of graphs we can produce; you'll see more about this sort of graph in the [graphing lab](LabIntroggplot.md).
 ```r
 ggplot(alldata) +
     aes(x=time, y=value, group=subject, color=subject) +
@@ -278,9 +278,9 @@ ggplot(relativedata) +
 
 ## Practice
 
-You likely have a dataset of your own that you might want to work with to practice the above. If you don't, then here's a possible project:
+You likely have a dataset of your own that you might want to work with to practice the above. If you don't, then here's a possible project (make sure to start a new project either way):
 
-1. The [GapMinder](www.gapminder.org) website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually an R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
+1. The [GapMinder](https://www.gapminder.org) website has a wealth of information on each country over many years. We will suggest some analyses to perform but you are free to pursue a different analysis. There is actually an R package that can load a lot of this data in more ready form, but we will use this as an opportunity to access data from the web and from multiple sources.
     - Start by creating a new project. You may also want to start an RMarkdown document to keep your work organized.
     - Next we will access the data sets from the website, `https://www.gapminder.org/data/`. On that page you can see a list of datasets, and you can use the search box at the upper right of the first table to search for a variable of interest (we will discuss what those are for us in a moment). You have two options: You can either download the file and include it in your project, or you can use the file's URL directly into R. We will recommend the first approach in this instance, but keep in mind that the second path is possible.
 2. We will use the `life expectancy (years)` variable.
@@ -295,53 +295,72 @@ You likely have a dataset of your own that you might want to work with to practi
 4. We will also want to get the total population of each country, stored in a dataset named "Population, total". Use similar steps for it.
 
     (Optional step) If you are feeling adventurous, you can pursue the possibility of writing a function to make these steps easier, since we more or less repeated the same steps three times.
-5. Now we want to bring these three datasets together, by matching entries on the country and year. The `inner_join` function can help you do that; make sure to look at its documentation, or the `dplyr` cheatsheet. Store the result in a variable (we called it `gpdata`).
+5. Now we want to bring these three datasets together, by matching entries on the country and year. The `inner_join` function can help you do that; make sure to look at its documentation, or the `dplyr` cheatsheet. Store the result in a variable (we called it `gapdata`).
 
     You'll need to do this in two steps, as `inner_join` only joins two datasets at a time. So you'll start with one dataset, pipe it into an `inner_join` with the second dataset, and then pipe the result into another `inner_join` with the third dataset. So your code might look something like this:
     ```r
-    gpdata <- lifeExpectancy %>%
+    gapdata <- lifeExpectancy %>%
         inner_join(income, by=....) %>%
         inner_join(population, by=....)
     ```
-    You have a choice to make here, actually, `inner_join` vs `full_join`. `full_join` will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use `inner_join` instead, which will only keep the entries where both the income and the life expectancy are known.
+    You have a choice to make here, actually, `inner_join` vs `full_join`. If you use `full_join`, you will include entries for country and year combinations where one of the two values of income and life expectancy is missing. This gives us more data to work with, but we might end up having to throw away some values later on anyway when trying to do graphs or analysis and so on. We will use `inner_join` instead, which will only keep the entries where both the income and the life expectancy are known.
 
-#### A challenge: Matching Country Names
+    If you have done this correctly, you should be seeing about $15,000$ observations on $5% variables.
 
-Warning: This section is somewhat challenging, as it attempts to reconcile differences in country names between different datasets. The end result is simply to have a `region` variable associated with each country. Feel free to skip this on a first go, and straight to the "practice continued" section.
+### Some questions to try out
 
-We will incorporate a variable for the various regions of the world. As this variable does not appear to be available in the gapminder data, we will need to get it from another source. In this instance, the world bank seems to include it in some of their available datasets: [http://databank.worldbank.org/data/download/WDI_excel.zip](http://databank.worldbank.org/data/download/WDI_excel.zip).
-    - Download the file and unzip it, then upload the corresponding Excel to your project folder.
-    - The second sheet, named `country`, contains the information we need. Load that into a variable, we called it `wdi`.
-    - Since we only care about the country name and continent, use `select` to only choose the four columns `Short Name`, `Table Name`, `Long Name`, `Region`.
+This ends the "data tidying part", except for one more challenging addition that we'll discuss after these problems. We can now do some analyses on these numbers.
 
-The challenging part now is to match the country names between the two datasets, and the conventions on naming some of the countries. For instance, let us start by making a list of all the countries in `gpdata` and in the `Short Name` and `Table Name` entries of the `wdi` data, and look at their difference:
+1. Use `arrange` (maybe along with `head` or `tail`) to reorder the rows in the gapdata and discover what the most recent year in the data is. You can also find that out from the viewer, or you can use `summarize` or `pluck` along with the `max` function.
+2. Use `filter` to consider only the subset of the data that relates to the most recent year, then `arrange` to order the data according to income, and find the countries with the 5 highest and 5 lowest per capita incomes.
+3. For each country, determine how many rows of data we have for that country, and visualize the results with an appropriate graph.
+4. Determine for each year the country with the highest per-capita income. You can do this with a `group_by` and a `filter`.
+5. Compute the total world population per year.
+6. Compute total income for each row by multiplying together the population and income variables, and add that as a new variable.
+
+### A challenge: Matching Country Names
+
+Warning: This section is somewhat challenging, as it attempts to reconcile differences in country names between different datasets. The end result is simply to have a `region` variable associated with each country. Feel free to skip this on a first go.
+
+We will incorporate a variable for the various regions of the world. As this variable does not appear to be available in the GapMinder data, we will need to get it from another source. In this instance, the World Bank seems to include it in some of their available datasets:
+
+> [http://databank.worldbank.org/data/download/WDI_excel.zip](http://databank.worldbank.org/data/download/WDI_excel.zip)
+
+- Download the file and extra the contained Excel file, then upload it to your project folder.
+- The second sheet, named `country`, contains the information we need. Load that into a variable, we called it `wdi`.
+- Since we only care about the country name and region, use `select` to only choose the four columns `Short Name`, `Table Name`, `Long Name`, `Region`.
+
+The challenging part now is to match the country names between the two datasets, which can be different due to different conventions on naming some of the countries. For instance, let us start by making a list of all the countries in `gapdata` and in the `Table Name` entry of the `wdi` data, and look at their difference:
 
 ```r
-gpCountries <- gpdata %>% pluck("country") %>% unique() %>% sort()
+gapCountries <- gapdata %>% pluck("country") %>% unique() %>% sort()
 wdiCountries <- wdi %>% pluck("Table Name") %>% unique() %>% sort()
-setdiff(gpCountries, wdiCountries)   # names in gpCountries but not wdiCountries
+setdiff(gapCountries, wdiCountries)   # names in gapCountries but not wdiCountries
 ```
 
-We will see a number of countries missing that really shouldn't be missing. We could also try to use the `Short Name` column instead, but if you do that you'll notice that it too is missing some countries.
+You should see a number of countries in that list, meaning that they don't show up as such in `wdiCountries`, but that really must be somewhere there, maybe with a different representation. We could also try to use the `Short Name` column instead, but if you do that you'll notice that it too is missing some countries.
 
-We could of course simply edit the Excel sheet and change the country names. But then we may need to do that each time we want to update the data from the originals. Manually changing the Excel sheets is not very sustainable in the long run. So we will look for a programmatic way to do it. Here's the steps we will take:
+Before we move on, you might want to `View` the `wdi` data and search for those missing countries in the data view, to see how they show up.
 
-- We will create a new column `gpName` in the `wdi` data that contains the `Short Name` if that was in the `gpCountries` list, or the `Table Name` if *that* was in the `gpCountries` list, or otherwise it is `NA` (missing value).
-- Next we will find out which countries in `gpdata` do not have a corresponding entry. Hopefully that will be a small list. We will then manually write a small dataset that contains an appropriate matching name for those countries, by inspecting the names that exist in the `Short Name` column.
-- Then we will join this spreadsheet with the `wdi` to fill in the remaining `gpName` entries.
-- Lastly, we will then join our `gpdata` with this updated `wdi` spreadsheet in order to get the continent names.
+We could of course simply edit the Excel sheet and change the country names. But then we may need to do that each time we want to update the data from the originals. Manually changing the Excel sheets is unsustainable in the long run. So we will look for a programmatic way to do it. Here are the steps we will take:
 
-So let's start with the first part, adding a new column in `wdi`. We can use the `case_when` method for this: It tries a series of alternatives in turn and uses the first that matches:
+- We first create a new column in the `wdi` data to hold either the `Table Name` or the `Short Name`, whichever one actually matches the country name in the `gapData`. We will call this new column `gapName`.
+- Next we will find out which countries in `gapdata` do not have a corresponding entry in the `gapName` column. Hopefully that will be a small list. We will then manually create a small dataset that contains an appropriate matching name for each of those countries, by inspecting the names that exist in the `Table Name` column.
+- Then we will join this dataset with the `wdi` to fill in the remaining `gapName` entries.
+- Lastly, we will join our `gapdata` with this updated `wdi` dataset in order to get the region names into the `gapdata`.
+
+So let's start with the first part, adding a new column in `wdi`. We can use the `case_when` method for this: It tries a series of alternatives in turn and uses the first one that matches:
 ```r
-wdi <- wdi %>% mutate(gpName = case_when(
-  `Table Name` %in% gpCountries     ~ `Table Name`,
-  `Short Name` %in% gpCountries     ~ `Short Name`,
-  TRUE                              ~ as.character(NA)))
+wdi <- wdi %>% mutate(gapName = case_when(
+  `Table Name` %in% gapCountries   ~ `Table Name`,
+  `Short Name` %in% gapCountries   ~ `Short Name`,
+  TRUE                             ~ as.character(NA)))
+setdiff(gapCountries, wdi$gapName)
 ```
-Now we need to create a little dataset that contains these countries and their appropriate `wdi` entries. We will use the `tribble` command for that, which allows us to nicely align the values vertically. We do need to use the search feature in the data view in order to find what the appropriate names would be:
+So there are 12 countries in the `gapdata` which do not yet have a matching `gapName` in the `wdi` data. Let's make a small dataset that contains these countries and their appropriate `wdi` entries. We will use the `tribble` command for that, which allows us to nicely align the values vertically. We used the search feature in the data view in order to find what the appropriate names would be:
 ```r
 countryNames <- tribble(
-  ~gpName, ~`Short Name`,
+  ~gapName, ~`Short Name`,
   "Bahamas", "The Bahamas",
   "Cape Verde", "Cabo Verde",
   "Cote d'Ivoire", "Côte d'Ivoire",
@@ -357,34 +376,45 @@ countryNames <- tribble(
 ```
 We could not find an entry for Taiwan in the `wdi` data. We will need to assign its region manually after we do all the needed joins.
 
-Now we want to join this variable into the `wdi` data. This is a bit tricky: A join sounds like the right thing to do, with `Short Name` being the common variable. But the way R does this is to create two separate columns: One for the `gpName`s from `wdi` and another for those from `countryNames`. We need to use `coalesce` along with `mutate` to merge the two together.
+Now we want to join the `countryNames` dataset into the `wdi` data. This is a bit tricky: A join sounds like the right thing to do, with `Short Name` being the common variable. But the way R does this is to create two separate columns, one for the `gapName`s from `wdi` and another for those from `countryNames`. We need to use `coalesce` along with `mutate` to merge the two together (you mean want to check out the `coalesce` function's documentation and possibly look at the result with just the `full_join` to see why the `mutate` step is needed).
 ```r
 wdi2 <- wdi %>% full_join(countryNames, by="Short Name") %>%
-  mutate(gpName = coalesce(gpName.x, gpName.y))
-setdiff(gpCountries, wdi2$gpName)
+  mutate(gapName = coalesce(gapName.x, gapName.y))
+setdiff(gapCountries, wdi2$gapName)
 ```
-You should now see the `setdiff` method return a `character(0)` value, meaning there are no entries. Good, that means each value in `gpCountries` is now accounted for in `wdi`. We will still need to deal with Taiwan.
+You should now see the `setdiff` method return only Taiwan. Good, that means each value in `gapCountries` is now accounted for in `wdi`. We will still need to deal with Taiwan.
 
-Now, we want to merge in the region values from `wdi` into our `gpdata` set. This will be a simple join, matching the `country` to the `gpName`. But we only want to bring in the `region` variable, so before joining we will select only a few columns from `wdi` (`left_join` here tells it to ignore entries in `wdi` that don't have a matching value in `gpdata`):
+Now, we want to merge in the region values from `wdi` into our `gapdata` set. This will simply be a join, matching the `country` to the `gapName`. But we only want to bring in the `region` variable, so before joining we will select only a few columns from `wdi2` (`left_join` here tells it to ignore entries in `wdi2` that don't have a matching value in `gapdata` but to include entries in `gapdata` that don't have matching value in `wdi2`. This way Taiwan is not left out):
 ```r
-gpdata <- gpdata %>% left_join(wdi %>% select(gpName, Region),
-    by=c(country="gpName")) %>%
+gapdata <- gapdata %>%
+    left_join(wdi2 %>% select(gapName, Region),
+        by=c("country"="gapName"))
+# Now some cleanup and adding Taiwan
+gapdata <- gapdata %>%
     rename(region="Region") %>%
     mutate(region=replace(region, country=="Taiwan", "East Asia & Pacific")) %>%
     mutate(region=factor(region))
 ```
+The `by` part of the `left_join` method might look different than before. This is because the two columns we wish to join on have different names in the two datasets. The `by=c("country"="gapName")` syntax tells it to match the `country` variable in the first dataset to the `gapName` variable in the second dataset.
+
 Notice the first `mutate` line above. It tells it to replace the `region` variable by using whatever was in the `region` variable before but whenever the country is Taiwan it should set the region to be East Asia and Pacific.
 
-And with that, we should be done: In order to check, try to use `group_by` region and `summarize` using `n_distinct` to count each country only once. If done correctly, this should give you a reasonable count of countries for each region (for example, 3 countries in north america).
+Phew, and with that, we should be done! In order to check, try to use `group_by` region and `summarize` using `n_distinct` to count each country only once. If done correctly, this should give you a reasonable count of countries for each region (for example, 3 countries in North America).
 
+As practice, you can now compute total populations for each region of the world for each year.
 
-#### Practice Continued
+### Addendum: Saving data
 
-This ends the "data tidying part". We can now do some analyses on these numbers.
+Phew, after all this work we should save this dataset for future use. We can of course save it as a csv file, which would be convenient if you wanted to share it with non-R users. We can do that with the `write_csv` and `write_excel_csv` methods. You should prefer these methods to the similarly named `write.csv` and `write.excel`, and you can look at their documentation for details. An example call might be:
+```r
+getwd()    # Check to see what the current directory is. This is where files will be saved
+write_csv(gapdata, "gapdata.csv", na="")
+```
 
-1. Use `arrange` to reorder the values and discover what the most recent year in the data is. You can also find that out from the viewer, or you can use `summarize` or `pluck` along with the `max` function.
-2. Use `filter` to consider only the subset of the data that relates to the most recent year, then `arrange` to order the data according to income, and find the countries with the 5 highest and 5 lowest per capita incomes.
-3. For each country, determine the number of data entries present.
-4. Determine for each year the country with the highest per-capita income. You can do this with a `group_by` and a `filter`.
-5. (If you did the region part above) Compute total populations for each region of the world and each year.
-6. Compute total income for each row by multiplying together the population and income variables, and add that as a new variable.
+Another option is to save the data set as an R object. You can in fact save any kind of R object, for instance model fits, summary results etc. You can do this with the `save` command, and the objects can be then loaded back via the `load` command:
+```r
+save(gapdata, file="gapdata.RData")
+```
+It is conventional to use `RData` for the extension of such a file.
+
+We should point out however, that sharing data this way does not show the work that was used to produce those data, compared to providing an RMarkdown file or an R script, which both show all the processing steps.
