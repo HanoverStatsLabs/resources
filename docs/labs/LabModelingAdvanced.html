@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="advanced-lab-4-more-linear-modeling-and-anova" class="level1">
+<h1>Advanced Lab 4: More Linear Modeling and ANOVA</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
+<p>We will now start considering more complex models, with more than one predictor. We will start with a model including all the predictors:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitAll &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>., <span class="dt">data=</span>targetingFinal)
+<span class="kw">summary</span>(fitAll)</code></pre></div>
+<p>Let’s take a closer look at this model. We have:</p>
+<ul>
+<li>the intercept</li>
+<li>a term for the subject ID. We should probably remove this.</li>
+<li><code>iat</code></li>
+<li>a factor level for male <code>gender</code>. Presumably the female case is the base case.</li>
+<li>factor levels for age, with 18 being the base case.</li>
+<li>a factor level for <code>race</code> being white. Presumably the base case is race being black.</li>
+<li>a factor level for the <code>weapon</code> value being set to unarmed, with base case being armed.</li>
+<li>a factor level for action <code>incorrect</code>, with base case being the correct action.</li>
+</ul>
+<p>Calling <code>anova</code> on the model will tell us about each factor as a whole, and whether its contribution is statistically significant:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fitAll)</code></pre></div>
+<p>We see that the contribution with ther largest P-value, and hence smaller effect, is from the subject ID. This is good, there is no reason whatsoever that the subject ID should have anything to do with the data. Let’s remove it and reconsider:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubj &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>.<span class="op">-</span>subject, <span class="dt">data=</span>targetingFinal)
+<span class="kw">summary</span>(fitNoSubj)
+<span class="kw">anova</span>(fitNoSubj)</code></pre></div>
+<p>We can see that the residual standard error did not change almost at all with the removal of the <code>subject</code> variable. We see a number of other variables that are potentially not influential.</p>
+<p>One powerful utility that R offers is the ability to remove one variable at a time from a model, and consider all the resulting smaller models. The <code>drop1</code> method is one way to proceed for that:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">drop1</span>(fitNoSubj)</code></pre></div>
+<p>What we see is the effect of removing each of the variables, in terms of how much the RSS will change. The AIC column portrays the “Akaike Information Criterion”. The AIC is a number that takes into consideration the RSS but also penalizes models based on the number of parameters used. It is technically given by the formula: <span class="math display">\[-2\textrm{log-likelihood} + 2p\]</span> A larger model will fit the data better, and so will have a larger log-likelihood and therefore a smaller value for <span class="math inline">\(-2\textrm{log-likelihood}\)</span>. But it will also have more parameters, so <span class="math inline">\(2p\)</span> will be larger. The formula aims to balanced the two: The smaller the AIC the more you have gained by the bigger model, while also accounting for how bigger the model was. A model with smaller AIC is fitting the data “more economically”. There is often an indeterminate additive constant involved in AIC computations, so they are only appropriate for comparisons between models.</p>
+<p>The first line, marked <code>&lt;none&gt;</code>, contains the full model, while the remaining lines indicate the effect with the corresponding predictor removed.</p>
+<p>In this case we see that the biggest gain in AIC can be obtained by dropping the <code>age</code> variable. This would make sense since that variable, coded as a factor variable, uses 5 parameters. Let’s remove it and consider the model again:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubjNoAge &lt;-<span class="st"> </span>fitNoSubj <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>age)
+<span class="kw">summary</span>(fitNoSubjNoAge)
+<span class="kw">anova</span>(fitNoSubjNoAge)
+<span class="kw">drop1</span>(fitNoSubjNoAge)</code></pre></div>
+<p>We now see <code>race</code> as a next possible variable to remove.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubjNoAgeNoRace &lt;-<span class="st"> </span>fitNoSubjNoAge <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>race)
+<span class="kw">summary</span>(fitNoSubjNoAgeNoRace)
+<span class="kw">anova</span>(fitNoSubjNoAgeNoRace)
+<span class="kw">drop1</span>(fitNoSubjNoAgeNoRace)</code></pre></div>
+<p>Removing gender seems to be the next step:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubjNoAgeNoRaceNoGender &lt;-<span class="st"> </span>fitNoSubjNoAgeNoRace <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>gender)
+<span class="kw">summary</span>(fitNoSubjNoAgeNoRaceNoGender)
+<span class="kw">anova</span>(fitNoSubjNoAgeNoRaceNoGender)
+<span class="kw">drop1</span>(fitNoSubjNoAgeNoRaceNoGender)</code></pre></div>
+<p>We now have a model where removing a variable does not provide an AIC improvement.</p>
+<p>We can also consider adding models in, one at a time:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">add1</span>(fitNoSubjNoAgeNoRaceNoGender, <span class="dt">scope=</span><span class="op">~</span>.<span class="op">+</span>race<span class="op">+</span>gender<span class="op">+</span>age)</code></pre></div>
+<p>We see that none of them is an improvement.</p>
+</section>
+<section id="cleanup" class="level2">
+<h2>CLEANUP</h2>
+<p>We will leave it as is for now as the data did not show any signs of extreme skewness. Here is a starting plot that shows the density distribution for <code>time</code> for armed and unarmed weapons, and with different graphs for each race and gender combination:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">color=</span>weapon) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_density</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(race<span class="op">~</span>gender)</code></pre></div>
+<p>We can see that mean reaction times were slower for the unarmed weapons.</p>
+<p>Let us compute some numerical summaries:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingCorrect <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(race, weapon, gender) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(time),
+                   <span class="dt">se=</span><span class="kw">sd</span>(time)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">n</span>()))</code></pre></div>
+<p>We can also plot these:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>weapon, <span class="dt">y=</span>time, <span class="dt">color=</span>race) <span class="op">+</span>
+<span class="st">    </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span>mean_se, <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.2</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</code></pre></div>
+<p>We probably expected the marked difference in reaction times between armed and unarmed subjects. For female subjects, the race of the subject seems to play a small factor.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>race<span class="op">*</span>weapon, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit1)
+<span class="kw">anova</span>(fit1)</code></pre></div>
+<p>We can see a significant overall effect, but we can also see that the interaction terms are not significant. We remove them from the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>race<span class="op">+</span>weapon, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit2)
+<span class="kw">anova</span>(fit2)</code></pre></div>
+<p>We can compare the two models to see if there are differences, and there is no significant difference:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit1, fit2)</code></pre></div>
+<p>We can get some default diagnostics from plotting the fit:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(fit2)</code></pre></div>
+<p>The residuals appear to be normal and with constant variance. We can visualize their effect against the other predictors:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>weapon, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>race) <span class="op">+</span>
+<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>weapon) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="fl">0.1</span>))
+<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>weapon) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.1</span>))
+<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>gender, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span><span class="kw">interaction</span>(race, weapon)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.2</span>))</code></pre></div>
+<p>We can look at how <code>iat</code> might be related to those residuals, there’s clearly a relation there:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>iat, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>weapon) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_smooth</span>()</code></pre></div>
+<p>Now let’s add the subject’s gender into the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit3 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>race<span class="op">+</span>weapon<span class="op">+</span>gender<span class="op">+</span>race<span class="op">:</span>gender<span class="op">+</span>weapon<span class="op">:</span>gender, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit3)
+<span class="kw">anova</span>(fit3)
+<span class="kw">anova</span>(fit2, fit3)</code></pre></div>
+<p>We see that the subject’s gender does not appear to be significant.</p>
+<p>Finally, we look at whether we should remove race from the model as well:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit4 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>weapon, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit4)
+<span class="kw">anova</span>(fit4)
+<span class="kw">anova</span>(fit4, fit3)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit5 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span><span class="kw">poly</span>(iat, <span class="dv">2</span>)<span class="op">+</span>weapon, <span class="dt">data=</span>targetingCorrect)
+<span class="kw">summary</span>(fit5)
+<span class="kw">anova</span>(fit5)</code></pre></div>
+<p>ggplot(targetingCorrect) + aes(x=race, y=time, color=gender) + geom_point() + geom_line(aes(group=subject))</p>
+</section>
+</section>
+</body>
+</html>

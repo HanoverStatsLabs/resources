@@ -10,5 +10,8 @@ These labs focus on more advanced topics. They are presented in the order that w
 [Advanced Graphing Lab](labs/LabIntroGgplot.md)
   ~ Details the ggplot2 package and the ecosystem built around it, to produce powerful visualizations.
 
-[Advanced Modeling Lab](labs/LabANOVAOverall.md)
+[Advanced Modeling Lab I](labs/LabModelingBasic.md)
   ~ Introduction to the various modeling tools in R with an emphasis towards linear regression and ANOVA.
+
+[Advanced Modeling Lab II](labs/LabModelingAdvanced.md)
+  ~ Survey of more advanced modeling topics
