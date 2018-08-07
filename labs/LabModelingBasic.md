@@ -312,7 +312,7 @@ plot(fit1)
 
 #### Standardized and Studentized residuals
 
-Due to the effect of the hat values, we should consider rescaling the residuals before assessing normality. There are two standard adjustments to consider. The first is what is known as *standardized residuals*. These are simply the residuals divided by the estimate of the standard deviation $\hat\sigmat$ and the hat matrix effect, so that they have variance 1:
+Due to the effect of the hat values, we should consider rescaling the residuals before assessing normality. There are two standard adjustments to consider. The first is what is known as *standardized residuals*. These are simply the residuals divided by the estimate of the standard deviation $\hat\sigma$ and the hat matrix effect, so that they have variance 1:
 $$r_i = \frac{\hat\epsilon_i}{\hat\sigma\sqrt{1-h_i}}$$
 The `rstandard` method in R returns those residuals:
 ```r
