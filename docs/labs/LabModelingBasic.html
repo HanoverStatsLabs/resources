@@ -62,7 +62,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(haven)
 targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span class="st">&quot;targeting.sav&quot;</span>)
 <span class="co"># View(targeting)</span></code></pre></div>
-<p>The data set contains a number of factor variables are currently coded into column names. There is there race of the target (White/Black), whether the target was armed or unarmed, and whether a correct or incorrect shot action was taken. We will need to create these factor variables as we process the columns.</p>
+<p>The data set contains a number of factor variables which are currently coded into column names. There is there race of the target (White/Black), whether the target was armed or unarmed, and whether a correct or incorrect shot action was taken. We will need to create these factor variables as we process the columns.</p>
 </section>
 <section id="cleaning-up-the-dataset" class="level2">
 <h2>Cleaning up the dataset</h2>
@@ -156,7 +156,7 @@ rss &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <s
 <p>This null model is kind of a baseline against which we can compare our other models. This is essentially the simplest possible model; any other model should be doing better by comparison.</p>
 <section id="optional-background-maximum-likelihood-estimation" class="level4">
 <h4>Optional background: Maximum Likelihood Estimation</h4>
-<p>There is a slightly different approach to the least squares method described above, proves to be easier to generalize to other settings. It roughly works as follows:</p>
+<p>There is a slightly different approach to the least squares method described above, and it proves to be easier to generalize to other settings. It roughly works as follows:</p>
 <ul>
 <li>We assume that the residuals are independent of each other and are all distributed identically, following a normal distribution centered at <span class="math inline">\(0\)</span> and with some standard deviation <span class="math inline">\(\sigma\)</span>. In that case the <span class="math inline">\(y\)</span> values follow a normal distribution centered at <span class="math inline">\(\beta_0\)</span>.</li>
 <li>Therefore for each data point <span class="math inline">\(y_i\)</span> we can discuss the <em>likelihood/probability</em> that the <span class="math inline">\(y_i\)</span> would take this value, assuming the normal distribution and for a given value of <span class="math inline">\(\beta_0\)</span>.</li>
@@ -173,9 +173,9 @@ rss &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <s
 <section id="linear-fit-one-scalar-predictor" class="level3">
 <h3>Linear fit, one scalar predictor</h3>
 <p>Now we want to examine how the mean reaction time might be affected by other predictors. We will start by considering one such predictor, the <code>iat</code> score.</p>
-<p>The <code>iat</code> score is the <a href="https://en.wikipedia.org/wiki/Implicit-association_test"><em>implicit-association test</em></a>, which measures “the strength of a person’s automatic associations between mental representations of objects in memory”. In this particular case, the iat was measuring the strength of association between race (black/white) and pictures of weapons.</p>
-<p>A graph is a good start, this would be a point plot and we will add a smooth line to it.</p>
-<p><strong>Do this now</strong>, use <code>ggplot</code> to draw a scatterplot of the <code>iat</code> score in the x-axis and the <code>time</code> in the y-axis, and use <code>geom_smooth</code> to add a smooth line through the fit. How would you describe the influence of <code>iat</code> on <code>time</code>?</p>
+<p>The <code>iat</code> score is the <a href="https://en.wikipedia.org/wiki/Implicit-association_test"><em>implicit-association test</em></a> score, which measures “the strength of a person’s automatic associations between mental representations of objects in memory”. In this particular case, the iat was measuring the strength of association between race (black/white) and pictures of weapons.</p>
+<p>A graph is a good start. This should be a point plot and we will add a smooth line to it.</p>
+<p><strong>Do this now</strong>: use <code>ggplot</code> to draw a scatterplot of the <code>iat</code> score in the x-axis and the <code>time</code> in the y-axis, and use <code>geom_smooth</code> to add a smooth line through the fit. How would you describe the influence of <code>iat</code> on <code>time</code>?</p>
 <p>In a linear model we seek a formula that would describe in a linear way the response variable from the independent variables, accounting for a possible error. So the equation we are after would look like this: <span class="math display">\[\textrm{time} = \beta_0 + \beta_1 \times \textrm{iat} + \epsilon\]</span></p>
 <p>The linear part, <span class="math inline">\(\beta_0 + \beta_1 \times \textrm{iat}\)</span>, provides our <em>predicted value</em>, while the <span class="math inline">\(\epsilon\)</span> term indicates the error we are making (called the <em>residual</em>). In typical linear modeling there are numerous questions we like to ask:</p>
 <ol type="1">
@@ -392,7 +392,8 @@ iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gro
 <section id="comparing-level-differences" class="level3">
 <h3>Comparing level differences</h3>
 <p>We can get pairwise comparisons between the levels by using Tukey’s HSD (honest significant difference) test:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(irisFit)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(irisFit)
+<span class="kw">TukeyHSD</span>(irisFit) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plot</span>()</code></pre></div>
 <p>This test is a single-step-multiple-comparison procedure that constructs confidence intervals for all pairwise differences between the factor levels, using a <em>studentized range distribution</em>. You can read more about this test in the documentation and the internet.</p>
 </section>
 </section>

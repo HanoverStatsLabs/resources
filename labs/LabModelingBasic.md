@@ -13,7 +13,7 @@ targeting <- read_sav("targeting.sav")
 # View(targeting)
 ```
 
-The data set contains a number of factor variables are currently coded into column names. There is there race of the target (White/Black), whether the target was armed or unarmed, and whether a correct or incorrect shot action was taken. We will need to create these factor variables as we process the columns.
+The data set contains a number of factor variables which are currently coded into column names. There is there race of the target (White/Black), whether the target was armed or unarmed, and whether a correct or incorrect shot action was taken. We will need to create these factor variables as we process the columns.
 
 ## Cleaning up the dataset
 
@@ -125,7 +125,7 @@ This null model is kind of a baseline against which we can compare our other mod
 
 #### Optional background: Maximum Likelihood Estimation
 
-There is a slightly different approach to the least squares method described above, proves to be easier to generalize to other settings. It roughly works as follows:
+There is a slightly different approach to the least squares method described above, and it proves to be easier to generalize to other settings. It roughly works as follows:
 
 - We assume that the residuals are independent of each other and are all distributed identically, following a normal distribution centered at $0$ and with some standard deviation $\sigma$. In that case the $y$ values follow a normal distribution centered at $\beta_0$.
 - Therefore for each data point $y_i$ we can discuss the *likelihood/probability* that the $y_i$ would take this value, assuming the normal distribution and for a given value of $\beta_0$.
@@ -141,11 +141,11 @@ It turns out that for linear regression, the solution to these two problems is e
 
 Now we want to examine how the mean reaction time might be affected by other predictors. We will start by considering one such predictor, the `iat` score.
 
-The `iat` score is the [*implicit-association test*](https://en.wikipedia.org/wiki/Implicit-association_test), which measures "the strength of a person's automatic associations between mental representations of objects in memory". In this particular case, the iat was measuring the strength of association between race (black/white) and pictures of weapons.
+The `iat` score is the [*implicit-association test*](https://en.wikipedia.org/wiki/Implicit-association_test) score, which measures "the strength of a person's automatic associations between mental representations of objects in memory". In this particular case, the iat was measuring the strength of association between race (black/white) and pictures of weapons.
 
-A graph is a good start, this would be a point plot and we will add a smooth line to it.
+A graph is a good start. This should be a point plot and we will add a smooth line to it.
 
-**Do this now**, use `ggplot` to draw a scatterplot of the `iat` score in the x-axis and the `time` in the y-axis, and use `geom_smooth` to add a smooth line through the fit. How would you describe the influence of `iat` on `time`?
+**Do this now**: use `ggplot` to draw a scatterplot of the `iat` score in the x-axis and the `time` in the y-axis, and use `geom_smooth` to add a smooth line through the fit. How would you describe the influence of `iat` on `time`?
 
 In a linear model we seek a formula that would describe in a linear way the response variable from the independent variables, accounting for a possible error. So the equation we are after would look like this:
 $$\textrm{time} = \beta_0 + \beta_1 \times \textrm{iat} + \epsilon$$
@@ -474,5 +474,6 @@ Note that this last graph suggests a violation of the homoscedasticity assumptio
 We can get pairwise comparisons between the levels by using Tukey's HSD (honest significant difference) test:
 ```r
 TukeyHSD(irisFit)
+TukeyHSD(irisFit) %>% plot()
 ```
 This test is a single-step-multiple-comparison procedure that constructs confidence intervals for all pairwise differences between the factor levels, using a *studentized range distribution*. You can read more about this test in the documentation and the internet.
