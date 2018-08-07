@@ -53,7 +53,7 @@ This variable actually contains two different pieces of information, whether the
    Hits Target was armed, subject fired (Correct Action)
  Misses Target was armed, subject did not fire (Incorrect Action)
     CRs Target was unarmed, subject did not fire (Correct Rejection)
-    FAs Target awas unarmed, subject did fire (False Alarm)
+    FAs Target was unarmed, subject did fire (False Alarm)
 ------- -------------------------------------------------------------
 
 We will use `mutate` and `recode_factor` to create these new variables:
@@ -246,12 +246,14 @@ targetingFinal %>% ggplot() +
      geom_smooth() +
      facet_grid(action~race)
 ```
-We see that the residuals exhibit overall a slightly quadratic behavior, but more importantly there are differences in the behavior of the residuals due to the other factors. A better picture might arise from considering those factors as part of the model, which we will do at a later time.
+We see that the residuals exhibit overall a slightly quadratic behavior, but more importantly there are differences in the behavior of the residuals due to the other factors. A better model might result from including those factors as predictors, which we will do at a later time.
 
-Once we determine that no systematic patterns can be observed in the residuals, we can examine the assumption of constant variance in relation to the fitted values. To achieve this it turns out that we can improve our precision by considering the *square root of the absolute residuals*. The idea here is that in order to consider variability the difference between positive and negative shouldn't be a factor, and by taking absolute values we essentially double our precision. However as the resulting distribution is skewed, it turns out that we can get a better view if we square these absolute value residuals, which results in an approximately normal distribution if the original distribution was normal. Here is how that might look in R:
+Once we determine that no systematic patterns can be observed in the residuals, we can examine the assumption of constant variance in relation to the fitted values. To achieve this it turns out that we can improve our precision by considering the *square root of the absolute residuals*. The idea here is that in order to consider variability, the difference between positive and negative shouldn't be a factor, and by taking absolute values we essentially double our precision. However, as the resulting distribution is skewed, it turns out that we can get a better view if we square root these absolute value residuals, which results in an approximately normal distribution if the original distribution was normal. Here is how that might look in R:
 ```r
 targetingFinal %>% ggplot() +
-     aes(x=fitted(fit1), y=residuals(fit1) %>% abs() %>% sqrt(), color=weapon) +
+     aes(x=fitted(fit1),
+         y=residuals(fit1) %>% abs() %>% sqrt(),
+         color=weapon) +
      geom_point() +
      facet_grid(action~race)
 ```
@@ -277,7 +279,7 @@ For that reason, this matrix is called the *hat matrix*. For our current discuss
 $$\hat\epsilon = (I-H)\epsilon$$
 where here $I$ is the identity matrix.
 
-The important thing to take out of this is that even though we assume that the errors in our model are uncorrelated and with constant variance, the observed residuals that result form the fit in fact do not have to be, due to the above relation. In particular, the variance of the $i$-th residual can be found by multiplying the variance $\sigma^2$ of the errors by $1-h_{ii}$, where $h_{ii}$ is the $i$-th entry in the diagonal of the hat matrix.
+The important thing to take out of this is that even though we assume that the errors in our model are uncorrelated and with constant variance, the observed residuals that result from the fit in fact do not have to be uncorrelated and with constand variance, due to the above relation. In particular, the variance of the $i$-th residual can be found by multiplying the variance $\sigma^2$ of the errors by $1-h_{ii}$, where $h_{ii}$ is the $i$-th entry in the diagonal of the hat matrix.
 
 The method `hatvalues` returns the diagonal elements of the hat matrix, which are also called *leverages*:
 ```r
@@ -291,26 +293,36 @@ Leverages always add up to the number $p$ of predictors, in our case $2$. We can
 ```r
 sum(hatvals)
 ```
-This means that on average we expect leverages to be about equal to $\frac{p}{n} = \frac{2}{387}=0.005168$. Values that are at least twice as much are worth looking at closer:
+This means that on average we expect leverages to be about equal to $\frac{p}{n} = \frac{2}{387}=0.005168$, where $n$ is the number of data points. Values that are at least twice as much as this expected average are worth looking at more closely:
 ```r
-abline(h=2*2/387, col="red")
-sum(hatvals >= 2*2/387)
+sum(hatvals)
+
+p.over.n = 2 / 387
+p.over.n
+sum(hatvals >= 2 * p.over.n)  # How many data points have high leverage?
+plot(targetingFinal$iat, hatvals)  # Which data points have high leverage
+abline(h=2 * p.over.n, col="red")  # Horizontal line at 2*2/387
 ```
 In our case that's 47 observations that might be worth a closer look, as far as this model is concerned.
 
+An important diagnostic tool would plot the residuals against the leverages. Values that have both high residual and high leverage can have a large effect on the regression, and the graph will show them. It is the last diagnostic graph when you plot a model:
+```r
+plot(fit1)
+```
+
 #### Standardized and Studentized residuals
 
-Due to the effect of the hat values, we should consider rescaling the residuals before considering normality. There are two standard adjustments to consider. The first is what is known as *standardized residuals*. These are simply the residuals divided by the estimate of the standard deviation and the hat matrix effect, so that they have variance 1:
-$$r_i = \frac{\hat\epsilon_i}{\hat sigma\sqrt{1-h_i}}$$
+Due to the effect of the hat values, we should consider rescaling the residuals before assessing normality. There are two standard adjustments to consider. The first is what is known as *standardized residuals*. These are simply the residuals divided by the estimate of the standard deviation $\hat\sigmat$ and the hat matrix effect, so that they have variance 1:
+$$r_i = \frac{\hat\epsilon_i}{\hat\sigma\sqrt{1-h_i}}$$
 The `rstandard` method in R returns those residuals:
 ```r
 rstandard(fit1)
 ```
 In order to test for normality, it is best to use these standardized residuals, though typically they won't be all that different from the raw residuals. These are also often called *internally studentized residuals*.
 
-The other kind of residual is called *(externally) studentized residual*. A studentized residual is the residual that a point produces, but where we use a model fit that excluded that point. So in theory for each point we would: exclude it, compute the model fit, predict the value at the point and compute the residual.
+The other kind of residual is called *(externally) studentized residual*. A studentized residual is the residual that a point produces, but where we use a model fit that excluded that point. So in theory, for each point we would do the following: exclude the point from the data, compute the model fit on the remaining data, predict the value at the point, and compute the residual.
 
-Luckily there is a formula that allows us to compute this number easily. The precise formula is complicated, but the `rstudent` method can compute it for us:
+Luckily there is a formula that allows us to compute this number easily. The precise formula is complicated, but the `rstudent` method will compute it for us:
 ```r
 rstudent(fit1)
 ```
@@ -331,13 +343,14 @@ Even though in both cases the estimate is the same, namely the result of pluggin
 
 For the former, we simply need to account for the variability in the estimation of the parameters $\beta$. This is essentially the standard deviation $\sigma$ of the residuals suitably scaled to account for the $x$ value. The resulting intervals are called *confidence intervals*.
 
-For the latter, we have to account for the extra variability $\sigma$ due to the possible error at that particular $x$. The combination of the two independent variabilities is the desired variability. The resulting intervals are called *prediction intervals*.
+For the latter, we have to account for the extra variability $\sigma$ due to the possible additive *error* term at that particular $x$. The combination of the two independent variabilities is the desired variability. The resulting intervals are called *prediction intervals*.
 
-In R, the `predict` method can provide us with confidence and prediction intervals:
+In R, the `predict` method will provide us with confidence and prediction intervals:
 ```r
 predict(fit1, list(iat=-2:4), interval="confidence")
 predict(fit1, list(iat=-2:4), interval="prediction")
 ```
+As anticipated, for each $x$, the prediction interval at $x$ is wider than the confidence interval for the $y$ mean at that $x$.
 
 ### Linear fit, one factor
 
@@ -456,7 +469,10 @@ augment(irisFit) %>% ggplot() +
 ```
 Note that this last graph suggests a violation of the homoscedasticity assumption.
 
+### Comparing level differences
+
 We can get pairwise comparisons between the levels by using Tukey's HSD (honest significant difference) test:
 ```r
 TukeyHSD(irisFit)
 ```
+This test is a single-step-multiple-comparison procedure that constructs confidence intervals for all pairwise differences between the factor levels, using a *studentized range distribution*. You can read more about this test in the documentation and the internet.

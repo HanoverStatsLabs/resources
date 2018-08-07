@@ -76,7 +76,7 @@ The data is in what is known as a "wide" form: In a "tidy" version of the data t
 
 We will now convert the data sheet into this form. Here as well as in many places later on we will be building a command iteratively, adding once step at a time. What you see in each of the following couple of code chunks is how the commands looks as it evolves, and therefore they will all correspond to the same chunk in your document, as it changes over time.
 
-The first step in converting the data to a tidy form is to isolate the `CSU` columns as well as the subject column. We will use the `subset` method for that, which picks out a subset of the variables. There are various ways to specify which variables to select, and you can look at the documentation or cheatsheets for more information.
+The first step in converting the data to a tidy form is to isolate the `CSU` columns as well as the subject column. We will use the `select` method for that, which picks out a subset of the variables. There are various ways to specify which variables to select, and you can look at the documentation or cheatsheets for more information.
 ```r
 compression.uac %>%
     select(X__1, CSUACPR:CSUAC5)

@@ -347,7 +347,7 @@ cutCounts</code></pre></div>
 cutCounts</code></pre></div>
 <p>Then we add a new geom to our graph, which draws from the <code>cutCounts</code> dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ourPieChart <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_text</span>(cutCounts,
+<span class="st">    </span><span class="kw">geom_text</span>(<span class="dt">data=</span>cutCounts,
               <span class="kw">aes</span>(<span class="dt">x=</span><span class="fl">1.2</span>, <span class="dt">y=</span>count, <span class="dt">label=</span>percent),
               <span class="dt">position=</span><span class="kw">position_stack</span>(<span class="dt">vjust=</span><span class="fl">0.5</span>))</code></pre></div>
 </section>

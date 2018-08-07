@@ -103,7 +103,7 @@ targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</s
 </tr>
 <tr class="even">
 <td style="text-align: right;">FAs</td>
-<td style="text-align: left;">Target awas unarmed, subject did fire (False Alarm)</td>
+<td style="text-align: left;">Target was unarmed, subject did fire (False Alarm)</td>
 </tr>
 </tbody>
 </table>
@@ -245,10 +245,12 @@ variability.time</code></pre></div>
 <span class="st">     </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">     </span><span class="kw">geom_smooth</span>() <span class="op">+</span>
 <span class="st">     </span><span class="kw">facet_grid</span>(action<span class="op">~</span>race)</code></pre></div>
-<p>We see that the residuals exhibit overall a slightly quadratic behavior, but more importantly there are differences in the behavior of the residuals due to the other factors. A better picture might arise from considering those factors as part of the model, which we will do at a later time.</p>
-<p>Once we determine that no systematic patterns can be observed in the residuals, we can examine the assumption of constant variance in relation to the fitted values. To achieve this it turns out that we can improve our precision by considering the <em>square root of the absolute residuals</em>. The idea here is that in order to consider variability the difference between positive and negative shouldn’t be a factor, and by taking absolute values we essentially double our precision. However as the resulting distribution is skewed, it turns out that we can get a better view if we square these absolute value residuals, which results in an approximately normal distribution if the original distribution was normal. Here is how that might look in R:</p>
+<p>We see that the residuals exhibit overall a slightly quadratic behavior, but more importantly there are differences in the behavior of the residuals due to the other factors. A better model might result from including those factors as predictors, which we will do at a later time.</p>
+<p>Once we determine that no systematic patterns can be observed in the residuals, we can examine the assumption of constant variance in relation to the fitted values. To achieve this it turns out that we can improve our precision by considering the <em>square root of the absolute residuals</em>. The idea here is that in order to consider variability, the difference between positive and negative shouldn’t be a factor, and by taking absolute values we essentially double our precision. However, as the resulting distribution is skewed, it turns out that we can get a better view if we square root these absolute value residuals, which results in an approximately normal distribution if the original distribution was normal. Here is how that might look in R:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">fitted</span>(fit1), <span class="dt">y=</span><span class="kw">residuals</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">abs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sqrt</span>(), <span class="dt">color=</span>weapon) <span class="op">+</span>
+<span class="st">     </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">fitted</span>(fit1),
+         <span class="dt">y=</span><span class="kw">residuals</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">abs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sqrt</span>(),
+         <span class="dt">color=</span>weapon) <span class="op">+</span>
 <span class="st">     </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">     </span><span class="kw">facet_grid</span>(action<span class="op">~</span>race)</code></pre></div>
 <p>There does not appear to be any systematic change in the variance, which is good.</p>
@@ -258,7 +260,7 @@ variability.time</code></pre></div>
 <p>When we consider a linear regression model, we usually write it in a linear algebra form: <span class="math display">\[y = X\beta + \epsilon\]</span> where <span class="math inline">\(\beta\)</span> is the vector of coefficients, including the constant, and <span class="math inline">\(X\)</span> is a matrix containing all our predictors. We can inspect the matrix for our model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">model.matrix</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
 <p>We determine the parameter estimates <span class="math inline">\(\hat\beta\)</span> via a matrix multiplication whose details are not that important right now: <span class="math display">\[\hat\beta = (X^TX)^{-1}X^T y\]</span> And from there we can find the fitted values <span class="math inline">\(\hat y\)</span> by multiplying these estimates by the matrix <span class="math inline">\(X\)</span>: <span class="math display">\[\hat y = X\hat\beta = X(X^T X)^{-1}X^T y\]</span> The end result of all this is that if we consider the matrix <span class="math inline">\(H=X(X^T X)^{-1}X^T\)</span>, then we can find the fitted values from the original values by simple matrix multiplication: <span class="math display">\[\hat y = H y\]</span> For that reason, this matrix is called the <em>hat matrix</em>. For our current discussion, the importance of this matrix is that we can use it to express the observed residuals in terms of the true errors: <span class="math display">\[\hat\epsilon = (I-H)\epsilon\]</span> where here <span class="math inline">\(I\)</span> is the identity matrix.</p>
-<p>The important thing to take out of this is that even though we assume that the errors in our model are uncorrelated and with constant variance, the observed residuals that result form the fit in fact do not have to be, due to the above relation. In particular, the variance of the <span class="math inline">\(i\)</span>-th residual can be found by multiplying the variance <span class="math inline">\(\sigma^2\)</span> of the errors by <span class="math inline">\(1-h_{ii}\)</span>, where <span class="math inline">\(h_{ii}\)</span> is the <span class="math inline">\(i\)</span>-th entry in the diagonal of the hat matrix.</p>
+<p>The important thing to take out of this is that even though we assume that the errors in our model are uncorrelated and with constant variance, the observed residuals that result from the fit in fact do not have to be uncorrelated and with constand variance, due to the above relation. In particular, the variance of the <span class="math inline">\(i\)</span>-th residual can be found by multiplying the variance <span class="math inline">\(\sigma^2\)</span> of the errors by <span class="math inline">\(1-h_{ii}\)</span>, where <span class="math inline">\(h_{ii}\)</span> is the <span class="math inline">\(i\)</span>-th entry in the diagonal of the hat matrix.</p>
 <p>The method <code>hatvalues</code> returns the diagonal elements of the hat matrix, which are also called <em>leverages</em>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hatvals &lt;-<span class="st"> </span><span class="kw">hatvalues</span>(fit1)
 <span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(hatvals), hatvals)
@@ -266,18 +268,25 @@ variability.time</code></pre></div>
 <p>We can see how some data points have larger leverages than others. In particular, predictor values that are more towards the extremes have larger leverages. This makes sense in a way: A large leverage value means small variance for the error. Points that are far in the <span class="math inline">\(x\)</span> direction will tend to influence the regression line more and will tend to have smaller variance to their errors.</p>
 <p>Leverages always add up to the number <span class="math inline">\(p\)</span> of predictors, in our case <span class="math inline">\(2\)</span>. We can easily check that:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(hatvals)</code></pre></div>
-<p>This means that on average we expect leverages to be about equal to <span class="math inline">\(\frac{p}{n} = \frac{2}{387}=0.005168\)</span>. Values that are at least twice as much are worth looking at closer:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">2</span><span class="op">*</span><span class="dv">2</span><span class="op">/</span><span class="dv">387</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">sum</span>(hatvals <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">2</span><span class="op">/</span><span class="dv">387</span>)</code></pre></div>
+<p>This means that on average we expect leverages to be about equal to <span class="math inline">\(\frac{p}{n} = \frac{2}{387}=0.005168\)</span>, where <span class="math inline">\(n\)</span> is the number of data points. Values that are at least twice as much as this expected average are worth looking at more closely:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(hatvals)
+
+p.over.n =<span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">387</span>
+p.over.n
+<span class="kw">sum</span>(hatvals <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>p.over.n)  <span class="co"># How many data points have high leverage?</span>
+<span class="kw">plot</span>(targetingFinal<span class="op">$</span>iat, hatvals)  <span class="co"># Which data points have high leverage</span>
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>p.over.n, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)  <span class="co"># Horizontal line at 2*2/387</span></code></pre></div>
 <p>In our case that’s 47 observations that might be worth a closer look, as far as this model is concerned.</p>
+<p>An important diagnostic tool would plot the residuals against the leverages. Values that have both high residual and high leverage can have a large effect on the regression, and the graph will show them. It is the last diagnostic graph when you plot a model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit1)</code></pre></div>
 </section>
 <section id="standardized-and-studentized-residuals" class="level4">
 <h4>Standardized and Studentized residuals</h4>
-<p>Due to the effect of the hat values, we should consider rescaling the residuals before considering normality. There are two standard adjustments to consider. The first is what is known as <em>standardized residuals</em>. These are simply the residuals divided by the estimate of the standard deviation and the hat matrix effect, so that they have variance 1: <span class="math display">\[r_i = \frac{\hat\epsilon_i}{\hat sigma\sqrt{1-h_i}}\]</span> The <code>rstandard</code> method in R returns those residuals:</p>
+<p>Due to the effect of the hat values, we should consider rescaling the residuals before assessing normality. There are two standard adjustments to consider. The first is what is known as <em>standardized residuals</em>. These are simply the residuals divided by the estimate of the standard deviation <span class="math inline">\(\hat\sigmat\)</span> and the hat matrix effect, so that they have variance 1: <span class="math display">\[r_i = \frac{\hat\epsilon_i}{\hat\sigma\sqrt{1-h_i}}\]</span> The <code>rstandard</code> method in R returns those residuals:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstandard</span>(fit1)</code></pre></div>
 <p>In order to test for normality, it is best to use these standardized residuals, though typically they won’t be all that different from the raw residuals. These are also often called <em>internally studentized residuals</em>.</p>
-<p>The other kind of residual is called <em>(externally) studentized residual</em>. A studentized residual is the residual that a point produces, but where we use a model fit that excluded that point. So in theory for each point we would: exclude it, compute the model fit, predict the value at the point and compute the residual.</p>
-<p>Luckily there is a formula that allows us to compute this number easily. The precise formula is complicated, but the <code>rstudent</code> method can compute it for us:</p>
+<p>The other kind of residual is called <em>(externally) studentized residual</em>. A studentized residual is the residual that a point produces, but where we use a model fit that excluded that point. So in theory, for each point we would do the following: exclude the point from the data, compute the model fit on the remaining data, predict the value at the point, and compute the residual.</p>
+<p>Luckily there is a formula that allows us to compute this number easily. The precise formula is complicated, but the <code>rstudent</code> method will compute it for us:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstudent</span>(fit1)</code></pre></div>
 <p>A typical diagnostic plot would be a “normal quantile plot” of the standardized residuals. These plots draw the values of each percentile mapped against the corresponding theoretical values from a normal distribution. If our values are normally distributed then the resulting plot is a straight line:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstandard</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">qqnorm</span>()</code></pre></div>
@@ -291,10 +300,11 @@ variability.time</code></pre></div>
 </ol>
 <p>Even though in both cases the estimate is the same, namely the result of plugging in the <span class="math inline">\(x\)</span> value to the formula of the estimates, the two cases differ considerably in the estimation of the standard error and consequently the construction of confidence intervals.</p>
 <p>For the former, we simply need to account for the variability in the estimation of the parameters <span class="math inline">\(\beta\)</span>. This is essentially the standard deviation <span class="math inline">\(\sigma\)</span> of the residuals suitably scaled to account for the <span class="math inline">\(x\)</span> value. The resulting intervals are called <em>confidence intervals</em>.</p>
-<p>For the latter, we have to account for the extra variability <span class="math inline">\(\sigma\)</span> due to the possible error at that particular <span class="math inline">\(x\)</span>. The combination of the two independent variabilities is the desired variability. The resulting intervals are called <em>prediction intervals</em>.</p>
-<p>In R, the <code>predict</code> method can provide us with confidence and prediction intervals:</p>
+<p>For the latter, we have to account for the extra variability <span class="math inline">\(\sigma\)</span> due to the possible additive <em>error</em> term at that particular <span class="math inline">\(x\)</span>. The combination of the two independent variabilities is the desired variability. The resulting intervals are called <em>prediction intervals</em>.</p>
+<p>In R, the <code>predict</code> method will provide us with confidence and prediction intervals:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit1, <span class="kw">list</span>(<span class="dt">iat=</span><span class="op">-</span><span class="dv">2</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)
 <span class="kw">predict</span>(fit1, <span class="kw">list</span>(<span class="dt">iat=</span><span class="op">-</span><span class="dv">2</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">interval=</span><span class="st">&quot;prediction&quot;</span>)</code></pre></div>
+<p>As anticipated, for each <span class="math inline">\(x\)</span>, the prediction interval at <span class="math inline">\(x\)</span> is wider than the confidence interval for the <span class="math inline">\(y\)</span> mean at that <span class="math inline">\(x\)</span>.</p>
 </section>
 </section>
 <section id="linear-fit-one-factor" class="level3">
@@ -378,8 +388,12 @@ iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gro
 <span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>Species, <span class="dt">color=</span>Species, <span class="dt">y=</span>.resid) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
 <p>Note that this last graph suggests a violation of the homoscedasticity assumption.</p>
+</section>
+<section id="comparing-level-differences" class="level3">
+<h3>Comparing level differences</h3>
 <p>We can get pairwise comparisons between the levels by using Tukey’s HSD (honest significant difference) test:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(irisFit)</code></pre></div>
+<p>This test is a single-step-multiple-comparison procedure that constructs confidence intervals for all pairwise differences between the factor levels, using a <em>studentized range distribution</em>. You can read more about this test in the documentation and the internet.</p>
 </section>
 </section>
 </section>

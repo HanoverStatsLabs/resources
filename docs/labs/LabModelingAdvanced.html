@@ -54,8 +54,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <body>
 <section id="advanced-lab-4-more-linear-modeling-and-anova" class="level1">
 <h1>Advanced Lab 4: More Linear Modeling and ANOVA</h1>
-<section id="introduction" class="level2">
-<h2>Introduction</h2>
+<section id="introduction-multiple-predictors" class="level2">
+<h2>Introduction: Multiple predictors</h2>
 <p>We will now start considering more complex models, with more than one predictor. We will start with a model including all the predictors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitAll &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>., <span class="dt">data=</span>targetingFinal)
 <span class="kw">summary</span>(fitAll)</code></pre></div>
@@ -100,70 +100,53 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>We can also consider adding models in, one at a time:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">add1</span>(fitNoSubjNoAgeNoRaceNoGender, <span class="dt">scope=</span><span class="op">~</span>.<span class="op">+</span>race<span class="op">+</span>gender<span class="op">+</span>age)</code></pre></div>
 <p>We see that none of them is an improvement.</p>
+<p>It is clear however that the two most important effects are due to whether the target was armed or unarmed, and whether the action was correct or incorrect. Let’s review some graphs that break the cases down by these two variables:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pBasic &lt;-<span class="st"> </span><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">y=</span>time) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(weapon<span class="op">~</span>action)
+
+pBasic <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>race) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()
+pBasic <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">group=</span>subject) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
 </section>
-<section id="cleanup" class="level2">
-<h2>CLEANUP</h2>
-<p>We will leave it as is for now as the data did not show any signs of extreme skewness. Here is a starting plot that shows the density distribution for <code>time</code> for armed and unarmed weapons, and with different graphs for each race and gender combination:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>time, <span class="dt">color=</span>weapon) <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_density</span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw">facet_grid</span>(race<span class="op">~</span>gender)</code></pre></div>
-<p>We can see that mean reaction times were slower for the unarmed weapons.</p>
-<p>Let us compute some numerical summaries:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingCorrect <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(race, weapon, gender) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(time),
-                   <span class="dt">se=</span><span class="kw">sd</span>(time)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">n</span>()))</code></pre></div>
-<p>We can also plot these:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>weapon, <span class="dt">y=</span>time, <span class="dt">color=</span>race) <span class="op">+</span>
-<span class="st">    </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span>mean_se, <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.2</span>)) <span class="op">+</span>
-<span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</code></pre></div>
-<p>We probably expected the marked difference in reaction times between armed and unarmed subjects. For female subjects, the race of the subject seems to play a small factor.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>race<span class="op">*</span>weapon, <span class="dt">data=</span>targetingCorrect)
-<span class="kw">summary</span>(fit1)
-<span class="kw">anova</span>(fit1)</code></pre></div>
-<p>We can see a significant overall effect, but we can also see that the interaction terms are not significant. We remove them from the model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>race<span class="op">+</span>weapon, <span class="dt">data=</span>targetingCorrect)
-<span class="kw">summary</span>(fit2)
-<span class="kw">anova</span>(fit2)</code></pre></div>
-<p>We can compare the two models to see if there are differences, and there is no significant difference:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit1, fit2)</code></pre></div>
-<p>We can get some default diagnostics from plotting the fit:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
-<span class="kw">plot</span>(fit2)</code></pre></div>
-<p>The residuals appear to be normal and with constant variance. We can visualize their effect against the other predictors:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>weapon, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>race) <span class="op">+</span>
-<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>weapon) <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="fl">0.1</span>))
-<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>race, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>weapon) <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.1</span>))
-<span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>gender, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span><span class="kw">interaction</span>(race, weapon)) <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.2</span>))</code></pre></div>
-<p>We can look at how <code>iat</code> might be related to those residuals, there’s clearly a relation there:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingCorrect) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>iat, <span class="dt">y=</span><span class="kw">resid</span>(fit2), <span class="dt">color=</span>weapon) <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw">geom_smooth</span>()</code></pre></div>
-<p>Now let’s add the subject’s gender into the model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit3 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>race<span class="op">+</span>weapon<span class="op">+</span>gender<span class="op">+</span>race<span class="op">:</span>gender<span class="op">+</span>weapon<span class="op">:</span>gender, <span class="dt">data=</span>targetingCorrect)
-<span class="kw">summary</span>(fit3)
-<span class="kw">anova</span>(fit3)
-<span class="kw">anova</span>(fit2, fit3)</code></pre></div>
-<p>We see that the subject’s gender does not appear to be significant.</p>
-<p>Finally, we look at whether we should remove race from the model as well:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit4 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>weapon, <span class="dt">data=</span>targetingCorrect)
-<span class="kw">summary</span>(fit4)
-<span class="kw">anova</span>(fit4)
-<span class="kw">anova</span>(fit4, fit3)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit5 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span><span class="kw">poly</span>(iat, <span class="dv">2</span>)<span class="op">+</span>weapon, <span class="dt">data=</span>targetingCorrect)
-<span class="kw">summary</span>(fit5)
-<span class="kw">anova</span>(fit5)</code></pre></div>
-<p>ggplot(targetingCorrect) + aes(x=race, y=time, color=gender) + geom_point() + geom_line(aes(group=subject))</p>
+<section id="interaction-terms" class="level2">
+<h2>Interaction Terms</h2>
+<p>Before moving on to more complex model techniques, let’s try to add interaction terms to our model. Our initial model was <code>fitAll</code>, but to keep it simple let’s at least remove the age and subject:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitStandard &lt;-<span class="st"> </span>fitAll <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>age<span class="op">-</span>subject)
+<span class="kw">summary</span>(fitStandard)</code></pre></div>
+<p>We would like to consider adding some interaction terms now. For example let’s try to add an interaction term that accounts for the target’s race and their weapon status:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitInter1 &lt;-<span class="st"> </span>fitStandard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span><span class="st"> </span>race<span class="op">:</span>weapon)
+<span class="kw">summary</span>(fitInter1)
+<span class="kw">anova</span>(fitInter1, fitStandard)</code></pre></div>
+<p>We see that this model does not add anything significant. Let’s try an interaction term for weapon and action:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitInter2 &lt;-<span class="st"> </span>fitStandard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon)
+<span class="kw">summary</span>(fitInter2)
+<span class="kw">anova</span>(fitInter2, fitStandard)</code></pre></div>
+<p>This appears to be significant! Let’s try to add an interaction term between race and action:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitInter3 &lt;-<span class="st"> </span>fitInter2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span><span class="st"> </span>action<span class="op">:</span>race)
+<span class="kw">summary</span>(fitInter3)
+<span class="kw">anova</span>(fitInter3, fitInter2)</code></pre></div>
+<p>That does not appear to be significant.</p>
+<p>Before we move on, let’s use the <code>step</code> method to tell R to perform this step-wise model selection that we performed manually earlier:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">step</span>(fitInter2)</code></pre></div>
+<p>We see that R successively removed the <code>race</code> and <code>gender</code> factors from our model, using the AIC numbers a guides. You can look at the documentation for <code>step</code> to learn more about its use.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modelFinal &lt;-<span class="st"> </span><span class="kw">step</span>(fitInter2)
+<span class="kw">summary</span>(modelFinal)</code></pre></div>
+</section>
+<section id="mixed-effects-modeling" class="level2">
+<h2>Mixed Effects Modeling</h2>
+<p>The above techniques have not accounted at all for the nature of the distinct participants. It is reasonable to assume that each subject has a different baseline reaction time, and we have to account for that effect. The most appropriate way to model that is likely via a <em>random effect</em>, i.e. assuming that there is a constant base reaction time component to each subject, that comes from a distribution whose parameters we might need to specify. So our model for the reaction time may end up looking something like this: <span class="math display">\[\textrm{time} = \mu + \beta_1\times \textrm{iat} + \beta_2\times\textrm{weapon} + \cdots + \textrm{tsubj} + \epsilon\]</span> where <span class="math inline">\(\textrm{tsubj}\)</span> is an effect different for each subject and drawn from a distribution <span class="math inline">\(N(0,\sigma_s)\)</span>, while <span class="math inline">\(\epsilon\)</span> is still the standard error term from a <span class="math inline">\(N(0,\sigma)\)</span> distribution, and <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span> etc are still the <em>fixed effects</em> from the various factors and predictors.</p>
+<p>For simplicity we will start with a simple case. We need a new package for this, called <code>lme4</code>, as mixed effects modeling goes beyond the standard linear modeling techniques. The method <code>lmer</code> from that package is our main workhorse. Here is one example call:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lme4)
+mixedFit1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
+<span class="kw">summary</span>(mixedFit1)
+
+mixedFit2 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>iat <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
+mixedFit3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>iat <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
+mixedFit4 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
+<span class="kw">anova</span>(mixedFit1, mixedFit2)
+<span class="kw">anova</span>(mixedFit3, mixedFit2)
+<span class="kw">anova</span>(mixedFit4, mixedFit3)</code></pre></div>
+<p>TODO</p>
 </section>
 </section>
 </body>

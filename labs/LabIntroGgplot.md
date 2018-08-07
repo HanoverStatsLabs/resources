@@ -400,7 +400,7 @@ cutCounts
 Then we add a new geom to our graph, which draws from the `cutCounts` dataset:
 ```r
 ourPieChart +
-    geom_text(cutCounts,
+    geom_text(data=cutCounts,
               aes(x=1.2, y=count, label=percent),
               position=position_stack(vjust=0.5))
 ```

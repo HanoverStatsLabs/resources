@@ -1,6 +1,6 @@
 # Advanced Lab 4: More Linear Modeling and ANOVA
 
-## Introduction
+## Introduction: Multiple predictors
 
 We will now start considering more complex models, with more than one predictor. We will start with a model including all the predictors:
 
@@ -70,99 +70,72 @@ add1(fitNoSubjNoAgeNoRaceNoGender, scope=~.+race+gender+age)
 ```
 We see that none of them is an improvement.
 
-## CLEANUP
+It is clear however that the two most important effects are due to whether the target was armed or unarmed, and whether the action was correct or incorrect. Let's review some graphs that break the cases down by these two variables:
+```r
+pBasic <- ggplot(targetingFinal) +
+    aes(y=time) +
+    facet_grid(weapon~action)
 
-We will leave it as is for now as the data did not show any signs of extreme skewness. Here is a starting plot that shows the density distribution for `time` for armed and unarmed weapons, and with different graphs for each race and gender combination:
-```r
-ggplot(targetingFinal) +
-    aes(x=time, color=weapon) +
-    geom_density() +
-    facet_grid(race~gender)
-```
-We can see that mean reaction times were slower for the unarmed weapons.
-
-Let us compute some numerical summaries:
-
-```r
-targetingCorrect %>%
-    group_by(race, weapon, gender) %>%
-    summarize(mean=mean(time),
-                   se=sd(time)/sqrt(n()))
-```
-We can also plot these:
-```r
-ggplot(targetingCorrect) +
-    aes(x=weapon, y=time, color=race) +
-    stat_summary(fun.data=mean_se, position=position_dodge(0.2)) +
-    facet_wrap(~gender)
-```
-We probably expected the marked difference in reaction times between armed and unarmed subjects. For female subjects, the race of the subject seems to play a small factor.
-```r
-fit1 <- lm(time~race*weapon, data=targetingCorrect)
-summary(fit1)
-anova(fit1)
-```
-We can see a significant overall effect, but we can also see that the interaction terms are not significant. We remove them from the model:
-```r
-fit2 <- lm(time~race+weapon, data=targetingCorrect)
-summary(fit2)
-anova(fit2)
-```
-We can compare the two models to see if there are differences, and there is no significant difference:
-```r
-anova(fit1, fit2)
-```
-We can get some default diagnostics from plotting the fit:
-```r
-par(mfrow=c(2,2))
-plot(fit2)
-```
-The residuals appear to be normal and with constant variance. We can visualize their effect against the other predictors:
-```r
-ggplot(targetingCorrect) +
-    aes(x=weapon, y=resid(fit2), color=race) +
-ggplot(targetingCorrect) +
-    aes(x=race, y=resid(fit2), color=weapon) +
-    geom_point(position=position_jitter(0.1))
-ggplot(targetingCorrect) +
-    aes(x=race, y=resid(fit2), color=weapon) +
-    geom_point(position=position_dodge(0.1))
-ggplot(targetingCorrect) +
-    aes(x=gender, y=resid(fit2), color=interaction(race, weapon)) +
-    geom_point(position=position_dodge(0.2))
-```
-We can look at how `iat` might be related to those residuals, there's clearly a relation there:
-```r
-ggplot(targetingCorrect) +
-    aes(x=iat, y=resid(fit2), color=weapon) +
-    geom_point() +
-    geom_smooth()
+pBasic + aes(x=race) + geom_boxplot()
+pBasic + aes(x=race, group=subject) + geom_line()
 ```
 
-Now let's add the subject's gender into the model:
-```r
-fit3 <- lm(time~race+weapon+gender+race:gender+weapon:gender, data=targetingCorrect)
-summary(fit3)
-anova(fit3)
-anova(fit2, fit3)
-```
-We see that the subject's gender does not appear to be significant.
+## Interaction Terms
 
-Finally, we look at whether we should remove race from the model as well:
+Before moving on to more complex model techniques, let's try to add interaction terms to our model. Our initial model was `fitAll`, but to keep it simple let's at least remove the age and subject:
 ```r
-fit4 <- lm(time~weapon, data=targetingCorrect)
-summary(fit4)
-anova(fit4)
-anova(fit4, fit3)
+fitStandard <- fitAll %>% update(formula=.~.-age-subject)
+summary(fitStandard)
 ```
 
+We would like to consider adding some interaction terms now. For example let's try to add an interaction term that accounts for the target's race and their weapon status:
 ```r
-fit5 <- lm(time~poly(iat, 2)+weapon, data=targetingCorrect)
-summary(fit5)
-anova(fit5)
+fitInter1 <- fitStandard %>% update(formula=.~.+ race:weapon)
+summary(fitInter1)
+anova(fitInter1, fitStandard)
+```
+We see that this model does not add anything significant. Let's try an interaction term for weapon and action:
+```r
+fitInter2 <- fitStandard %>% update(formula=.~.+ action:weapon)
+summary(fitInter2)
+anova(fitInter2, fitStandard)
+```
+This appears to be significant! Let's try to add an interaction term between race and action:
+```r
+fitInter3 <- fitInter2 %>% update(formula=.~.+ action:race)
+summary(fitInter3)
+anova(fitInter3, fitInter2)
+```
+That does not appear to be significant.
+
+Before we move on, let's use the `step` method to tell R to perform this step-wise model selection that we performed manually earlier:
+```r
+step(fitInter2)
+```
+We see that R successively removed the `race` and `gender` factors from our model, using the AIC numbers a guides. You can look at the documentation for `step` to learn more about its use.
+```r
+modelFinal <- step(fitInter2)
+summary(modelFinal)
 ```
 
-ggplot(targetingCorrect) +
-    aes(x=race, y=time, color=gender) +
-    geom_point() +
-    geom_line(aes(group=subject))
+## Mixed Effects Modeling
+
+The above techniques have not accounted at all for the nature of the distinct participants. It is reasonable to assume that each subject has a different baseline reaction time, and we have to account for that effect. The most appropriate way to model that is likely via a *random effect*, i.e. assuming that there is a constant base reaction time component to each subject, that comes from a distribution whose parameters we might need to specify. So our model for the reaction time may end up looking something like this:
+$$\textrm{time} = \mu + \beta_1\times \textrm{iat} + \beta_2\times\textrm{weapon} + \cdots + \textrm{tsubj} + \epsilon$$
+where $\textrm{tsubj}$ is an effect different for each subject and drawn from a distribution $N(0,\sigma_s)$, while $\epsilon$ is still the standard error term from a $N(0,\sigma)$ distribution, and $\beta_1$, $\beta_2$ etc are still the *fixed effects* from the various factors and predictors.
+
+For simplicity we will start with a simple case. We need a new package for this, called `lme4`, as mixed effects modeling goes beyond the standard linear modeling techniques. The method `lmer` from that package is our main workhorse. Here is one example call:
+```r
+library(lme4)
+mixedFit1 <- lmer(time ~ race + weapon + action:weapon + (1|subject), data=targetingFinal)
+summary(mixedFit1)
+
+mixedFit2 <- lmer(time ~ iat + race + weapon + action:weapon + (1|subject), data=targetingFinal)
+mixedFit3 <- lmer(time ~ iat + weapon + action:weapon + (1|subject), data=targetingFinal)
+mixedFit4 <- lmer(time ~ weapon + action:weapon + (1|subject), data=targetingFinal)
+anova(mixedFit1, mixedFit2)
+anova(mixedFit3, mixedFit2)
+anova(mixedFit4, mixedFit3)
+```
+
+TODO
