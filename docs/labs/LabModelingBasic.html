@@ -52,8 +52,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </script>
 </head>
 <body>
-<section id="advanced-lab-3-basic-linear-modeling-and-anova" class="level1">
-<h1>Advanced Lab 3: Basic Linear Modeling and ANOVA</h1>
+<section id="advanced-lab-3-linear-modeling-and-anova" class="level1">
+<h1>Advanced Lab 3: Linear Modeling and ANOVA</h1>
 <section id="introduction" class="level2">
 <h2>Introduction</h2>
 <p>In this lab we will study key linear modeling techniques. We will also practice some data cleanup and import steps.</p>
@@ -71,13 +71,13 @@ targeting &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span c
 <p>We will only need the first 12 variables, the remaining are computed quantities. We will use a <code>select</code> for that. Then we will <code>gather</code> the 8 columns that contain observations (columns 3 through 10). Don’t worry about the warning.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;key&quot;</span>, <span class="dt">value=</span><span class="st">&quot;time&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>)</code></pre></div>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;condition&quot;</span>, <span class="dt">value=</span><span class="st">&quot;time&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>)</code></pre></div>
 <p>Next we need to break the <code>key</code> variable into two parts, one showing the target’s race and another showing the outcome. We’ll first mutate the <code>key</code> field to remove everything up through the underscore. We will need the <code>stringr</code> package for that. This package allows us to perform various string-related tasks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
 targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;key&quot;</span>, <span class="dt">value=</span><span class="st">&quot;time&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">key=</span><span class="kw">str_replace</span>(key, <span class="st">&quot;expressions.MeanRT_&quot;</span>, <span class="st">&quot;&quot;</span>))</code></pre></div>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;condition&quot;</span>, <span class="dt">value=</span><span class="st">&quot;time&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">condition=</span><span class="kw">str_replace</span>(condition, <span class="st">&quot;expressions.MeanRT_&quot;</span>, <span class="st">&quot;&quot;</span>))</code></pre></div>
 <p>Now we split the new key variable in two parts, splitting after the first 5 characters (to capture the White/Black part):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>) <span class="op">%&gt;%</span>
@@ -107,17 +107,15 @@ targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</s
 </tr>
 </tbody>
 </table>
-<p>We will use <code>mutate</code> and <code>recode_factor</code> to create these new variables:</p>
+<p>We will use <code>mutate</code> and <code>recode_factor</code> to create these new variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal &lt;-<span class="st"> </span>targetingLong <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">weapon=</span><span class="kw">recode_factor</span>(outcome, <span class="dt">Hits=</span><span class="st">&quot;Armed&quot;</span>, <span class="dt">Misses=</span><span class="st">&quot;Armed&quot;</span>,
                                          <span class="dt">CRs=</span><span class="st">&quot;Unarmed&quot;</span>, <span class="dt">FAs=</span><span class="st">&quot;Unarmed&quot;</span>),
            <span class="dt">action=</span><span class="kw">recode_factor</span>(outcome, <span class="dt">Hits=</span><span class="st">&quot;Correct&quot;</span>, <span class="dt">Misses=</span><span class="st">&quot;Incorrect&quot;</span>,
                                          <span class="dt">CRs=</span><span class="st">&quot;Correct&quot;</span>, <span class="dt">FAs=</span><span class="st">&quot;Incorrect&quot;</span>))</code></pre></div>
 <p>To double-check that we did this correctly, we’ll create counts:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(race, outcome, weapon, action) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">count=</span><span class="kw">n</span>())</code></pre></div>
-<p>We should see 49 cases for each, corresponding to our initial 49 data rows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(race, outcome, weapon, action)</code></pre></div>
+<p>We should see 49 cases for each of 8 different combinations of values, corresponding to our initial 49 data rows.</p>
 <p>Finally, a couple more cleanup steps are in order before we move on:</p>
 <ul>
 <li>We will fix the names of some of the variables, using <code>rename</code>.</li>
@@ -131,25 +129,44 @@ targetingLong &lt;-<span class="st"> </span>targeting <span class="op">%&gt;%</s
            <span class="dt">iat=</span><span class="st">&quot;expressions.d&quot;</span>,
            <span class="dt">gender=</span><span class="st">&quot;gender_response&quot;</span>,
            <span class="dt">age=</span><span class="st">&quot;age_response&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">starts_with</span>(<span class="st">&quot;outcome&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">factor</span>(gender), <span class="dt">age=</span><span class="kw">factor</span>(age), <span class="dt">race=</span><span class="kw">factor</span>(race)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>outcome) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">gender=</span><span class="kw">factor</span>(gender), <span class="dt">age=</span><span class="kw">ordered</span>(age), <span class="dt">race=</span><span class="kw">factor</span>(race)) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(time))</code></pre></div>
+<p>Let us visualize this data for a second. There are of course numerous plots we could do, but here is one possibility:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>action, <span class="dt">y=</span>time, <span class="dt">color=</span>race) <span class="op">+</span><span class="st"> </span><span class="kw">facet_grid</span>(<span class="op">~</span>weapon) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p>We would like to see if there is a relation between reaction time when facing white targets and reaction time when facing black targets. In order to do that, we need to do the opposite of <code>gather</code>, which is <code>spread</code>. The idea is that we could spread the time values across two columns, one for the case of white targets and one for the case of black targets.For use of analysis in the future steps, we will exclude the rows that did not have values for both white and black average response time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingRaceDiff &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key=</span>race, <span class="dt">value=</span>time) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(White) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(Black))
+targetingRaceDiff      <span class="co"># You can also use View</span></code></pre></div>
+<p>Let’s do a simple scatterplot first:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingRaceDiff) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>White, <span class="dt">y=</span>Black, <span class="dt">color=</span>action) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_smooth</span>()</code></pre></div>
+<p>And a more advanced scatterplot:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingRaceDiff) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>White, <span class="dt">y=</span>Black) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_grid</span>(weapon<span class="op">~</span>action, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_smooth</span>()</code></pre></div>
+<p>In the subsequent sections, we will consider models that describe the <code>Black</code> reaction time variable in terms of the other variables in <code>targetingRaceDiff</code>.</p>
 </section>
 <section id="linear-modeling" class="level2">
 <h2>Linear Modeling</h2>
 <section id="basic-constant-fit" class="level3">
 <h3>Basic (constant) fit</h3>
-<p>We are looking for a linear regression model to understand the mean reaction time in terms of given inputs. Let us start with the simplest such model, often referred to as the “null model”, where we would like to predict the <code>time</code> using no predictors at all. In that case all we can do is try to predict a single value, and then account for errors and variability around that value. Our model, as a formula, would look like this: <span class="math display">\[\textrm{time} = \beta_0 + \epsilon\]</span> where the <span class="math inline">\(\beta_0\)</span> is a parameter we need to choose, and <span class="math inline">\(\epsilon\)</span> is the error we are making (different error for each point). The key question to address here is how to determine the “best value” for the parameter <span class="math inline">\(\beta_0\)</span>.</p>
+<p>We are looking for a linear regression model to understand the mean reaction time for black targets in terms of given inputs. Let us start with the simplest such model, often referred to as the “null model”, where we would like to predict the <code>Black</code> using no predictors at all. In that case all we can do is try to predict a single value, and then account for errors and variability around that value. Our model, as a formula, would look like this: <span class="math display">\[\textrm{Black} = \beta_0 + \epsilon\]</span> where the <span class="math inline">\(\beta_0\)</span> is a parameter we need to choose, and <span class="math inline">\(\epsilon\)</span> is the error we are making (different error for each point). The key question to address here is how to determine the “best value” for the parameter <span class="math inline">\(\beta_0\)</span>.</p>
 <p>In linear regression, we choose the parameters so as to <em>minimize</em> the “residual sum of squares”, i.e. the sum of the squared residuals: <span class="math display">\[\textrm{RSS} = \sum \epsilon_i^2\]</span> In our case it can be seen easily that the choice of parameter value that minimizes this sum is the mean <span class="math inline">\(\beta_0 = \textrm{mean(y)}\)</span>. We can then use that to compute the RSS:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span>targetingRaceDiff<span class="op">$</span>Black <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean</span>()
 m
-rss &lt;-<span class="st"> </span><span class="kw">sum</span>((targetingFinal<span class="op">$</span>time <span class="op">-</span><span class="st"> </span>m)<span class="op">^</span><span class="dv">2</span>)
+rss &lt;-<span class="st"> </span><span class="kw">sum</span>((targetingRaceDiff<span class="op">$</span>Black <span class="op">-</span><span class="st"> </span>m)<span class="op">^</span><span class="dv">2</span>)
 rss</code></pre></div>
-<p>So we can see there is a total variability of <span class="math inline">\(924,812\)</span> to account for. Since we will often find ourselves computing the “sum of squared deviations” by subtracting the mean from a variable, then squaring, then summing all the values, let’s simplify matters by writing a small function that computes the squared deviations:</p>
+<p>So we can see an average response time close to <span class="math inline">\(500\)</span> milliseconds, and that there is a total variability of <span class="math inline">\(410,973.6\)</span> to account for. Since we will often find ourselves computing the “sum of squared deviations” by subtracting the mean from a variable, then squaring, then summing all the values, let’s simplify matters by writing a small function that computes the squared deviations:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sq.devs &lt;-<span class="st"> </span><span class="cf">function</span> (x) { (x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span> }
-rss &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()</code></pre></div>
+rss &lt;-<span class="st"> </span>targetingRaceDiff<span class="op">$</span>Black <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()</code></pre></div>
 <p>We could get the same number using R’s modeling machinery:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit0 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span><span class="dv">1</span>, <span class="dt">data=</span>targetingFinal)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit0 &lt;-<span class="st"> </span><span class="kw">lm</span>(Black<span class="op">~</span><span class="dv">1</span>, <span class="dt">data=</span>targetingRaceDiff)
 <span class="kw">summary</span>(fit0)
 <span class="kw">deviance</span>(fit0)    <span class="co"># Essentially the sum of squared deviations/residuals.</span></code></pre></div>
 <p>The <code>1</code> on the right-hand-side of the model represents that we fit a constant model.</p>
@@ -172,12 +189,10 @@ rss &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <s
 </section>
 <section id="linear-fit-one-scalar-predictor" class="level3">
 <h3>Linear fit, one scalar predictor</h3>
-<p>Now we want to examine how the mean reaction time might be affected by other predictors. We will start by considering one such predictor, the <code>iat</code> score.</p>
-<p>The <code>iat</code> score is the <a href="https://en.wikipedia.org/wiki/Implicit-association_test"><em>implicit-association test</em></a> score, which measures “the strength of a person’s automatic associations between mental representations of objects in memory”. In this particular case, the iat was measuring the strength of association between race (black/white) and pictures of weapons.</p>
-<p>A graph is a good start. This should be a point plot and we will add a smooth line to it.</p>
-<p><strong>Do this now</strong>: use <code>ggplot</code> to draw a scatterplot of the <code>iat</code> score in the x-axis and the <code>time</code> in the y-axis, and use <code>geom_smooth</code> to add a smooth line through the fit. How would you describe the influence of <code>iat</code> on <code>time</code>?</p>
-<p>In a linear model we seek a formula that would describe in a linear way the response variable from the independent variables, accounting for a possible error. So the equation we are after would look like this: <span class="math display">\[\textrm{time} = \beta_0 + \beta_1 \times \textrm{iat} + \epsilon\]</span></p>
-<p>The linear part, <span class="math inline">\(\beta_0 + \beta_1 \times \textrm{iat}\)</span>, provides our <em>predicted value</em>, while the <span class="math inline">\(\epsilon\)</span> term indicates the error we are making (called the <em>residual</em>). In typical linear modeling there are numerous questions we like to ask:</p>
+<p>Now we want to examine how the <code>Black</code> reaction time might be affected by other predictors. We will start by considering one such predictor, the <code>White</code> reaction time.</p>
+<p>A graph is a good start. We did this earlier.</p>
+<p>In a linear model we seek a formula that would describe in a linear way the response variable from the independent variables, accounting for a possible error. So the equation we are after would look like this: <span class="math display">\[\textrm{Black} = \beta_0 + \beta_1 \times \textrm{White} + \epsilon\]</span></p>
+<p>The linear part, <span class="math inline">\(\beta_0 + \beta_1 \times \textrm{White}\)</span>, provides our <em>predicted value</em>, while the <span class="math inline">\(\epsilon\)</span> term indicates the error we are making (called the <em>residual</em>). In typical linear modeling there are numerous questions we like to ask:</p>
 <ol type="1">
 <li>Since we have many choices for the parameters <span class="math inline">\(\beta_i\)</span>, how do we define “the best choice”?</li>
 <li>How can we assess whether the structure of the model is reasonable?</li>
@@ -185,111 +200,38 @@ rss &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <s
 <li>How can we use the model to make predictions, and what kind of error do we expect on those predictions?</li>
 <li>How can we compare our model to other models?</li>
 </ol>
-<p>We essentially answered question 1 earlier. We saw there were two different ways to compute the best choice, and in the standard setting of a linear model they both result in the same estimates. Let us now construct a linear fit in R using the <code>iat</code> predictor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(time<span class="op">~</span>iat, <span class="dt">data=</span>targetingFinal)
+<p>We essentially answered question 1 earlier. We saw there were two different ways to compute the best choice, and in the standard setting of a linear model they both result in the same estimates. Let us now construct a linear fit in R using the <code>White</code> predictor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Black<span class="op">~</span>White, <span class="dt">data=</span>targetingRaceDiff)
 <span class="kw">summary</span>(fit1)</code></pre></div>
-<p>The output of this summary view tends to contain a lot of information. For now the one key piece of information is the fit coefficients, namely <span class="math inline">\(\beta_0 = 492.223\)</span> and <span class="math inline">\(\beta_1=10.965\)</span>. Therefore we are claiming that we have a model relationship that looks like so: <span class="math display">\[\textrm{time} = 492.223 + 10.965 \times \textrm{iat} + \epsilon\]</span> For instance, let us try to predict what the <code>time</code> should be when <code>iat</code> equals <span class="math inline">\(1\)</span>. We can do this either by direct computation using the above linear equation, or by using the <code>predict</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit1, <span class="kw">data.frame</span>(<span class="dt">iat=</span><span class="dv">1</span>))
-<span class="fl">482.223</span><span class="op">+</span><span class="fl">19.965</span><span class="op">*</span><span class="dv">1</span></code></pre></div>
+<p>The output of this summary view tends to contain a lot of information. For now the one key piece of information is the fit coefficients, namely <span class="math inline">\(\beta_0 = 235.6828\)</span> and <span class="math inline">\(\beta_1=0.5203\)</span>. Therefore we are claiming that we have a model relationship that looks like so: <span class="math display">\[\textrm{Black} = 235.6828 + 0.5203 \times \textrm{White} + \epsilon\]</span> For instance, let us try to predict what the <code>Black</code> reaction time should be when <code>White</code> equals <span class="math inline">\(450\)</span>. We can do this either by direct computation using the above linear equation, or by using the <code>predict</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit1, <span class="kw">data.frame</span>(<span class="dt">White=</span><span class="dv">450</span>))
+intercept &lt;-<span class="st"> </span><span class="kw">coef</span>(fit1)[<span class="dv">1</span>]    <span class="co"># 235.6828</span>
+slope &lt;-<span class="st"> </span><span class="kw">coef</span>(fit1)[<span class="dv">2</span>]        <span class="co"># 0.5203</span>
+intercept <span class="op">+</span><span class="st"> </span>slope <span class="op">*</span><span class="st"> </span><span class="dv">450</span>       <span class="co"># prediction at White = 450</span></code></pre></div>
+<p>In general, we can interpret the slope of <span class="math inline">\(0.52\)</span> as telling us that the reaction time for Black targets changes at half the rate as the reaction time for White targets.</p>
 <p>One of the questions we’ll want to answer is how reliable this prediction is; we will return to that later.</p>
+<p>For now let us discuss how to assess how good of a fit this is. There are two questions to consider:</p>
+<ol type="1">
+<li>Is this model significantly better than the null model that uses no predictors?</li>
+<li>Do the individual predictors that are used have a considerable contribution to the model? In this case as there is only one predictor, this is the same question as 1.</li>
+</ol>
+<p>To answer question 1, a first place to look is the F-statistic and its p-value. In our case that is <span class="math inline">\(F=92.18\)</span> on <span class="math inline">\(1\)</span> and <span class="math inline">\(189\)</span> degrees of freedom, with a p-value less than <code>2.2e-16</code>, indicating that the overall model that includes the <code>White</code> variable is an improvement over the null model.</p>
+<p>To answer question 2, we would typically look at the t-value for the coefficient, and its p-value, which in this case happens to be the same.</p>
 <p>We can get all the predicted values and all the residuals by simply doing respectively:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit1)
 <span class="kw">resid</span>(fit1)</code></pre></div>
-<p>Let’s discuss how good this model fit is. There are numerous questions we could ask. A natural first question is how well the model manages to explain the variation in <code>time</code> as a result of the variation in <code>iat</code>.</p>
-<p>We can break the variation in <code>time</code> into two parts:</p>
-<ul>
-<li>Variation due to the variation in <code>iat</code> (or all the predictors in general if we have multiple predictors).</li>
-<li>Variation due to randomness, measured by the residuals.</li>
-</ul>
-<p>In the null/constant model we discussed earlier, there was essentially no variation due to the predictors; it was all due to randomness.</p>
-<p>It turns out that these two variations are sort of “orthogonal” to each other, and we have a formula that essentially says that the sum of these two variabilities equals the total variability. We can see this in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">variability.time &lt;-<span class="st"> </span>targetingFinal<span class="op">$</span>time <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()  <span class="co"># Total sum of squares</span>
-residual.sum.squares &lt;-<span class="st"> </span><span class="kw">resid</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()  <span class="co"># Residual sum of squares</span>
-variability.predicted &lt;-<span class="st"> </span><span class="kw">predict</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
-variability.predicted
-residual.sum.squares
-<span class="co"># The following two are equal</span>
-variability.predicted <span class="op">+</span><span class="st"> </span>residual.sum.squares
-variability.time</code></pre></div>
-<p>So this breaks down the variance in two parts: The explained part and the unexplained part. In our case we can see that the explained part is a small part of the whole: <span class="math display">\[\frac{6273.656}{924811.7} = 0.006783712 = 0.68\%\]</span> This is the same as the <span class="math inline">\(r^2\)</span> and is extremely small in this case, indicating that our model explains very little of the variability in <code>time</code>.</p>
-<p>This doesn’t yet mean the model is “bad”: Maybe that’s as much of the variability as we <em>can</em> explain from <code>iat</code>, and all the rest is just “noise” or depends on other predictors. So we pose the question: If a linear equation in <code>iat</code> doesn’t help much, what is <em>the best we could possibly hope to do using just <code>iat</code> as a predictor</em>?</p>
-<p>Let us see how we could try to measure this: For each value of <span class="math inline">\(x\)</span> there is only one corresponding prediction we can make. But we may have multiple <span class="math inline">\(y\)</span> values for the same <span class="math inline">\(x\)</span>. Whatever the variability of those values is, there is no way that we could do better than that, by just using <span class="math inline">\(x\)</span>, because we can only make one prediction for each <span class="math inline">\(x\)</span>.</p>
-<p>Now as our <span class="math inline">\(x\)</span> is scalar, it is fairly unlikely that we would see multiple <span class="math inline">\(y\)</span>s for the same <span class="math inline">\(x\)</span>. We could however “fake” it by breaking <span class="math inline">\(x\)</span> into many small pieces, and assume that our prediction is more or less constant within each of those pieces. In effect we will imagine that our regression line is stepwise with really small steps. Then we’ll measure the error we make in each step. We can’t really have a function that jumps a lot within one of these steps, as they are so small. Here’s how we can compute something like that:</p>
-<ul>
-<li>Cut <code>iat</code> into small pieces and create a new variable from that.</li>
-<li>Group the data set based on the levels of this new variable. Each of these groups essentially amounts to constant <code>iat</code>. Any function using <code>iat</code> can’t really do much better than predicting a single value on each of thes groups.</li>
-<li>Measure the variability in time on each of those levels.</li>
-<li>Add all those together.</li>
-</ul>
-<p>The <code>dplyr</code> machinery can help us do all that:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">iat.binned=</span><span class="kw">cut_width</span>(iat, <span class="fl">0.01</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(iat.binned) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarize</span>(
-        <span class="dt">sq.devs =</span> <span class="kw">sq.devs</span>(time) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>(),
-        <span class="dt">count =</span> <span class="kw">n</span>()
-    ) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">sum</span>(sq.devs))</code></pre></div>
-<p>We get as an answer <span class="math inline">\(623,859.5\)</span>. This suggests that there is a great amount of variability of <code>time</code>, namely <span class="math inline">\(\frac{623859.5}{924811.7} = 67.5\%\)</span> that we cannot really hope to explain with any regression model that uses <code>iat</code> only. Still, we could in theory have explained up to <span class="math inline">\(33.5\%\)</span>, yet our model does considerably worse.</p>
-<p>Another approach is to do what is known as a <code>loess</code> fit, which essentially fits the best possible smooth curve. We can use the <code>loess</code> method for that and see the size of the residuals:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">loess</span>(time<span class="op">~</span>iat, <span class="dt">data=</span>targetingFinal) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">resid</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()</code></pre></div>
-<p>This adds up to <span class="math inline">\(855,951\)</span> which is <span class="math inline">\(\frac{855951}{924611.7} = 0.9257 = 92.6\%\)</span>. This suggests that we couldn’t really predict more than <span class="math inline">\(8\%\)</span> of the time variability using <code>iat</code>.</p>
-<p>Whether we can do better with <code>iat</code> or not, it is clear that using <code>iat</code> as the only predictor is a bad idea. We may return to exploring the effect of <code>iat</code> further later.</p>
-</section>
-<section id="other-diagnostics" class="level3">
-<h3>Other diagnostics</h3>
-<p>Let us consider for the moment other diagnostics we could perform on this data. One of the most important diagnostics is of course looking at residual plots. There are two things we look for in a residual plot: The first is homoscedasticity, namely constant variance. The other is consistent patterns, which might suggest that other predictors or higher order contributions from our predictor might be desired.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">fitted</span>(fit1), <span class="dt">y=</span><span class="kw">residuals</span>(fit1), <span class="dt">color=</span>weapon) <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_smooth</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">facet_grid</span>(action<span class="op">~</span>race)</code></pre></div>
-<p>We see that the residuals exhibit overall a slightly quadratic behavior, but more importantly there are differences in the behavior of the residuals due to the other factors. A better model might result from including those factors as predictors, which we will do at a later time.</p>
-<p>Once we determine that no systematic patterns can be observed in the residuals, we can examine the assumption of constant variance in relation to the fitted values. To achieve this it turns out that we can improve our precision by considering the <em>square root of the absolute residuals</em>. The idea here is that in order to consider variability, the difference between positive and negative shouldn’t be a factor, and by taking absolute values we essentially double our precision. However, as the resulting distribution is skewed, it turns out that we can get a better view if we square root these absolute value residuals, which results in an approximately normal distribution if the original distribution was normal. Here is how that might look in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">fitted</span>(fit1),
-         <span class="dt">y=</span><span class="kw">residuals</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">abs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sqrt</span>(),
-         <span class="dt">color=</span>weapon) <span class="op">+</span>
-<span class="st">     </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">     </span><span class="kw">facet_grid</span>(action<span class="op">~</span>race)</code></pre></div>
-<p>There does not appear to be any systematic change in the variance, which is good.</p>
-<p>An important consideration is whether the residuals are normally distributed. Technically, one has to be careful how to assess this, and a slight detour to some statistical theory might be needed.</p>
-<section id="the-hat-matrix-and-its-effect" class="level4">
-<h4>The hat matrix and its effect</h4>
-<p>When we consider a linear regression model, we usually write it in a linear algebra form: <span class="math display">\[y = X\beta + \epsilon\]</span> where <span class="math inline">\(\beta\)</span> is the vector of coefficients, including the constant, and <span class="math inline">\(X\)</span> is a matrix containing all our predictors. We can inspect the matrix for our model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">model.matrix</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
-<p>We determine the parameter estimates <span class="math inline">\(\hat\beta\)</span> via a matrix multiplication whose details are not that important right now: <span class="math display">\[\hat\beta = (X^TX)^{-1}X^T y\]</span> And from there we can find the fitted values <span class="math inline">\(\hat y\)</span> by multiplying these estimates by the matrix <span class="math inline">\(X\)</span>: <span class="math display">\[\hat y = X\hat\beta = X(X^T X)^{-1}X^T y\]</span> The end result of all this is that if we consider the matrix <span class="math inline">\(H=X(X^T X)^{-1}X^T\)</span>, then we can find the fitted values from the original values by simple matrix multiplication: <span class="math display">\[\hat y = H y\]</span> For that reason, this matrix is called the <em>hat matrix</em>. For our current discussion, the importance of this matrix is that we can use it to express the observed residuals in terms of the true errors: <span class="math display">\[\hat\epsilon = (I-H)\epsilon\]</span> where here <span class="math inline">\(I\)</span> is the identity matrix.</p>
-<p>The important thing to take out of this is that even though we assume that the errors in our model are uncorrelated and with constant variance, the observed residuals that result from the fit in fact do not have to be uncorrelated and with constand variance, due to the above relation. In particular, the variance of the <span class="math inline">\(i\)</span>-th residual can be found by multiplying the variance <span class="math inline">\(\sigma^2\)</span> of the errors by <span class="math inline">\(1-h_{ii}\)</span>, where <span class="math inline">\(h_{ii}\)</span> is the <span class="math inline">\(i\)</span>-th entry in the diagonal of the hat matrix.</p>
-<p>The method <code>hatvalues</code> returns the diagonal elements of the hat matrix, which are also called <em>leverages</em>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hatvals &lt;-<span class="st"> </span><span class="kw">hatvalues</span>(fit1)
-<span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(hatvals), hatvals)
-<span class="kw">plot</span>(targetingFinal<span class="op">$</span>iat, hatvals)</code></pre></div>
-<p>We can see how some data points have larger leverages than others. In particular, predictor values that are more towards the extremes have larger leverages. This makes sense in a way: A large leverage value means small variance for the error. Points that are far in the <span class="math inline">\(x\)</span> direction will tend to influence the regression line more and will tend to have smaller variance to their errors.</p>
-<p>Leverages always add up to the number <span class="math inline">\(p\)</span> of predictors, in our case <span class="math inline">\(2\)</span>. We can easily check that:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(hatvals)</code></pre></div>
-<p>This means that on average we expect leverages to be about equal to <span class="math inline">\(\frac{p}{n} = \frac{2}{387}=0.005168\)</span>, where <span class="math inline">\(n\)</span> is the number of data points. Values that are at least twice as much as this expected average are worth looking at more closely:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(hatvals)
-
-p.over.n =<span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">387</span>
-p.over.n
-<span class="kw">sum</span>(hatvals <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>p.over.n)  <span class="co"># How many data points have high leverage?</span>
-<span class="kw">plot</span>(targetingFinal<span class="op">$</span>iat, hatvals)  <span class="co"># Which data points have high leverage</span>
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>p.over.n, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)  <span class="co"># Horizontal line at 2*2/387</span></code></pre></div>
-<p>In our case that’s 47 observations that might be worth a closer look, as far as this model is concerned.</p>
-<p>An important diagnostic tool would plot the residuals against the leverages. Values that have both high residual and high leverage can have a large effect on the regression, and the graph will show them. It is the last diagnostic graph when you plot a model:</p>
+<p>Perhaps the most useful diagnostic for assessing a model fit is to look at the fit’s diagnostic plots. The following code automatically creates four different diagnostic plots:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit1)</code></pre></div>
-</section>
+<p>The first of these plots is a typical <em>residual plot</em>, showing the residuals vs the fitted values. In this plot we typically look for two things: non-linear patterns might be an indication that we need a different form for our model (for example perhaps a quadratic term for <code>White</code>); also we hope to see consistent variance in the residuals across the range of the fitted values (homoskedasticity). Looking at the residual plot for our <code>fit1</code> raises no concerns.</p>
+<p>The second plot is a normal quantile plot of the standardized residuals. This helps us assess the assumption that the errors should be normally distributed (which translates to a normal distribution for the <em>standardized</em> residuals, which we will discuss more later). The normal quantile plot for our fit shows a linear pattern, which suggests that our standardized residuals are in fact normally distributed.</p>
+<p>The third plot gives us an alternative method for assessing the assumption of homoskedasticity.</p>
+<p>The fourth plot helps us identify influential observations, which may be unduly influencing the model fit. The x-axis is a point’s <em>leverage</em>, which is a measure of how far that data point is from the rest of the data. Such points tend to pull the fit towards them, hence the term <code>leverage</code>. The y-axis is the point’s standardized residual. We are typically interested in points that both influential and have large residuals, so the product of the two values, typically described by the so-called “Cook’s distance”. The red dashed lines indicate thresholds for the Cook’s distance, and values beyond those thresholds warrant a closer look.</p>
 <section id="standardized-and-studentized-residuals" class="level4">
 <h4>Standardized and Studentized residuals</h4>
-<p>Due to the effect of the hat values, we should consider rescaling the residuals before assessing normality. There are two standard adjustments to consider. The first is what is known as <em>standardized residuals</em>. These are simply the residuals divided by the estimate of the standard deviation <span class="math inline">\(\hat\sigma\)</span> and the hat matrix effect, so that they have variance 1: <span class="math display">\[r_i = \frac{\hat\epsilon_i}{\hat\sigma\sqrt{1-h_i}}\]</span> The <code>rstandard</code> method in R returns those residuals:</p>
+<p>In a linear model we make an assumption that our errors are normally distributed. When trying to assess that assumption, we have at our disposal not the errors themselves but the estimates of those errors in the form of the residuals. These estimates turn out to not be exactly independent and normally distributed. But the corresponding <em>standardized residuals</em> should be normally distributed. The <code>rstandard</code> method in R computes these standardized residuals:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstandard</span>(fit1)</code></pre></div>
 <p>In order to test for normality, it is best to use these standardized residuals, though typically they won’t be all that different from the raw residuals. These are also often called <em>internally studentized residuals</em>.</p>
-<p>The other kind of residual is called <em>(externally) studentized residual</em>. A studentized residual is the residual that a point produces, but where we use a model fit that excluded that point. So in theory, for each point we would do the following: exclude the point from the data, compute the model fit on the remaining data, predict the value at the point, and compute the residual.</p>
-<p>Luckily there is a formula that allows us to compute this number easily. The precise formula is complicated, but the <code>rstudent</code> method will compute it for us:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstudent</span>(fit1)</code></pre></div>
-<p>A typical diagnostic plot would be a “normal quantile plot” of the standardized residuals. These plots draw the values of each percentile mapped against the corresponding theoretical values from a normal distribution. If our values are normally distributed then the resulting plot is a straight line:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstandard</span>(fit1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">qqnorm</span>()</code></pre></div>
+<p>You may also run into another kind of residual, called <em>(externally) studentized residual</em>. These can be computed in R with the <code>rstudent</code> method.</p>
 </section>
 <section id="prediction-and-estimation" class="level4">
 <h4>Prediction and Estimation</h4>
@@ -302,39 +244,44 @@ p.over.n
 <p>For the former, we simply need to account for the variability in the estimation of the parameters <span class="math inline">\(\beta\)</span>. This is essentially the standard deviation <span class="math inline">\(\sigma\)</span> of the residuals suitably scaled to account for the <span class="math inline">\(x\)</span> value. The resulting intervals are called <em>confidence intervals</em>.</p>
 <p>For the latter, we have to account for the extra variability <span class="math inline">\(\sigma\)</span> due to the possible additive <em>error</em> term at that particular <span class="math inline">\(x\)</span>. The combination of the two independent variabilities is the desired variability. The resulting intervals are called <em>prediction intervals</em>.</p>
 <p>In R, the <code>predict</code> method will provide us with confidence and prediction intervals:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit1, <span class="kw">list</span>(<span class="dt">iat=</span><span class="op">-</span><span class="dv">2</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)
-<span class="kw">predict</span>(fit1, <span class="kw">list</span>(<span class="dt">iat=</span><span class="op">-</span><span class="dv">2</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">interval=</span><span class="st">&quot;prediction&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fit1, <span class="kw">list</span>(<span class="dt">White=</span><span class="dv">450</span>), <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)
+<span class="kw">predict</span>(fit1, <span class="kw">list</span>(<span class="dt">White=</span><span class="dv">450</span>), <span class="dt">interval=</span><span class="st">&quot;prediction&quot;</span>)</code></pre></div>
 <p>As anticipated, for each <span class="math inline">\(x\)</span>, the prediction interval at <span class="math inline">\(x\)</span> is wider than the confidence interval for the <span class="math inline">\(y\)</span> mean at that <span class="math inline">\(x\)</span>.</p>
 </section>
 </section>
 <section id="linear-fit-one-factor" class="level3">
 <h3>Linear fit, one factor</h3>
-<p>Let us now consider a factor variable and look at its effect on the <code>time</code>. A factor variable can make a single prediction for each factor level, and so it may be able to do better than the initial null model, which was only making a single prediction. Let’s consider the <code>weapon</code> variable, which refers to whether the target was armed or unarmed. We might expect faster reaction times if the target is armed. We start with a plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingFinal) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(weapon, time) <span class="op">+</span>
+<p>Let us now consider a factor variable and look at its effect on <code>Black</code>. A factor variable can make a single prediction for each factor level, and so it may be able to do better than the initial null model, which was only making a single prediction. Let’s consider the <code>weapon</code> variable, which refers to whether the target was armed or unarmed. We might expect faster reaction times if the target is armed. We start with a plot:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(targetingRaceDiff) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">x=</span>weapon, <span class="dt">y=</span>Black) <span class="op">+</span>
 <span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
-<p>We’re curious if there is a difference in the mean reaction times between the two groups, and they seem to be fairly close to each other. Let us use <code>dplyr</code> to compute some numerical summaries for each group:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingFinal <span class="op">%&gt;%</span>
+<p>We could also do a t-test:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(<span class="op">~</span>Black<span class="op">|</span>weapon, <span class="dt">data=</span>targetingRaceDiff)</code></pre></div>
+<p>This is treated as independent-samples test, which is clearly not the right thing in our case since we have matched pairs. In order to do that matched pairs, test, we would need to spread the data first:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingRaceDiff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>White) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">spread</span>(weapon, Black) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">with</span>(<span class="kw">t.test</span>(Armed, Unarmed, <span class="dt">paired=</span><span class="ot">TRUE</span>))</code></pre></div>
+<p>We could also use <code>dplyr</code> to compute some numerical summaries for each group:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">targetingRaceDiff <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">group_by</span>(weapon) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(time),
-              <span class="dt">sd  =</span> <span class="kw">sd</span>(time),
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(Black),
+              <span class="dt">sd  =</span> <span class="kw">sd</span>(Black),
               <span class="dt">n   =</span> <span class="kw">n</span>(),
-              <span class="dt">se  =</span> <span class="kw">sd</span>(time)<span class="op">/</span><span class="kw">sqrt</span>(n))</code></pre></div>
-<p>We can see a slight difference in the standard deviations, and we can see the two means fairly close to each other. We can see that the standard errors within each category are somewhere in the 3-4 range, indicating that the mean difference of close to 17 is considerable.</p>
+              <span class="dt">se  =</span> <span class="kw">sd</span>(Black)<span class="op">/</span><span class="kw">sqrt</span>(n))</code></pre></div>
 <p>Let’s take a look at a model fit:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(time <span class="op">~</span><span class="st"> </span>weapon, <span class="dt">data=</span>targetingFinal)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(Black <span class="op">~</span><span class="st"> </span>weapon, <span class="dt">data=</span>targetingRaceDiff)
 <span class="kw">summary</span>(fit2)
 <span class="kw">coef</span>(fit2)</code></pre></div>
-<p>We can see that the model output has treated the “Armed” case as a baseline, and the intercept represents the mean/predicted value for <code>time</code> for those subjects in the “Armed” case. The effect for the “Unarmed” case is then considered as an additive factor to that. So the predicted value for the “Armed” case would be <code>coef(fit2)[1] = 489</code> and the predicted value for the “Unarmed” case would be <code>coef(fit2)[1] + coef(fit2)[2] = 506.3</code>. These are of course the same as the mean values we saw with dplyr.</p>
-<p>Notice the p-value of <span class="math inline">\(0.000495\)</span> which appears in two places. It is the P-value for an F test that measures if our model is better than the null model, i.e. than the case where the values for armed and unarmed were the same. Or it can be thought of as the P-value for a t test on whether the coefficient for the term <code>weaponUnarmed</code> is non-zero. We discuss these tests in more detail in the next section.</p>
+<p>We can see that the model output has treated the “Armed” case as a baseline, and the intercept represents the mean/predicted value for <code>Black</code> for those subjects in the “Armed” case. The effect for the “Unarmed” case is then considered as an additive factor to that. So the predicted value for the “Armed” case would be <code>coef(fit2)[1] = 485.5178</code> and the predicted value for the “Unarmed” case would be <code>coef(fit2)[1] + coef(fit2)[2] = 505.4491</code>. These are of course the same as the mean values we saw with dplyr.</p>
+<p>Notice the p-value of <span class="math inline">\(0.00284\)</span> which appears in two places. It is the P-value for an F test that measures if our model is better than the null model, i.e. than the case where the values for armed and unarmed were the same. Or it can be thought of as the P-value for a t test on whether the coefficient for the term <code>weaponUnarmed</code> is non-zero. We discuss these tests in more detail in the next section.</p>
 </section>
-<section id="the-f-statistic" class="level3">
-<h3>The F statistic</h3>
+<section id="the-f-statistic-optional" class="level3">
+<h3>The F statistic (optional)</h3>
 <p>In general, if we have two models <span class="math inline">\(M_1\)</span> and <span class="math inline">\(M_2\)</span> with <span class="math inline">\(M_2\)</span> being the an extension of <span class="math inline">\(M_1\)</span>, and with degrees of freedom <span class="math inline">\(df_1\)</span> and <span class="math inline">\(df_2\)</span> respectively, then we can consider the difference between the residual sums of squares of the two models scaled by the difference in the degrees of freedom, and divide that by the scaled residual for the larger model: <span class="math display">\[F=\frac{(\textrm{RSS}(M_1) - \textrm{RSS}(M_2) )/(df_1-df_2)}{\textrm{RSS}(M_2)/df_2}\]</span> Assuming that the larger model <span class="math inline">\(M_2\)</span> does not provide any improvement over the smaller model, then this number <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F_{df_1-df_2, df_2}\)</span> distribution.</p>
-<p>As an example in our case, we have our larger model <span class="math inline">\(M_2\)</span> that uses <code>weapon</code> in addition to a constant to determine <code>time</code>, and we want to compare it to the null model, which uses just the constant. We have <span class="math inline">\(df_2=n-2\)</span> and <span class="math inline">\(df_1=n-1\)</span>. We can directly compute the sums of squared residuals of the two models:</p>
+<p>As an example in our case, we have our larger model <span class="math inline">\(M_2\)</span> that uses <code>weapon</code> in addition to a constant to determine <code>Black</code>, and we want to compare it to the null model, which uses just the constant. We have <span class="math inline">\(df_2=n-2\)</span> and <span class="math inline">\(df_1=n-1\)</span>. We can directly compute the sums of squared residuals of the two models:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rss1 &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit0) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
 rss2 &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sq.devs</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()
-n &lt;-<span class="st"> </span><span class="kw">nrow</span>(targetingFinal)
+n &lt;-<span class="st"> </span><span class="kw">nrow</span>(targetingRaceDiff)
 df1 &lt;-<span class="st"> </span>n<span class="op">-</span><span class="dv">1</span>
 df2 &lt;-<span class="st"> </span>n<span class="op">-</span><span class="dv">2</span>
 fstat &lt;-<span class="st"> </span>((rss1<span class="op">-</span>rss2)<span class="op">/</span>(df1<span class="op">-</span>df2)) <span class="op">/</span><span class="st"> </span>(rss2<span class="op">/</span>df2)
@@ -342,15 +289,15 @@ fstat; df1<span class="op">-</span>df2; df2
 <span class="kw">pf</span>(fstat, df1<span class="op">-</span>df2, df2, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p>The last line tells R to compute the upper-tail probability for the value <code>fstat</code> in an F distribution with <code>df1-df2</code> and <code>df2</code> degrees of freedom. There are a number of functions like <code>pf</code> for all kinds of distributions. You can read more about them via <code>?Distributions</code>.</p>
 <p>You may be familiar with these computations under a different terminology. The denominator can be interpreted as the <strong>within-groups variability</strong>, while the numerator can be interpreted as the <strong>between-groups variability</strong>. Let’s check this in our instance. We can define the between-groups variability as follows: Data points form two groups based on their <code>weapon</code> value. For each point we consider the difference between the mean of the point’s group vs the overall mean, then we look at the sum of squares of these differences. In R this would be:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">between.groups &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">totalMean=</span><span class="kw">mean</span>(time)) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">between.groups &lt;-<span class="st"> </span>targetingRaceDiff <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">totalMean=</span><span class="kw">mean</span>(Black)) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">group_by</span>(weapon) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">groupMean=</span><span class="kw">mean</span>(time)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">groupMean=</span><span class="kw">mean</span>(Black)) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">summarize</span>(<span class="dt">between.groups=</span><span class="kw">sum</span>((groupMean<span class="op">-</span>totalMean)<span class="op">^</span><span class="dv">2</span>))
-within.groups &lt;-<span class="st"> </span>targetingFinal <span class="op">%&gt;%</span>
+within.groups &lt;-<span class="st"> </span>targetingRaceDiff <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">group_by</span>(weapon) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">sqdevs =</span> <span class="kw">sq.devs</span>(time)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">sqdevs =</span> <span class="kw">sq.devs</span>(Black)) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">summarize</span>(<span class="dt">within.groups=</span><span class="kw">sum</span>(sqdevs))
 
@@ -362,6 +309,17 @@ between.groups; within.groups
 <p>We can also see the same computation in the <code>anova</code> function, which compares two models via the method described above:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit0, fit2)</code></pre></div>
 <p>Analogous tests can be performed on the coefficients of the fit directly, using the <span class="math inline">\(t\)</span> distribution. Testing for a coefficient equaling 0 is equivalent to an F-test where we compare the full model with the smaller model without that coefficient. In the cases we have seen so far, this coincides with the test of the full model against the null model.</p>
+</section>
+<section id="rs-distribution-functions" class="level3">
+<h3>R’s distribution functions</h3>
+<p>While most of the time you would rely on the outputs of the <code>summary</code> and <code>anova</code> functions for your p-value computations, you may on occasion find it useful to compute some of these directly. R offers us a whole bevy of distribution functions to help with that, and you can find more about them by typing <code>?Distributions</code> in the console.</p>
+<p>R knows about over 20 different distributions, and of each distribution it provides us with 4 functions:</p>
+<ul>
+<li><code>r...</code> can be used to produce random values following a specific distribution. For example `rnorm(1000, mean=3, sd=1) would give us 1000 values drawn from a normal distribution with a mean of 3 and standard deviation of 1.</li>
+<li><code>d...</code> is the actual density function for the distribution, and is not particularly useful.</li>
+<li><code>p...</code> returns probability values for a given x value. For example <code>pf(9.143, df1=1, df2=189, lower.tail=FALSE)</code> is the p-value 0.00284 for an F-test with an F value of 9.143 and degrees of freedom 1 and 189.</li>
+<li><code>q...</code> returns the quantile for a specified probability. For example to find the 90th percentile on a t-distribution with 30 degrees of freedom, we would do <code>qt(0.9, df=30, lower.tail=TRUE)</code>.</li>
+</ul>
 </section>
 <section id="factors-with-multiple-levels" class="level3">
 <h3>Factors with multiple levels</h3>

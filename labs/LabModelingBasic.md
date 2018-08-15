@@ -1,4 +1,4 @@
-# Advanced Lab 3: Basic Linear Modeling and ANOVA
+# Advanced Lab 3: Linear Modeling and ANOVA
 
 ## Introduction
 
@@ -25,15 +25,15 @@ We will only need the first 12 variables, the remaining are computed quantities.
 ```r
 targetingLong <- targeting %>%
     select(1:12) %>%
-    gather(key="key", value="time", 3:10)
+    gather(key="condition", value="time", 3:10)
 ```
 Next we need to break the `key` variable into two parts, one showing the target's race and another showing the outcome. We'll first mutate the `key` field to remove everything up through the underscore. We will need the `stringr` package for that. This package allows us to perform various string-related tasks.
 ```r
 library(stringr)
 targetingLong <- targeting %>%
     select(1:12) %>%
-    gather(key="key", value="time", 3:10) %>%
-    mutate(key=str_replace(key, "expressions.MeanRT_", ""))
+    gather(key="condition", value="time", 3:10) %>%
+    mutate(condition=str_replace(condition, "expressions.MeanRT_", ""))
 ```
 Now we split the new key variable in two parts, splitting after the first 5 characters (to capture the White/Black part):
 ```r
@@ -56,7 +56,7 @@ This variable actually contains two different pieces of information, whether the
     FAs Target was unarmed, subject did fire (False Alarm)
 ------- -------------------------------------------------------------
 
-We will use `mutate` and `recode_factor` to create these new variables:
+We will use `mutate` and `recode_factor` to create these new variables.
 ```r
 targetingFinal <- targetingLong %>%
     mutate(weapon=recode_factor(outcome, Hits="Armed", Misses="Armed",
@@ -66,11 +66,9 @@ targetingFinal <- targetingLong %>%
 ```
 To double-check that we did this correctly, we'll create counts:
 ```r
-targetingFinal %>%
-    group_by(race, outcome, weapon, action) %>%
-    summarize(count=n())
+targetingFinal %>% count(race, outcome, weapon, action)
 ```
-We should see 49 cases for each, corresponding to our initial 49 data rows.
+We should see 49 cases for each of 8 different combinations of values, corresponding to our initial 49 data rows.
 
 Finally, a couple more cleanup steps are in order before we move on:
 
@@ -86,36 +84,66 @@ targetingFinal <- targetingFinal %>%
            iat="expressions.d",
            gender="gender_response",
            age="age_response") %>%
-    select(-starts_with("outcome")) %>%
-    mutate(gender=factor(gender), age=factor(age), race=factor(race)) %>%
+    select(-outcome) %>%
+    mutate(gender=factor(gender), age=ordered(age), race=factor(race)) %>%
     filter(!is.na(time))
 ```
+
+Let us visualize this data for a second. There are of course numerous plots we could do, but here is one possibility:
+```r
+ggplot(targetingFinal) + aes(x=action, y=time, color=race) + facet_grid(~weapon) + geom_boxplot()
+```
+
+We would like to see if there is a relation between reaction time when facing white targets and reaction time when facing black targets. In order to do that, we need to do the opposite of `gather`, which is `spread`. The idea is that we could spread the time values across two columns, one for the case of white targets and one for the case of black targets.For use of analysis in the future steps, we will exclude the rows that did not have values for both white and black average response time.
+```r
+targetingRaceDiff <- targetingFinal %>%
+    spread(key=race, value=time) %>%
+    filter(!is.na(White) & !is.na(Black))
+targetingRaceDiff      # You can also use View
+```
+Let's do a simple scatterplot first:
+```r
+ggplot(targetingRaceDiff) +
+    aes(x=White, y=Black, color=action) +
+    geom_point() +
+    geom_smooth()
+```
+And a more advanced scatterplot:
+```r
+ggplot(targetingRaceDiff) +
+    aes(x=White, y=Black) +
+    facet_grid(weapon~action, scales="free") +
+    geom_point() +
+    geom_smooth()
+```
+
+In the subsequent sections, we will consider models that describe the `Black` reaction time variable in terms of the other variables in `targetingRaceDiff`.
 
 ## Linear Modeling
 
 ### Basic (constant) fit
 
-We are looking for a linear regression model to understand the mean reaction time in terms of given inputs. Let us start with the simplest such model, often referred to as the "null model", where we would like to predict the `time` using no predictors at all. In that case all we can do is try to predict a single value, and then account for errors and variability around that value. Our model, as a formula, would look like this:
-$$\textrm{time} = \beta_0 + \epsilon$$
+We are looking for a linear regression model to understand the mean reaction time for black targets in terms of given inputs. Let us start with the simplest such model, often referred to as the "null model", where we would like to predict the `Black` using no predictors at all. In that case all we can do is try to predict a single value, and then account for errors and variability around that value. Our model, as a formula, would look like this:
+$$\textrm{Black} = \beta_0 + \epsilon$$
 where the $\beta_0$ is a parameter we need to choose, and $\epsilon$ is the error we are making (different error for each point). The key question to address here is how to determine the "best value" for the parameter $\beta_0$.
 
 In linear regression, we choose the parameters so as to *minimize* the "residual sum of squares", i.e. the sum of the squared residuals:
 $$\textrm{RSS} = \sum \epsilon_i^2$$
 In our case it can be seen easily that the choice of parameter value that minimizes this sum is the mean $\beta_0 = \textrm{mean(y)}$. We can then use that to compute the RSS:
 ```r
-m <- targetingFinal$time %>% mean()
+m <- targetingRaceDiff$Black %>% mean()
 m
-rss <- sum((targetingFinal$time - m)^2)
+rss <- sum((targetingRaceDiff$Black - m)^2)
 rss
 ```
-So we can see there is a total variability of $924,812$ to account for. Since we will often find ourselves computing the "sum of squared deviations" by subtracting the mean from a variable, then squaring, then summing all the values, let's simplify matters by writing a small function that computes the squared deviations:
+So we can see an average response time close to $500$ milliseconds, and that there is a total variability of $410,973.6$ to account for. Since we will often find ourselves computing the "sum of squared deviations" by subtracting the mean from a variable, then squaring, then summing all the values, let's simplify matters by writing a small function that computes the squared deviations:
 ```r
 sq.devs <- function (x) { (x-mean(x))^2 }
-rss <- targetingFinal$time %>% sq.devs() %>% sum()
+rss <- targetingRaceDiff$Black %>% sq.devs() %>% sum()
 ```
 We could get the same number using R's modeling machinery:
 ```r
-fit0 <- lm(time~1, data=targetingFinal)
+fit0 <- lm(Black~1, data=targetingRaceDiff)
 summary(fit0)
 deviance(fit0)    # Essentially the sum of squared deviations/residuals.
 ```
@@ -139,18 +167,14 @@ It turns out that for linear regression, the solution to these two problems is e
 
 ### Linear fit, one scalar predictor
 
-Now we want to examine how the mean reaction time might be affected by other predictors. We will start by considering one such predictor, the `iat` score.
+Now we want to examine how the `Black` reaction time might be affected by other predictors. We will start by considering one such predictor, the `White` reaction time.
 
-The `iat` score is the [*implicit-association test*](https://en.wikipedia.org/wiki/Implicit-association_test) score, which measures "the strength of a person's automatic associations between mental representations of objects in memory". In this particular case, the iat was measuring the strength of association between race (black/white) and pictures of weapons.
-
-A graph is a good start. This should be a point plot and we will add a smooth line to it.
-
-**Do this now**: use `ggplot` to draw a scatterplot of the `iat` score in the x-axis and the `time` in the y-axis, and use `geom_smooth` to add a smooth line through the fit. How would you describe the influence of `iat` on `time`?
+A graph is a good start. We did this earlier.
 
 In a linear model we seek a formula that would describe in a linear way the response variable from the independent variables, accounting for a possible error. So the equation we are after would look like this:
-$$\textrm{time} = \beta_0 + \beta_1 \times \textrm{iat} + \epsilon$$
+$$\textrm{Black} = \beta_0 + \beta_1 \times \textrm{White} + \epsilon$$
 
-The linear part, $\beta_0 + \beta_1 \times \textrm{iat}$, provides our *predicted value*, while the $\epsilon$ term indicates the error we are making (called the *residual*). In typical linear modeling there are numerous questions we like to ask:
+The linear part, $\beta_0 + \beta_1 \times \textrm{White}$, provides our *predicted value*, while the $\epsilon$ term indicates the error we are making (called the *residual*). In typical linear modeling there are numerous questions we like to ask:
 
 1. Since we have many choices for the parameters $\beta_i$, how do we define "the best choice"?
 2. How can we assess whether the structure of the model is reasonable?
@@ -158,20 +182,33 @@ The linear part, $\beta_0 + \beta_1 \times \textrm{iat}$, provides our *predicte
 4. How can we use the model to make predictions, and what kind of error do we expect on those predictions?
 5. How can we compare our model to other models?
 
-We essentially answered question 1 earlier. We saw there were two different ways to compute the best choice, and in the standard setting of a linear model they both result in the same estimates. Let us now construct a linear fit in R using the `iat` predictor:
+We essentially answered question 1 earlier. We saw there were two different ways to compute the best choice, and in the standard setting of a linear model they both result in the same estimates. Let us now construct a linear fit in R using the `White` predictor:
 ```r
-fit1 <- lm(time~iat, data=targetingFinal)
+fit1 <- lm(Black~White, data=targetingRaceDiff)
 summary(fit1)
 ```
 
-The output of this summary view tends to contain a lot of information. For now the one key piece of information is the fit coefficients, namely $\beta_0 = 492.223$ and $\beta_1=10.965$. Therefore we are claiming that we have a model relationship that looks like so:
-$$\textrm{time} = 492.223 + 10.965 \times \textrm{iat} + \epsilon$$
-For instance, let us try to predict what the `time` should be when `iat` equals $1$. We can do this either by direct computation using the above linear equation, or by using the `predict` function:
+The output of this summary view tends to contain a lot of information. For now the one key piece of information is the fit coefficients, namely $\beta_0 = 235.6828$ and $\beta_1=0.5203$. Therefore we are claiming that we have a model relationship that looks like so:
+$$\textrm{Black} = 235.6828 + 0.5203 \times \textrm{White} + \epsilon$$
+For instance, let us try to predict what the `Black` reaction time should be when `White` equals $450$. We can do this either by direct computation using the above linear equation, or by using the `predict` function:
 ```r
-predict(fit1, data.frame(iat=1))
-482.223+19.965*1
+predict(fit1, data.frame(White=450))
+intercept <- coef(fit1)[1]    # 235.6828
+slope <- coef(fit1)[2]        # 0.5203
+intercept + slope * 450       # prediction at White = 450
 ```
+In general, we can interpret the slope of $0.52$ as telling us that the reaction time for Black targets changes at half the rate as the reaction time for White targets.
+
 One of the questions we'll want to answer is how reliable this prediction is; we will return to that later.
+
+For now let us discuss how to assess how good of a fit this is. There are two questions to consider:
+
+1. Is this model significantly better than the null model that uses no predictors?
+2. Do the individual predictors that are used have a considerable contribution to the model? In this case as there is only one predictor, this is the same question as 1.
+
+To answer question 1, a first place to look is the F-statistic and its p-value. In our case that is $F=92.18$ on $1$ and $189$ degrees of freedom, with a p-value less than `2.2e-16`, indicating that the overall model that includes the `White` variable is an improvement over the null model.
+
+To answer question 2, we would typically look at the t-value for the coefficient, and its p-value, which in this case happens to be the same.
 
 We can get all the predicted values and all the residuals by simply doing respectively:
 ```r
@@ -179,158 +216,28 @@ predict(fit1)
 resid(fit1)
 ```
 
-Let's discuss how good this model fit is. There are numerous questions we could ask. A natural first question is how well the model manages to explain the variation in `time` as a result of the variation in `iat`.
-
- We can break the variation in `time` into two parts:
-
-- Variation due to the variation in `iat` (or all the predictors in general if we have multiple predictors).
-- Variation due to randomness, measured by the residuals.
-
-In the null/constant model we discussed earlier, there was essentially no variation due to the predictors; it was all due to randomness.
-
-It turns out that these two variations are sort of "orthogonal" to each other, and we have a formula that essentially says that the sum of these two variabilities equals the total variability. We can see this in R:
-```r
-variability.time <- targetingFinal$time %>% sq.devs() %>% sum()  # Total sum of squares
-residual.sum.squares <- resid(fit1) %>% sq.devs() %>% sum()  # Residual sum of squares
-variability.predicted <- predict(fit1) %>% sq.devs() %>% sum()
-variability.predicted
-residual.sum.squares
-# The following two are equal
-variability.predicted + residual.sum.squares
-variability.time
-```
-So this breaks down the variance in two parts: The explained part and the unexplained part. In our case we can see that the explained part is a small part of the whole:
-$$\frac{6273.656}{924811.7} = 0.006783712 = 0.68\%$$
-This is the same as the $r^2$ and is extremely small in this case, indicating that our model explains very little of the variability in `time`.
-
-This doesn't yet mean the model is "bad": Maybe that's as much of the variability as we *can* explain from `iat`, and all the rest is just "noise" or depends on other predictors. So we pose the question: If a linear equation in `iat` doesn't help much, what is *the best we could possibly hope to do using just `iat` as a predictor*?
-
-Let us see how we could try to measure this: For each value of $x$ there is only one corresponding prediction we can make. But we may have multiple $y$ values for the same $x$. Whatever the variability of those values is, there is no way that we could do better than that, by just using $x$, because we can only make one prediction for each $x$.
-
-Now as our $x$ is scalar, it is fairly unlikely that we would see multiple $y$s for the same $x$. We could however "fake" it by breaking $x$ into many small pieces, and assume that our prediction is more or less constant within each of those pieces. In effect we will imagine that our regression line is stepwise with really small steps. Then we'll measure the error we make in each step. We can't really have a function that jumps a lot within one of these steps, as they are so small. Here's how we can compute something like that:
-
-- Cut `iat` into small pieces and create a new variable from that.
-- Group the data set based on the levels of this new variable. Each of these groups essentially amounts to constant `iat`. Any function using `iat` can't really do much better than predicting a single value on each of thes groups.
-- Measure the variability in time on each of those levels.
-- Add all those together.
-
-The `dplyr` machinery can help us do all that:
-```r
-targetingFinal %>%
-    mutate(iat.binned=cut_width(iat, 0.01)) %>%
-    group_by(iat.binned) %>%
-    summarize(
-        sq.devs = sq.devs(time) %>% sum(),
-        count = n()
-    ) %>%
-    summarize(total=sum(sq.devs))
-```
-We get as an answer $623,859.5$. This suggests that there is a great amount of variability of `time`, namely $\frac{623859.5}{924811.7} = 67.5\%$ that we cannot really hope to explain with any regression model that uses `iat` only. Still, we could in theory have explained up to $33.5\%$, yet our model does considerably worse.
-
-Another approach is to do what is known as a `loess` fit, which essentially fits the best possible smooth curve. We can use the `loess` method for that and see the size of the residuals:
-```r
-loess(time~iat, data=targetingFinal) %>%
-    resid() %>% sq.devs() %>% sum()
-```
-This adds up to $855,951$ which is $\frac{855951}{924611.7} = 0.9257 = 92.6\%$. This suggests that we couldn't really predict more than $8\%$ of the time variability using `iat`.
-
-Whether we can do better with `iat` or not, it is clear that using `iat` as the only predictor is a bad idea. We may return to exploring the effect of `iat` further later.
-
-### Other diagnostics
-
-Let us consider for the moment other diagnostics we could perform on this data. One of the most important diagnostics is of course looking at residual plots. There are two things we look for in a residual plot: The first is homoscedasticity, namely constant variance. The other is consistent patterns, which might suggest that other predictors or higher order contributions from our predictor might be desired.
-```r
-targetingFinal %>% ggplot() +
-     aes(x=fitted(fit1), y=residuals(fit1), color=weapon) +
-     geom_point() +
-     geom_smooth() +
-     facet_grid(action~race)
-```
-We see that the residuals exhibit overall a slightly quadratic behavior, but more importantly there are differences in the behavior of the residuals due to the other factors. A better model might result from including those factors as predictors, which we will do at a later time.
-
-Once we determine that no systematic patterns can be observed in the residuals, we can examine the assumption of constant variance in relation to the fitted values. To achieve this it turns out that we can improve our precision by considering the *square root of the absolute residuals*. The idea here is that in order to consider variability, the difference between positive and negative shouldn't be a factor, and by taking absolute values we essentially double our precision. However, as the resulting distribution is skewed, it turns out that we can get a better view if we square root these absolute value residuals, which results in an approximately normal distribution if the original distribution was normal. Here is how that might look in R:
-```r
-targetingFinal %>% ggplot() +
-     aes(x=fitted(fit1),
-         y=residuals(fit1) %>% abs() %>% sqrt(),
-         color=weapon) +
-     geom_point() +
-     facet_grid(action~race)
-```
-There does not appear to be any systematic change in the variance, which is good.
-
-An important consideration is whether the residuals are normally distributed. Technically, one has to be careful how to assess this, and a slight detour to some statistical theory might be needed.
-
-#### The hat matrix and its effect
-
-When we consider a linear regression model, we usually write it in a linear algebra form:
-$$y = X\beta + \epsilon$$
-where $\beta$ is the vector of coefficients, including the constant, and $X$ is a matrix containing all our predictors. We can inspect the matrix for our model:
-```r
-model.matrix(fit1) %>% head(10)
-```
-We determine the parameter estimates $\hat\beta$ via a matrix multiplication whose details are not that important right now:
-$$\hat\beta = (X^TX)^{-1}X^T y$$
-And from there we can find the fitted values $\hat y$ by multiplying these estimates by the matrix $X$:
-$$\hat y = X\hat\beta = X(X^T X)^{-1}X^T y$$
-The end result of all this is that if we consider the matrix $H=X(X^T X)^{-1}X^T$, then we can find the fitted values from the original values by simple matrix multiplication:
-$$\hat y = H y$$
-For that reason, this matrix is called the *hat matrix*. For our current discussion, the importance of this matrix is that we can use it to express the observed residuals in terms of the true errors:
-$$\hat\epsilon = (I-H)\epsilon$$
-where here $I$ is the identity matrix.
-
-The important thing to take out of this is that even though we assume that the errors in our model are uncorrelated and with constant variance, the observed residuals that result from the fit in fact do not have to be uncorrelated and with constand variance, due to the above relation. In particular, the variance of the $i$-th residual can be found by multiplying the variance $\sigma^2$ of the errors by $1-h_{ii}$, where $h_{ii}$ is the $i$-th entry in the diagonal of the hat matrix.
-
-The method `hatvalues` returns the diagonal elements of the hat matrix, which are also called *leverages*:
-```r
-hatvals <- hatvalues(fit1)
-plot(1:length(hatvals), hatvals)
-plot(targetingFinal$iat, hatvals)
-```
-We can see how some data points have larger leverages than others. In particular, predictor values that are more towards the extremes have larger leverages. This makes sense in a way: A large leverage value means small variance for the error. Points that are far in the $x$ direction will tend to influence the regression line more and will tend to have smaller variance to their errors.
-
-Leverages always add up to the number $p$ of predictors, in our case $2$. We can easily check that:
-```r
-sum(hatvals)
-```
-This means that on average we expect leverages to be about equal to $\frac{p}{n} = \frac{2}{387}=0.005168$, where $n$ is the number of data points. Values that are at least twice as much as this expected average are worth looking at more closely:
-```r
-sum(hatvals)
-
-p.over.n = 2 / 387
-p.over.n
-sum(hatvals >= 2 * p.over.n)  # How many data points have high leverage?
-plot(targetingFinal$iat, hatvals)  # Which data points have high leverage
-abline(h=2 * p.over.n, col="red")  # Horizontal line at 2*2/387
-```
-In our case that's 47 observations that might be worth a closer look, as far as this model is concerned.
-
-An important diagnostic tool would plot the residuals against the leverages. Values that have both high residual and high leverage can have a large effect on the regression, and the graph will show them. It is the last diagnostic graph when you plot a model:
+Perhaps the most useful diagnostic for assessing a model fit is to look at the fit's diagnostic plots. The following code automatically creates four different diagnostic plots:
 ```r
 plot(fit1)
 ```
 
+The first of these plots is a typical *residual plot*, showing the residuals vs the fitted values. In this plot we typically look for two things: non-linear patterns might be an indication that we need a different form for our model (for example perhaps a quadratic term for `White`); also we hope to see consistent variance in the residuals across the range of the fitted values (homoskedasticity). Looking at the residual plot for our `fit1` raises no concerns.
+
+The second plot is a normal quantile plot of the standardized residuals. This helps us assess the assumption that the errors should be normally distributed (which translates to a normal distribution for the *standardized* residuals, which we will discuss more later). The normal quantile plot for our fit shows a linear pattern, which suggests that our standardized residuals are in fact normally distributed.
+
+The third plot gives us an alternative method for assessing the assumption of homoskedasticity.
+
+The fourth plot helps us identify influential observations, which may be unduly influencing the model fit. The x-axis is a point's *leverage*, which is a measure of how far that data point is from the rest of the data. Such points tend to pull the fit towards them, hence the term `leverage`. The y-axis is the point's standardized residual. We are typically interested in points that both influential and have large residuals, so the product of the two values, typically described by the so-called "Cook's distance". The red dashed lines indicate thresholds for the Cook's distance, and values beyond those thresholds warrant a closer look.
+
 #### Standardized and Studentized residuals
 
-Due to the effect of the hat values, we should consider rescaling the residuals before assessing normality. There are two standard adjustments to consider. The first is what is known as *standardized residuals*. These are simply the residuals divided by the estimate of the standard deviation $\hat\sigma$ and the hat matrix effect, so that they have variance 1:
-$$r_i = \frac{\hat\epsilon_i}{\hat\sigma\sqrt{1-h_i}}$$
-The `rstandard` method in R returns those residuals:
+In a linear model we make an assumption that our errors are normally distributed. When trying to assess that assumption, we have at our disposal not the errors themselves but the estimates of those errors in the form of the residuals. These estimates turn out to not be exactly independent and normally distributed. But the corresponding *standardized residuals* should be normally distributed. The `rstandard` method in R computes these standardized residuals:
 ```r
 rstandard(fit1)
 ```
 In order to test for normality, it is best to use these standardized residuals, though typically they won't be all that different from the raw residuals. These are also often called *internally studentized residuals*.
 
-The other kind of residual is called *(externally) studentized residual*. A studentized residual is the residual that a point produces, but where we use a model fit that excluded that point. So in theory, for each point we would do the following: exclude the point from the data, compute the model fit on the remaining data, predict the value at the point, and compute the residual.
-
-Luckily there is a formula that allows us to compute this number easily. The precise formula is complicated, but the `rstudent` method will compute it for us:
-```r
-rstudent(fit1)
-```
-
-A typical diagnostic plot would be a "normal quantile plot" of the standardized residuals. These plots draw the values of each percentile mapped against the corresponding theoretical values from a normal distribution. If our values are normally distributed then the resulting plot is a straight line:
-```r
-rstandard(fit1) %>% qqnorm()
-```
+You may also run into another kind of residual, called *(externally) studentized residual*. These can be computed in R with the `rstudent` method.
 
 #### Prediction and Estimation
 
@@ -347,51 +254,61 @@ For the latter, we have to account for the extra variability $\sigma$ due to the
 
 In R, the `predict` method will provide us with confidence and prediction intervals:
 ```r
-predict(fit1, list(iat=-2:4), interval="confidence")
-predict(fit1, list(iat=-2:4), interval="prediction")
+predict(fit1, list(White=450), interval="confidence")
+predict(fit1, list(White=450), interval="prediction")
 ```
 As anticipated, for each $x$, the prediction interval at $x$ is wider than the confidence interval for the $y$ mean at that $x$.
 
 ### Linear fit, one factor
 
-Let us now consider a factor variable and look at its effect on the `time`. A factor variable can make a single prediction for each factor level, and so it may be able to do better than the initial null model, which was only making a single prediction. Let's consider the `weapon` variable, which refers to whether the target was armed or unarmed. We might expect faster reaction times if the target is armed. We start with a plot:
+Let us now consider a factor variable and look at its effect on `Black`. A factor variable can make a single prediction for each factor level, and so it may be able to do better than the initial null model, which was only making a single prediction. Let's consider the `weapon` variable, which refers to whether the target was armed or unarmed. We might expect faster reaction times if the target is armed. We start with a plot:
 ```r
-ggplot(targetingFinal) +
-    aes(weapon, time) +
+ggplot(targetingRaceDiff) +
+    aes(x=weapon, y=Black) +
     geom_boxplot()
 ```
-We're curious if there is a difference in the mean reaction times between the two groups, and they seem to be fairly close to each other. Let us use `dplyr` to compute some numerical summaries for each group:
+We could also do a t-test:
 ```r
-targetingFinal %>%
-    group_by(weapon) %>%
-    summarize(mean = mean(time),
-              sd  = sd(time),
-              n   = n(),
-              se  = sd(time)/sqrt(n))
+t.test(~Black|weapon, data=targetingRaceDiff)
 ```
-We can see a slight difference in the standard deviations, and we can see the two means fairly close to each other. We can see that the standard errors within each category are somewhere in the 3-4 range, indicating that the mean difference of close to 17 is considerable.
+This is treated as independent-samples test, which is clearly not the right thing in our case since we have matched pairs. In order to do that matched pairs, test, we would need to spread the data first:
+```r
+targetingRaceDiff %>% select(-White) %>%
+    spread(weapon, Black) %>%
+    with(t.test(Armed, Unarmed, paired=TRUE))
+```
+
+We could also use `dplyr` to compute some numerical summaries for each group:
+```r
+targetingRaceDiff %>%
+    group_by(weapon) %>%
+    summarize(mean = mean(Black),
+              sd  = sd(Black),
+              n   = n(),
+              se  = sd(Black)/sqrt(n))
+```
 
 Let's take a look at a model fit:
 ```r
-fit2 <- lm(time ~ weapon, data=targetingFinal)
+fit2 <- lm(Black ~ weapon, data=targetingRaceDiff)
 summary(fit2)
 coef(fit2)
 ```
-We can see that the model output has treated the "Armed" case as a baseline, and the intercept represents the mean/predicted value for `time` for those subjects in the "Armed" case. The effect for the "Unarmed" case is then considered as an additive factor to that. So the predicted value for the "Armed" case would be `coef(fit2)[1] = 489` and the predicted value for the "Unarmed" case would be `coef(fit2)[1] + coef(fit2)[2] = 506.3`. These are of course the same as the mean values we saw with dplyr.
+We can see that the model output has treated the "Armed" case as a baseline, and the intercept represents the mean/predicted value for `Black` for those subjects in the "Armed" case. The effect for the "Unarmed" case is then considered as an additive factor to that. So the predicted value for the "Armed" case would be `coef(fit2)[1] = 485.5178 ` and the predicted value for the "Unarmed" case would be `coef(fit2)[1] + coef(fit2)[2] = 505.4491`. These are of course the same as the mean values we saw with dplyr.
 
-Notice the p-value of $0.000495$ which appears in two places. It is the P-value for an F test that measures if our model is better than the null model, i.e. than the case where the values for armed and unarmed were the same. Or it can be thought of as the P-value for a t test on whether the coefficient for the term `weaponUnarmed` is non-zero. We discuss these tests in more detail in the next section.
+Notice the p-value of $0.00284$ which appears in two places. It is the P-value for an F test that measures if our model is better than the null model, i.e. than the case where the values for armed and unarmed were the same. Or it can be thought of as the P-value for a t test on whether the coefficient for the term `weaponUnarmed` is non-zero. We discuss these tests in more detail in the next section.
 
-### The F statistic
+### The F statistic (optional)
 
 In general, if we have two models $M_1$ and $M_2$ with $M_2$ being the an extension of $M_1$, and with degrees of freedom $df_1$ and $df_2$ respectively, then we can consider the difference between the residual sums of squares of the two models scaled by the difference in the degrees of freedom, and divide that by the scaled residual for the larger model:
 $$F=\frac{(\textrm{RSS}(M_1) - \textrm{RSS}(M_2) )/(df_1-df_2)}{\textrm{RSS}(M_2)/df_2}$$
 Assuming that the larger model $M_2$ does not provide any improvement over the smaller model, then this number $F$ follows an $F_{df_1-df_2, df_2}$ distribution.
 
-As an example in our case, we have our larger model $M_2$ that uses `weapon` in addition to a constant to determine `time`, and we want to compare it to the null model, which uses just the constant. We have $df_2=n-2$ and $df_1=n-1$. We can directly compute the sums of squared residuals of the two models:
+As an example in our case, we have our larger model $M_2$ that uses `weapon` in addition to a constant to determine `Black`, and we want to compare it to the null model, which uses just the constant. We have $df_2=n-2$ and $df_1=n-1$. We can directly compute the sums of squared residuals of the two models:
 ```r
 rss1 <- residuals(fit0) %>% sq.devs() %>% sum()
 rss2 <- residuals(fit2) %>% sq.devs() %>% sum()
-n <- nrow(targetingFinal)
+n <- nrow(targetingRaceDiff)
 df1 <- n-1
 df2 <- n-2
 fstat <- ((rss1-rss2)/(df1-df2)) / (rss2/df2)
@@ -402,15 +319,15 @@ The last line tells R to compute the upper-tail probability for the value `fstat
 
 You may be familiar with these computations under a different terminology. The denominator can be interpreted as the **within-groups variability**, while the numerator can be interpreted as the **between-groups variability**. Let's check this in our instance. We can define the between-groups variability as follows: Data points form two groups based on their `weapon` value. For each point we consider the difference between the mean of the point's group vs the overall mean, then we look at the sum of squares of these differences. In R this would be:
 ```r
-between.groups <- targetingFinal %>%
-    mutate(totalMean=mean(time)) %>%
+between.groups <- targetingRaceDiff %>%
+    mutate(totalMean=mean(Black)) %>%
     group_by(weapon) %>%
-    mutate(groupMean=mean(time)) %>%
+    mutate(groupMean=mean(Black)) %>%
     ungroup() %>%
     summarize(between.groups=sum((groupMean-totalMean)^2))
-within.groups <- targetingFinal %>%
+within.groups <- targetingRaceDiff %>%
     group_by(weapon) %>%
-    mutate(sqdevs = sq.devs(time)) %>%
+    mutate(sqdevs = sq.devs(Black)) %>%
     ungroup() %>%
     summarize(within.groups=sum(sqdevs))
 
@@ -430,6 +347,17 @@ anova(fit0, fit2)
 ```
 
 Analogous tests can be performed on the coefficients of the fit directly, using the $t$ distribution. Testing for a coefficient equaling 0 is equivalent to an F-test where we compare the full model with the smaller model without that coefficient. In the cases we have seen so far, this coincides with the test of the full model against the null model.
+
+### R's distribution functions
+
+While most of the time you would rely on the outputs of the `summary` and `anova` functions for your p-value computations, you may on occasion find it useful to compute some of these directly. R offers us a whole bevy of distribution functions to help with that, and you can find more about them by typing `?Distributions` in the console.
+
+R knows about over 20 different distributions, and of each distribution it provides us with 4 functions:
+
+- `r...` can be used to produce random values following a specific distribution. For example `rnorm(1000, mean=3, sd=1) would give us 1000 values drawn from a normal distribution with a mean of 3 and standard deviation of 1.
+- `d...` is the actual density function for the distribution, and is not particularly useful.
+- `p...` returns probability values for a given x value. For example `pf(9.143, df1=1, df2=189, lower.tail=FALSE)` is the p-value 0.00284 for an F-test with an F value of 9.143 and degrees of freedom 1 and 189.
+- `q...` returns the quantile for a specified probability. For example to find the 90th percentile on a t-distribution with 30 degrees of freedom, we would do `qt(0.9, df=30, lower.tail=TRUE)`.
 
 ### Factors with multiple levels
 

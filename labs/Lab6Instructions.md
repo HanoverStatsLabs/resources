@@ -64,17 +64,17 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 	```r
 	lowCutoff <- quantile(~height, data=brfss, na.rm=TRUE, probs=.005)
 	highCutoff <- quantile(~height, data=brfss, na.rm=TRUE, probs=.995)
-	heightSubset <- brfss %>%
+	brfssSubset <- brfss %>%
 	    filter(height >= lowCutoff & height <= highCutoff)
 	```
-    If this was successful, you should see a `heightSubset` entry in the Environment pane, showing around 99% of the initial observations.
+    If this was successful, you should see a `brfssSubset` entry in the Environment pane, showing around 99% of the initial observations.
 
 	Now draw the histogram with the filtered data. Note: Instead of letting the histogram breaks be set by default, we will ask for 20 breaks.  Later on, we'll take finer control of the breaks.
 	```r
-	histogram(~height, data=heightSubset, breaks=20)
+	histogram(~height, data=brfssSubset, breaks=20)
 	```
     a. Describe the overall shape of the distribution.
-    b. Make a tally of the `sex` variable for the `heightSubset` data. What do you learn? How might this help to explain the shape of the histogram?
+    b. Make a tally of the `sex` variable for the `brfssSubset` data. What do you learn? How might this help to explain the shape of the histogram?
 
 3. When working with whole number data such as `height`, we have to take care with our histogram bins / number of breaks, since whole number data can interact badly with the breakpoints for creating the histogram bins.
 
@@ -86,7 +86,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 	```r
 	myBreaks <- seq(from=lowCutoff - 0.5, to=highCutoff + 0.5, by=1)
 	myBreaks  		# this just prints the sequence of numbers
-	histogram(~height, data=heightSubset, breaks=myBreaks)
+	histogram(~height, data=brfssSubset, breaks=myBreaks)
 	```
     Notice how the whole numbers on the x-axis are now centered below their corresponding bars.
 
@@ -94,11 +94,11 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 
 ## Height and Sex / Paneled Histogram
 
-4. Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal.  Indeed, with a boxplot we can see this difference. Draw a `bwplot` of `sex~height` now, using the `heightSubset` data.
+4. Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal.  Indeed, with a boxplot we can see this difference. Draw a `bwplot` of `sex~height` now, using the `brfssSubset` data.
 
     As a companion to the `bwplot`, let's also make a histogram which is paneled by sex.  Notice the use of the formula `~height|sex` for height versus sex, and the `layout=c(1,2)` option for forcing the panels to line up vertically (1 column, 2 rows):
     ```r
-    histogram(~height|sex, data=heightSubset, breaks=myBreaks, layout=c(1,2))
+    histogram(~height|sex, data=brfssSubset, breaks=myBreaks, layout=c(1,2))
     ```
     Use the boxplot and the paneled histogram to explain why the original histogram does not show a clear bimodal pattern.
 
@@ -106,7 +106,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 
 In this section we investigate the relationship between `height` and `weight` for our respondents.
 
-5. Make a scatterplot of weight versus height for the `heightSubset` dataset.
+5. Make a scatterplot of weight versus height for the `brfssSubset` dataset.
 
     a. Why do the dots make vertical stripes on the scatterplot?
     b. Describe the overall pattern in the data.  Do you see a strong relationship between height and weight for these subjects? Explain.
@@ -135,15 +135,15 @@ We will now learn how to create new variables out of existing variables. We will
 
 ### Creating a New Scalar Variable
 
-We start with creating a new variable that measures the [**body mass index**](https://en.wikipedia.org/wiki/Body_mass_index), typically abbreviated as BMI. The formula is "weight over height squared". If pounds and inches are used, then a conversion factor of $703$ must be applied. We will use the `heightSubset` rather than the whole `brfss`.
+We start with creating a new variable that measures the [**body mass index**](https://en.wikipedia.org/wiki/Body_mass_index), typically abbreviated as BMI. The formula is "weight over height squared". If pounds and inches are used, then a conversion factor of $703$ must be applied. We will use the `brfssSubset` rather than the whole `brfss`.
 
 We use the dollar sign notation here to add a new column to the data. We also introduce the `with` command, which allows us to refer to the columns of a particular dataset in the equation:
 ```r
-heightSubset$bmi <- with(heightSubset, weight / (height^2) * 703)
+brfssSubset$bmi <- with(brfssSubset, weight / (height^2) * 703)
 ```
-If this has succeeded, you should now see a new column in the `heightSubset`, called `bmi`.
+If this has succeeded, you should now see a new column in the `brfssSubset`, called `bmi`.
 
-7. Calculate a summary (`favstats`) and draw a basic histogram of the `bmi` variable using the `heightSubset` data. Describe the distribution. What can we say about the BMI values of the respondents?
+7. Calculate a summary (`favstats`) and draw a basic histogram of the `bmi` variable using the `brfssSubset` data. Describe the distribution. What can we say about the BMI values of the respondents?
 
 ### Creating a New Categorical Variable
 
@@ -158,17 +158,17 @@ Obese            Above 30
 
 To do this we use the new command `cut`. We have to specify where to break the values, and we can optionally give labels to the ranges (the default being an interval notation like `(25,30]`).
 ```r
-heightSubset$bmicat <- heightSubset$bmi %>%
+brfssSubset$bmicat <- brfssSubset$bmi %>%
     cut(breaks=c(0, 18.5, 25, 30, 100),
         labels=c("Underweight", "Normal", "Overweight", "Obese"))
 ```
-After running this command, you should see another new column titled `bmicat` in the `heightSubset` data.
+After running this command, you should see another new column titled `bmicat` in the `brfssSubset` data.
 
 8. We now have a categorical variable called `bmicat`. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents' BMI values from this?
 9. We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.
 10. In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at `healthVsExercise` and `healthVsIncome` in the previous lab. Produce a stacked bar graph with *one bar for each BMI category* and *stacks determined by the `genhealth` variable*. The first command for this would be:
     ```r
-    healthVsBmicat <- tally(~genhealth|bmicat, data=heightSubset,
+    healthVsBmicat <- tally(~genhealth|bmicat, data=brfssSubset,
          format="percent", useNA="no")
     ```
     What do you see in the stacked bar graph? How does it compare with your prediction?

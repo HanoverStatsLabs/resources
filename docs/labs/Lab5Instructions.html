@@ -153,9 +153,9 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <p>The <code>brewer</code> palette which ranges from red to purple will make an attractive spectrum. Let’s store it with 5 color values:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myColors &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;RdPu&quot;</span>)</code></pre></div>
 <p>Store the levels (categories) of the <code>genhealth</code> variable:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthLevels &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">levels</span>(brfss<span class="op">$</span>genhealth))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthLevels &lt;-<span class="st"> </span><span class="kw">levels</span>(brfss<span class="op">$</span>genhealth)</code></pre></div>
 <p>Build the legend <code>myKey</code> using the levels for <code>genhealth</code> and the colors in <code>myColors</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myKey &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span>healthLevels, <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myKey &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span><span class="kw">list</span>(healthLevels), <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))</code></pre></div>
 <p>Draw the stacked barchart with the new palette in both the bars and the legend:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">col=</span>myColors, <span class="dt">key=</span>myKey,
     <span class="dt">main=</span><span class="st">&quot;General Health vs. Does the Respondent Ever Exercise&quot;</span>)</code></pre></div>
@@ -172,8 +172,8 @@ healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsExercise &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>exerciseany, <span class="dt">data=</span>brfss,
     <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
 myColors &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;RdPu&quot;</span>)
-healthLevels &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">levels</span>(brfss<span class="op">$</span>genhealth))
-myKey &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span>healthLevels, <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))
+healthLevels &lt;-<span class="st"> </span><span class="kw">levels</span>(brfss<span class="op">$</span>genhealth)
+myKey &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span><span class="kw">list</span>(healthLevels), <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))
 healthVsExercise <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">col=</span>myColors, <span class="dt">key=</span>myKey,
     <span class="dt">main=</span><span class="st">&quot;General Health vs. Does the Respondent Ever Exercise&quot;</span>)</code></pre></div>
 <p>By revising the above commands, make a nice stacked bar graph for general health vs. income level (<code>income</code>). You will need to store a value for <code>healthVsIncome</code> rather than <code>healthVsExercise</code>, for example, and make additional changes.</p>

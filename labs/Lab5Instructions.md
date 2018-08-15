@@ -129,11 +129,11 @@ myColors <- brewer.pal(5, "RdPu")
 ```
 Store the levels (categories) of the `genhealth` variable:
 ```r
-healthLevels <- list(levels(brfss$genhealth))
+healthLevels <- levels(brfss$genhealth)
 ```
 Build the legend `myKey` using the levels for `genhealth` and the colors in `myColors`:
 ```r
-myKey <- list(text=healthLevels, rectangles=list(col=myColors))
+myKey <- list(text=list(healthLevels), rectangles=list(col=myColors))
 ```
 Draw the stacked barchart with the new palette in both the bars and the legend:
 ```r
@@ -155,8 +155,8 @@ Now we will see how income level and age group might be related to general healt
     healthVsExercise <- tally(~genhealth|exerciseany, data=brfss,
         format="percent", useNA="no")
     myColors <- brewer.pal(5, "RdPu")
-    healthLevels <- list(levels(brfss$genhealth))
-    myKey <- list(text=healthLevels, rectangles=list(col=myColors))
+    healthLevels <- levels(brfss$genhealth)
+    myKey <- list(text=list(healthLevels), rectangles=list(col=myColors))
     healthVsExercise %>% t() %>% barchart(col=myColors, key=myKey,
         main="General Health vs. Does the Respondent Ever Exercise")
     ```

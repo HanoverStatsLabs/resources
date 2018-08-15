@@ -37,11 +37,15 @@ We start similarly to the last lab. We will start a new project based on a prepa
 
 In the previous labs we have prepared the data for you in R's built-in system. But data you find in the real world is not typically in this form. It may be an Excel file, a comma-separated-format file (CSV) or one of many other formats. RStudio has built-in ways to read CSV and Excel files. Some other more obscure formats may need more work and specific instructions.
 
-For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.
+For now we will learn how to import a CSV file. This file currently lives on a webpage, at the following URL: [https://hanoverstatslabs.github.io/resources/datasets/driving.csv](https://hanoverstatslabs.github.io/resources/datasets/driving.csv)
 
-- Go to `File > Import Dataset > From CSV ...`
-- Paste in the following URL: [https://hanoverstatslabs.github.io/resources/datasets/driving.csv](https://hanoverstatslabs.github.io/resources/datasets/driving.csv)
-- Click the **Update** button to the right of the URL and you should see the data in the Preview Window. We now need to make sure the data is being read correctly before doing the actual import.
+- Download the file from the above page to your computer. This typically entails right-clicking the link and choosing something like **Save Link As**.
+- Now upload the file you just downloaded into your project folder. To do this:
+    - In the **Files** pane (lower right), click the **upload** button to start the `Upload Files` dialog.
+    - Navigate to where you saved the file and choose the file.
+    - Click **OK** to finish the upload. If this was successful, you should now see `driving.csv` in your Files pane.
+
+Now we want to read the file into our R report/environment. To do that, click the filename in the File pane and choose "Import Dataset".
 
 This data contains information recorded over the Fall 2007-2008 term when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.
 
@@ -52,17 +56,18 @@ This data contains information recorded over the Fall 2007-2008 term when one of
     - For each column in the data, RStudio needs to know the type of values for that column (integer, character, date, etc.). The system is usually smart enough to do the right thing.
     - For this data set, we will let RStudio "guess" the types as best it can.
     - If you ever find that RStudio did not guess the type correctly, you can use the column heading in the import dialog to specify a type (or have RStudio skip a column entirely if you don't really need it).
-    - Click the **Import** button. If the import went okay, you should now see the dataset in the data view.
 - Copying the appropriate code:
-    - In your report, **add a new code chunk** for the import.  Put it below the existing code chunks. We will be copying code from the console to complete the chunk.
-    - Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output "Show nothing (run code)".
-    - From the Console, one at a time, copy the two lines that were run in the console (as a result of clicking the Import button) and paste them into the chunk; do not copy the `>` prompt. The new chunk should now look as follows:
+    - Copy most of the code that is in the "Code Preview" section at the lower right of the Import window. You don't need the `View` line for now.
+    - In your report, **add a new code chunk** for the import.  Put it below the existing code chunks. Paste the code you copied into this chunk. The chunk will look something like this:
 
         ```r
         library(readr)
-        driving <- ...  # copy this one line from the console!
+        driving <- ...
         ```
 
+    - Edit the long filename string, which probably with something like `"~/..."` to leave only the actual file name there, `"driving.csv"`.
+    - Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output "Show nothing (run code)".
+    - Run the chunk. Then run a suitable `View` command in the console.
     - This code chunk ensures that when anyone compiles the report, the dataset will be loaded and ready to use.
 
 Take a moment to look at the two lines of code in your new chunk. The first line uses the `library` command to load a new package (also called a library) named `readr`. This package contains useful functions for loading new data. The second line uses the `read_csv` command from this package to load the data and store it in the name `driving`. You can access this data in the rest of your report via this name. You should be able to see the `driving` entry in the Environment pane.

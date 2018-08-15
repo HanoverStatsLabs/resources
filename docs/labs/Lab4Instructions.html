@@ -91,12 +91,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <section id="importing-data" class="level2">
 <h2>Importing Data</h2>
 <p>In the previous labs we have prepared the data for you in R’s built-in system. But data you find in the real world is not typically in this form. It may be an Excel file, a comma-separated-format file (CSV) or one of many other formats. RStudio has built-in ways to read CSV and Excel files. Some other more obscure formats may need more work and specific instructions.</p>
-<p>For now we will learn how to import a CSV file. R can read files directly from a URL, so there is no need to download the file.</p>
+<p>For now we will learn how to import a CSV file. This file currently lives on a webpage, at the following URL: <a href="https://hanoverstatslabs.github.io/resources/datasets/driving.csv" class="uri">https://hanoverstatslabs.github.io/resources/datasets/driving.csv</a></p>
 <ul>
-<li>Go to <code>File &gt; Import Dataset &gt; From CSV ...</code></li>
-<li>Paste in the following URL: <a href="https://hanoverstatslabs.github.io/resources/datasets/driving.csv" class="uri">https://hanoverstatslabs.github.io/resources/datasets/driving.csv</a></li>
-<li>Click the <strong>Update</strong> button to the right of the URL and you should see the data in the Preview Window. We now need to make sure the data is being read correctly before doing the actual import.</li>
+<li>Download the file from the above page to your computer. This typically entails right-clicking the link and choosing something like <strong>Save Link As</strong>.</li>
+<li>Now upload the file you just downloaded into your project folder. To do this:
+<ul>
+<li>In the <strong>Files</strong> pane (lower right), click the <strong>upload</strong> button to start the <code>Upload Files</code> dialog.</li>
+<li>Navigate to where you saved the file and choose the file.</li>
+<li>Click <strong>OK</strong> to finish the upload. If this was successful, you should now see <code>driving.csv</code> in your Files pane.</li>
+</ul></li>
 </ul>
+<p>Now we want to read the file into our R report/environment. To do that, click the filename in the File pane and choose “Import Dataset”.</p>
 <p>This data contains information recorded over the Fall 2007-2008 term when one of the faculty was living in Louisville and commuting to Hanover. Each row correponds to a one-way trip and contains details of that trip such as date, direction, departure and arrival times and car mileage at the start and end of the trip.</p>
 <ul>
 <li>Checking for misalignments:
@@ -109,15 +114,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>For each column in the data, RStudio needs to know the type of values for that column (integer, character, date, etc.). The system is usually smart enough to do the right thing.</li>
 <li>For this data set, we will let RStudio “guess” the types as best it can.</li>
 <li>If you ever find that RStudio did not guess the type correctly, you can use the column heading in the import dialog to specify a type (or have RStudio skip a column entirely if you don’t really need it).</li>
-<li>Click the <strong>Import</strong> button. If the import went okay, you should now see the dataset in the data view.</li>
 </ul></li>
 <li>Copying the appropriate code:
 <ul>
-<li>In your report, <strong>add a new code chunk</strong> for the import. Put it below the existing code chunks. We will be copying code from the console to complete the chunk.</li>
-<li>Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
-<li><p>From the Console, one at a time, copy the two lines that were run in the console (as a result of clicking the Import button) and paste them into the chunk; do not copy the <code>&gt;</code> prompt. The new chunk should now look as follows:</p>
+<li>Copy most of the code that is in the “Code Preview” section at the lower right of the Import window. You don’t need the <code>View</code> line for now.</li>
+<li><p>In your report, <strong>add a new code chunk</strong> for the import. Put it below the existing code chunks. Paste the code you copied into this chunk. The chunk will look something like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
-driving &lt;-<span class="st"> </span>...  <span class="co"># copy this one line from the console!</span></code></pre></div></li>
+driving &lt;-<span class="st"> </span>...</code></pre></div></li>
+<li>Edit the long filename string, which probably with something like <code>&quot;~/...&quot;</code> to leave only the actual file name there, <code>&quot;driving.csv&quot;</code>.</li>
+<li>Set the chunk options (gear button to the right of the chunk) to not show warnings, not show messages, and to output “Show nothing (run code)”.</li>
+<li>Run the chunk. Then run a suitable <code>View</code> command in the console.</li>
 <li><p>This code chunk ensures that when anyone compiles the report, the dataset will be loaded and ready to use.</p></li>
 </ul></li>
 </ul>

@@ -40,15 +40,16 @@ In order to add a data file to the project itself, we start by uploading an Exce
 
 - Download the Excel file that holds the relevant data: [https://hanoverstatslabs.github.io/resources/datasets/guns.xlsx](https://hanoverstatslabs.github.io/resources/datasets/guns.xlsx)
 - In the **Files** pane (lower right), click the **upload** button to start the `Upload Files` dialog.
-- Navigate to your Downloads folder. Find the file `guns.xlsx` and click on it.
+- Navigate to where you saved the file and choose the file.
 - Click **OK** to finish the upload. If this was successful, you should now see `guns.xlsx` in your Files pane.
 
-Now we need to *import the actual data from the Excel file into the RStudio project* (both into the console and into the report):
+Now we need to *import the actual data from the Excel file into the RStudio project* into the report:
 
 - Click on the `guns.xlsx` file. Choose the option **Import Dataset**. This should bring up the **Import Excel Data** dialog.
-- If the preview looks reasonable, click the **Import** button to do the import. You should now see the `guns` data in the data viewer, and a couple of lines of import code in the console. Next we will add these lines into our report.
-- Make a new R code chunk in your report (below the `hanoverbase` chunk).
-- There are two lines of code to copy from the console and paste into the new chunk. The first looks like `library(readxl)` and the second begins with `guns <-`. You do not need to run this chunk at this time, since we've already run those commands. But you need to have them in the chunk when you knit the report.
+- If the preview looks reasonable, Copy the couple lines of code (leave out the `View` line)and then click **Cancel** to close that window.
+- Make a new R code chunk in your report (below the `hanoverbase` chunk). And paste the two lines of code that you copied into it. Edit the long filename string, which probably with something like `"~/..."` to leave only the actual file name there, `"guns.xlsx"`.
+- Run the chunk.
+- Use a `View` command in the console to open up the new dataset.
 
 ## Explanation of the Variables in the Guns Dataset
 
