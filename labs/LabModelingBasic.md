@@ -13,7 +13,7 @@ targeting <- read_sav("targeting.sav")
 # View(targeting)
 ```
 
-The data set contains a number of factor variables which are currently coded into column names. There is there race of the target (White/Black), whether the target was armed or unarmed, and whether a correct or incorrect shot action was taken. We will need to create these factor variables as we process the columns.
+The data set contains a number of factor variables which are currently coded into column names. There is the race of the target (White/Black), whether the target was armed or unarmed, and whether a correct or incorrect shot action was taken. We will need to create these factor variables as we process the columns.
 
 ## Cleaning up the dataset
 
