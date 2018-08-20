@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="advanced-lab-5-odds-and-ends" class="level1">
+<h1>Advanced Lab 5: Odds and ends</h1>
+<p>This section contains various topics that are of importance but do not necessarily fit the previous narrative.</p>
+<ol type="1">
+<li>The <code>psych</code> package contains useful functions especially for psychometric studies. But many of these functions have broader uses. We will provide a brief overview of some functions here, and provide links to the main documentations for the package.</li>
+<li>ANOVA output can contain different types of results, typically called “type I, II, III” sums of squares. We discuss the differences here.</li>
+</ol>
+<section id="the-psych-package" class="level2">
+<h2>The psych package</h2>
+<p>First off, you can access important and helpful documentation about the package in the form of <em>vignettes</em>. You can see all available vignettes, or the vignettes specific to a package, as well as open up a specific vignette, using the <code>vignette</code> function provided by R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>()
+<span class="kw">vignette</span>(<span class="dt">package=</span><span class="st">&quot;psych&quot;</span>)           <span class="co"># Three available vignettes</span>
+<span class="kw">vignette</span>(<span class="st">&quot;intro&quot;</span>, <span class="dt">package=</span><span class="st">&quot;psych&quot;</span>)  <span class="co"># Open the &quot;intro&quot; vignette</span></code></pre></div>
+<p>There is also a lot of information in the accompanying website:</p>
+<ul>
+<li><a href="http://personality-project.org/r/book/" class="uri">http://personality-project.org/r/book/</a></li>
+<li><a href="http://personality-project.org/r/psych/" class="uri">http://personality-project.org/r/psych/</a></li>
+<li><a href="http://personality-project.org/r/r.guide.html" class="uri">http://personality-project.org/r/r.guide.html</a></li>
+</ul>
+<p>Some of the code uses base R and is different in style than the approach we have taken thus far, but there is plenty of useful information there. Here are some functions to check out:</p>
+<dl>
+<dt><code>outlier</code></dt>
+<dd>Computes the so-called <em>Mahalanobis distance</em> of points, to help identify outliers. You must restrict your data to only scalar variables.
+</dd>
+<dt><code>scrub</code></dt>
+<dd>Can be used to replace parts of the dataset with specific values (e.g. <code>NA</code>). This is an alternative to using the <code>dplyr</code> techniques we have discussed.
+</dd>
+<dt><code>error.bars.by</code></dt>
+<dd>Can produce some basic graphs with error bar information. <code>error.bars</code> is also available.
+</dd>
+<dt><code>pairs.panels</code></dt>
+<dd>Produces a matrix of graphs with information for the various variable interactions. Try <code>pairs.panels(attitude, stars=TRUE)</code> for an example.
+</dd>
+<dt><code>corr.test</code></dt>
+<dd><p>Computes pairwise correlations and P-values for the associated hypothesis tests. The <code>adjust</code> parameter allows for a number of possible multiple-test adjustments. Try <code>corr.test(attitude) %&gt;% print(short=FALSE)</code> for an example.</p>
+<p>This function can be the basis for a function that produces a table with significant correlations flagged. We will show below how to write such a function.</p>
+</dd>
+<dt><code>corPlot</code></dt>
+<dd><p>Visually shows the information from <code>corr.test</code>. Try something like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">corPlot</span>(Thurstone,<span class="dt">stars=</span><span class="ot">TRUE</span>,<span class="dt">numbers=</span><span class="ot">TRUE</span>,<span class="dt">upper=</span><span class="ot">FALSE</span>,<span class="dt">diag=</span><span class="ot">FALSE</span>)</code></pre></div>
+</dd>
+<dt><code>spider</code></dt>
+<dd>Shows a spider plot. See also <code>radar</code>. Example: <code>spider(y=1,x=2:4,data=iris[,1:4])</code>
+</dd>
+<dt><code>mediate</code></dt>
+<dd>Provides some tools for mediation analysis.
+</dd>
+</dl>
+<p>The package also includes a number of datasets that might be useful in demonstrating psychometric topics. See <code>data(package=&quot;psych&quot;)</code> or the <code>intro</code> vignette for details.</p>
+<p>The <a href="http://www.datavis.ca/papers/corrgram.pdf">corrgram</a> package might also be of interest for visualizing correlation matrices.</p>
+<section id="explicitly-flagging-significant-correlations" class="level3">
+<h3>Explicitly flagging significant correlations</h3>
+<p>We will now see how we can create a function that flags significant correlations in a correlation table. At the same time we will delve into some of the inner functioning of R.</p>
+<p>We start with the <code>corr.test</code> function in the <code>psych</code> package, and store the result of its call:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cors &lt;-<span class="st"> </span><span class="kw">corr.test</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<p>We can see information about what this <code>cors</code> really is by using the <code>str</code> function (or by expanding the <code>cors</code> value in the Environment pane):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(cors)</code></pre></div>
+<p>This output is a little hard to digest. First of all <code>cors</code> is a “list” of 9 items. They each appear following a dollar sign. And in fact we can access them based on the name next to that sign. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cors<span class="op">$</span>se
+cors<span class="op">$</span>adjust</code></pre></div>
+<p>We also see at the very bottom the line: <code>- attr(*, &quot;class&quot;)= chr [1:2] &quot;psych&quot; &quot;corr.test&quot;</code>. This tells us that the <code>cors</code> object has a “class” attribute with the two values “psych” and “corr.test”. Many objects in R have similar outputs; for example the output of a linear model call typically has the class “lm”. The class of an object changes how that object behaves for certain functions, like printing.</p>
+<p>Let us take note of a couple more entries in this list:</p>
+<ul>
+<li><code>r</code> contains the correlations. It has the “type” <code>num [1:4, 1:4]</code> which means it contains numeric values arranged in a 4 by 4 table. It also has a “dimnames” attribute, which contains the names of the two dimensions of the table.</li>
+<li><code>t</code> contains corresponding t-values. It has the same structure as <code>r</code>.</li>
+<li><code>p</code> contains the corresponding P-values, and it too has the same structure.</li>
+<li><code>ci</code> contains confidence intervals, and it could be used to produce a graphical representation of the information.</li>
+</ul>
+<p>As a quick example, let us use the <code>ci</code> information to draw quick plot of the different correlation confidence intervals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cis &lt;-<span class="st"> </span>cors<span class="op">$</span>ci <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rownames_to_column</span>(<span class="dt">var=</span><span class="st">&quot;pairs&quot;</span>)
+<span class="kw">ggplot</span>(cis) <span class="op">+</span>
+<span class="st">    </span><span class="kw">aes</span>(<span class="dt">y=</span>pairs, <span class="dt">x=</span>r, <span class="dt">xmin=</span>lower, <span class="dt">xmax=</span>upper) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_errorbarh</span>()</code></pre></div>
+<p>Now let’s see if we can flag the significant correlations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span>cors<span class="op">$</span>p
+stars &lt;-<span class="st"> </span><span class="kw">case_when</span>(
+    p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">0001</span> <span class="op">~</span><span class="st"> &quot;****&quot;</span>,
+    p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">001</span>  <span class="op">~</span><span class="st"> &quot;*** &quot;</span>,
+    p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">01</span>   <span class="op">~</span><span class="st"> &quot;**  &quot;</span>,
+    p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">05</span>   <span class="op">~</span><span class="st"> &quot;*   &quot;</span>,
+    <span class="ot">TRUE</span>      <span class="op">~</span><span class="st"> &quot;    &quot;</span>
+)
+<span class="kw">dim</span>(stars) &lt;-<span class="st"> </span><span class="kw">dim</span>(p)
+<span class="kw">dimnames</span>(stars) &lt;-<span class="st"> </span><span class="kw">dimnames</span>(p)
+stars</code></pre></div>
+<p>The <code>dim(...)</code> line set the dimensions of <code>stars</code> to match that of <code>p</code>, and the <code>dimnames</code> line added the names for the two dimensions.</p>
+<p>This just shows us the different stars. We now need to merge them together with the correlation values, which are stored in <code>cors$r</code>. First we should cut off the amount of precision on the numbers, for printing purposes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">formattedRs &lt;-<span class="st"> </span><span class="kw">format</span>(cors<span class="op">$</span>r, <span class="dt">digits=</span><span class="dv">2</span>)   <span class="co"># Format the correlations</span>
+starredCors &lt;-<span class="st"> </span><span class="kw">paste</span>(formattedRs, stars)  <span class="co"># Merge with the stars</span>
+<span class="kw">dim</span>(starredCors) &lt;-<span class="st"> </span><span class="kw">dim</span>(p)
+<span class="kw">dimnames</span>(starredCors) &lt;-<span class="st"> </span><span class="kw">dimnames</span>(p)
+<span class="kw">attr</span>(starredCors, <span class="st">&quot;class&quot;</span>) &lt;-<span class="st"> &quot;table&quot;</span>     <span class="co"># Define class a stable for nice printing</span>
+starredCors</code></pre></div>
+<p>We could manually repeat the above each time, but it would get tedious. A better idea is to create a function that does all these steps for us. When you define a function, you specify a list of <em>parameters</em> for it, and some can have default values. When we call a function we need to specify values for these parameters, as we have done many times in these labs. In our case our function will take a number of parameters:</p>
+<ul>
+<li><code>cors</code> will be the first parameter, and it is expected to be the result of calling <code>corr.test</code>.</li>
+<li><code>digits</code> will be the second parameter, specifying how many digits we should print. It will default to 2.</li>
+<li><code>max.stars</code> will be the third parameter, specifying the maximum number of stars to show. For example, some people might not want to have the “4 star” case there. This will default to 4, but it could be set to 3 if someone didn’t want the 4-star case to be shown separately.</li>
+</ul>
+<p>Our function returns whatever the last thing is in its body. So we will conclude the function with the end result we want.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corrFlag &lt;-<span class="st"> </span><span class="cf">function</span>(cors, <span class="dt">digits=</span><span class="dv">2</span>, <span class="dt">max.stars=</span><span class="dv">4</span>) {
+    p &lt;-<span class="st"> </span>cors<span class="op">$</span>p
+    stars &lt;-<span class="st"> </span><span class="kw">case_when</span>(
+        p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">0001</span> <span class="op">&amp;</span><span class="st"> </span>max.stars <span class="op">&gt;=</span><span class="st"> </span><span class="dv">4</span> <span class="op">~</span><span class="st"> &quot;****&quot;</span>,
+        p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">001</span>  <span class="op">&amp;</span><span class="st"> </span>max.stars <span class="op">&gt;=</span><span class="st"> </span><span class="dv">3</span> <span class="op">~</span><span class="st"> &quot;*** &quot;</span>,
+        p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">01</span>   <span class="op">&amp;</span><span class="st"> </span>max.stars <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> &quot;**  &quot;</span>,
+        p <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">05</span>   <span class="op">&amp;</span><span class="st"> </span>max.stars <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;*   &quot;</span>,
+        <span class="ot">TRUE</span>      <span class="op">~</span><span class="st"> &quot;    &quot;</span>
+    )
+    formattedRs &lt;-<span class="st"> </span><span class="kw">format</span>(cors<span class="op">$</span>r, <span class="dt">digits=</span>digits)
+    starredCors &lt;-<span class="st"> </span><span class="kw">paste</span>(formattedRs, stars)
+    <span class="kw">dim</span>(starredCors) &lt;-<span class="st"> </span><span class="kw">dim</span>(p)
+    <span class="kw">dimnames</span>(starredCors) &lt;-<span class="st"> </span><span class="kw">dimnames</span>(p)
+    <span class="kw">attr</span>(starredCors, <span class="st">&quot;class&quot;</span>) &lt;-<span class="st"> &quot;table&quot;</span>
+    starredCors
+}
+<span class="co"># Example call:</span>
+iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">corr.test</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">corrFlag</span>()</code></pre></div>
+<p>An important thing to know about a function is that any variables you define within the function will not be added to your environment. So for example the <code>formattedRs</code> assignment we make within the function is only meaningful while that function runs, and is forgotten afterwards. This helps keep our environment clean.</p>
+<p>And here is a different approach: We would like to start with the correlation table, then create a data frame of the pairs of variables and their corresponding correlations. Then we can add a column that has the star information. Let’s take a look. First we use <code>as.data.frame</code> to turn the <code>cors$r</code> array into a data frame, then we use <code>rownames_to_column</code> to bring in the row names as a new column, then we gather the remaining columns into one:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corrsDf &lt;-<span class="st"> </span>cors<span class="op">$</span>r <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
+<span class="st">            </span><span class="kw">rownames_to_column</span>(<span class="dt">var=</span><span class="st">&quot;var1&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">            </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;var2&quot;</span>, <span class="dt">value=</span><span class="st">&quot;r&quot;</span>, <span class="op">-</span><span class="dv">1</span>)
+corrsDf</code></pre></div>
+<p>Now we do the same thing for the <code>t</code> and <code>p</code> values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corrsTs &lt;-<span class="st"> </span>cors<span class="op">$</span>t <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
+<span class="st">            </span><span class="kw">rownames_to_column</span>(<span class="dt">var=</span><span class="st">&quot;var1&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">            </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;var2&quot;</span>, <span class="dt">value=</span><span class="st">&quot;t&quot;</span>, <span class="op">-</span><span class="dv">1</span>)
+corrsPs &lt;-<span class="st"> </span>cors<span class="op">$</span>p <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
+<span class="st">            </span><span class="kw">rownames_to_column</span>(<span class="dt">var=</span><span class="st">&quot;var1&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">            </span><span class="kw">gather</span>(<span class="dt">key=</span><span class="st">&quot;var2&quot;</span>, <span class="dt">value=</span><span class="st">&quot;p&quot;</span>, <span class="op">-</span><span class="dv">1</span>)</code></pre></div>
+<p>Now we use <code>inner_join</code> to bring these three frames together:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>corrsDf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">inner_join</span>(corrsTs) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">inner_join</span>(corrsPs)</code></pre></div>
+<p>Now we want to restrict <code>df</code> to only contain each pair twice, and to not consider a variable and itself. We can simply compare the variable names for this, then arrange by the p-values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(var1 <span class="op">&lt;</span><span class="st"> </span>var2) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">arrange</span>(p)</code></pre></div>
+<p>We can now add a star column to this data frame. Instead of using <code>case_when</code> as above, we will use <code>cut</code> to end up with an ordered factor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">finalDf &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">filter</span>(var1 <span class="op">&lt;</span><span class="st"> </span>var2) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">arrange</span>(p) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">star=</span><span class="kw">cut</span>(p, <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">0001</span>, .<span class="dv">001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="dv">1</span>),
+                       <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;****&quot;</span>, <span class="st">&quot;*** &quot;</span>, <span class="st">&quot;**  &quot;</span>, <span class="st">&quot;*   &quot;</span>, <span class="st">&quot;    &quot;</span>),
+                       <span class="dt">include.lowest=</span><span class="ot">TRUE</span>))
+finalDf</code></pre></div>
+</section>
+</section>
+<section id="anova-output-types" class="level2">
+<h2>ANOVA output types</h2>
+<p>When considering the output of an ANOVA analysis, there are different kinds of “sum of squares” computations and tests that we can be performing. They all come down to which models we are trying to compare. As a running example, let us consider a small dataset that is used in the SAS documentation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data&lt;-<span class="kw">tribble</span>(
+    <span class="op">~</span>Family, <span class="op">~</span>Gender, <span class="op">~</span>Height,
+    <span class="dv">1</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">67</span>,
+    <span class="dv">1</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">66</span>,
+    <span class="dv">1</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">64</span>,
+    <span class="dv">1</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">71</span>,
+    <span class="dv">1</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">72</span>,
+    <span class="dv">2</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">63</span>,
+    <span class="dv">2</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">63</span>,
+    <span class="dv">2</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">67</span>,
+    <span class="dv">2</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">69</span>,
+    <span class="dv">2</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">68</span>,
+    <span class="dv">2</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">70</span>,
+    <span class="dv">3</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">63</span>,
+    <span class="dv">3</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">64</span>,
+    <span class="dv">4</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">67</span>,
+    <span class="dv">4</span>,<span class="st">&quot;F&quot;</span>,<span class="dv">66</span>,
+    <span class="dv">4</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">67</span>,
+    <span class="dv">4</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">67</span>,
+    <span class="dv">4</span>,<span class="st">&quot;M&quot;</span>,<span class="dv">69</span>
+)
+data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Family=</span><span class="kw">factor</span>(Family), <span class="dt">Gender=</span><span class="kw">factor</span>(Gender))
+data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Family, Gender)</code></pre></div>
+<p>We can see that this is an <em>unbalanced</em> design, with unequal cell sizes. A consequence of this lack of balance is that contrast-coded variables will be correlated. This results in a number of different SS computations, and disagreements about which one to use. A good reference for this discussion are the following two resources:</p>
+<ul>
+<li><a href="http://psychology.okstate.edu/faculty/jgrice/psyc5314/SS_types.pdf">Working with unbalanced cell sizes in multiple regression with categorical predictors</a> by Ista Zahn</li>
+<li><a href="https://mcfromnz.wordpress.com/2011/03/02/anova-type-iiiiii-ss-explained/">Anova – Type I/II/III SS explained</a></li>
+<li>You can read <a href="http://www.stats.ox.ac.uk/pub/MASS3/Exegeses.pdf">here</a> a critique of some of the approaches described here.</li>
+</ul>
+<p>The differences arise from the kind of hypothesis we want to test. We can roughly consider the following graphical depiction of the various models we have in our example:</p>
+<figure>
+<img src="../images/ANOVASSTypes.png" alt="ANOVA SS Types" style="width:90.0%" /><figcaption>ANOVA SS Types</figcaption>
+</figure>
+<p>The classification into three different types comes from SPSS and SAS and has become common practice. Briefly:</p>
+<dl>
+<dt>Type I</dt>
+<dd>In this type, factors are compared sequentially as their are being added to the model. so if the model is <code>Height~Family+Gender+Family:Gender</code>, then we consider the effect of Family compared to the null model, then we consider the effect of Gender in the presence of Family, and finally with consider the effect of the interaction term in the presence of both the other variables.
+</dd>
+<dt>Type II</dt>
+<dd>In this type, factors are considered against a model that contains all the other factors, and assuming no interactions.
+</dd>
+<dt>Type III</dt>
+<dd>In this type, we consider factors against a model that contains all the other factors as well as the interactions.
+</dd>
+</dl>
+</section>
+</section>
+</body>
+</html>
