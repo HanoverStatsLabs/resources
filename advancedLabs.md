@@ -15,3 +15,6 @@ These labs focus on more advanced topics. They are presented in the order that w
 
 [Advanced Modeling Lab II](labs/LabModelingAdvanced.md)
   ~ Survey of more advanced modeling topics
+
+[Odds and Ends](labs/LabOddsEnds.md)
+  ~ Discusses various topics related to ANOVA and differences between R and SAS, and introduces the `psych` package.

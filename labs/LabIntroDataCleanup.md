@@ -35,19 +35,19 @@ In terms of providing us access to the data, the sheet is somewhat messy: It has
 
 Before we start, make sure to create a new RStudio project and to start a new R Markdown document in that project, and add a `library(hanoverbase)` R-chunk in it.
 
-We will start by reading the data from the first sheet, titled "Upper Arm Circ". You will need to first have the dataset uploaded into your project directory. Use the "Upload" button in the "Files" pain for that. You can then click on the uploaded dataset to open up the import dialog. We will not fully use the import dialog, but it is a good starting point to look at the data.
+We will start by reading the data from the first sheet, titled "Upper Arm Circ". You will need to first have the dataset uploaded into your project directory. Use the "Upload" button in the "Files" pane for that. You can then click on the uploaded dataset to open up the import dialog. We will not fully use the import dialog, but it is a good starting point to look at the data.
 
-In the import dialog, you can select the sheet you want, here the "Upper Arm Circ", from the "Sheet" drop down in the "Import Option" section. Then you should copy the couple of lines on the right, which provide syntax for the import. They will look something like this (the file path will be different depending on where you created your project):
+In the import dialog, you can select the sheet you want, here the "Upper Arm Circ", from the "Sheet" drop down in the "Import Option" section. Then you should copy the couple of lines on the right, which provide syntax for the import. They will look something like this (make sure to simplify the path to only the last part, the actual file name):
 ```r
 library(readxl)
-compression <- read_excel("~/statsLabPractice/compression/compression.xlsx",
+compression <- read_excel("compression.xlsx",
     sheet = "Upper Arm Circ")
 ```
 Now, paste these lines in an R-chunk after canceling the import dialog. Remember that the first line loads a package for us, and only needs to be present once in the RMarkdown file.
 
 Before running the chunk, we need to change the second command, to make sure we only try to load the first 8 data points, and also to improve the stored data set name:
 ```r
-compression.uac <- read_excel("~/statsLabPractice/compression/compression.xlsx",
+compression.uac <- read_excel("compression.xlsx",
     sheet = "Upper Arm Circ",
     range = "A1:O9")
 ```
@@ -55,7 +55,7 @@ Notice the addition of the `range="A1:O9"` parameter, to control the range that 
 
 Let us also load another one of the sheets (you will need to fix the file path to match yours):
 ```r
-compression.lac <- read_excel("~/statsLabPractice/compression/compression.xlsx",
+compression.lac <- read_excel("compression.xlsx",
     sheet = "Lower Arm Circ",
     range = "A1:O9")
 ```
