@@ -74,7 +74,7 @@ continent
 
 You are now ready to start working on your report.  The sections below give you questions to answer and commands to try.  Here are a few reminders:
 
-- **Important formatting note**: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report, using formatting elements to make the report easy to read. See: [Basic Cheatsheet](../cheatsheet.md)
+- **Important formatting note**: As you work through this lab assignment, answer the questions which are posed by typing into your R Markdown report, using formatting elements to make the report easy to read. See: [Basic Cheatsheet](../cheatSheet.md)
 - **R Chunks**: As usual, create R Chunks (use the `Insert` pulldown) for your R commands. Use the R Cheatsheet for help as needed.
 - **Knit Early and Often**
 
