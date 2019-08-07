@@ -18,9 +18,12 @@
 - [Assigning to variables.](../morsels/variableAssignment.md)
 - [Working with vectors/sequences.](../morsels/vectors.md)
 - [Quickly entering some data using `scan()`.](../morsels/usingScan.md)
-- Basic statistics
+- [Basic statistics for a vector](../morsels/basicStatisticsVector.md)
+- [Basic graphs for a vector](../morsels/basicGraphsVector.md)
 
 ## Analyzing some data
 
+- Loading data from Excel.
+- Loading data from CSV.
 - Loading built-in datasets with `data()`.
 
