@@ -23,7 +23,7 @@
 
 ## Analyzing some data
 
+- [Loading data from CSV.](../morsels/loadingDataCSV.md)
 - Loading data from Excel.
-- Loading data from CSV.
 - Loading built-in datasets with `data()`.
 
