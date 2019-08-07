@@ -1,0 +1,46 @@
+# Master list of R and R-studio "tidbits"
+
+- Introduction
+    - [What are R and R Studio.](tidbits/whatAreRAndRStudio.md)
+    - [Why use R and R Studio instead of something else?](tidbits/whyRStudio.md)
+    - [Starting R Studio](tidbits/loggingToRStudio.md)
+    - The different R Studio panes
+    - Using the console and its history
+    - Recovering from errors
+    - Starting a fresh session
+    - Ending a session
+- Packages
+    - Packages as toolboxes
+    - The hanoverbase package
+- Projects
+    - What is a project
+    - Starting a new project
+    - Opening an existing project
+- R Basics
+    - Basic arithmetic and scientific notation
+    - Assigning to variables
+    - Working with vectors/sequences
+    - Basic functions
+    - Quick creation of data using `scan` and copy-paste
+    - Loading built-in data sets
+- R-Markdown
+    - What are R-Markdown documents
+    - The differences between the console and an rmarkdown document
+    - Opening an existing R-Markdown document
+    - Compiling (Knitting) an R-Markdown document
+    - Knitting vs running a chunk vs running something in the console
+    - Setting title/author/date information
+    - Section and subsection headings
+    - Highlighting text (italics/bold/typewriter)
+    - Adding quoted text
+    - Linking to external pages and images
+    - Adding an R-chunk
+    - Executing an R-chunk in the document
+    - Setting an R-chunk to execute but not show output
+    - Setting figure size for an R-chunk
+- Interacting with Files
+    - Your R-Studio workspace vs your computer
+    - Uploading a file to your R-Studio workspace
+    - Downloading a file from your R-Studio workspace
+    - Importing an uploaded Excel data file
+    - Importing an uploaded comman-separated data file

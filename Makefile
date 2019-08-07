@@ -12,11 +12,11 @@ DATASETS := $(DATASETS:%=docs/datasets/%)
 
 $(HTMLFILES): docs/%.html: %.md $(TEMPLATE) makeHTML.hs
 	mkdir -p $(@D)
-	pandoc -o $@ --template=$(TEMPLATE) --mathjax --section-divs -t html5 --smart --filter ./makeHtml.hs $<
+	pandoc -o $@ --template=$(TEMPLATE) --mathjax --section-divs -t html5+smart --filter ./makeHtml.hs $<
 
 $(PDFS): docs/%.pdf: %.md $(TEXTEMPLATE)  makeTex.hs
 	mkdir -p $(@D)
-	pandoc -o $@ --template=$(TEXTEMPLATE) --latex-engine=xelatex --listings --filter ./makeTex.hs $<
+	pandoc -o $@ --template=$(TEXTEMPLATE) --pdf-engine=xelatex --listings --filter ./makeTex.hs $<
 
 
 $(IMGFILES): docs/images/%.png: images/%.png

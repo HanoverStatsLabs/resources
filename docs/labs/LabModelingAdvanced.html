@@ -6,44 +6,70 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title></title>
+  <title>LabModelingAdvanced</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
 
@@ -57,8 +83,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <section id="introduction-multiple-predictors" class="level2">
 <h2>Introduction: Multiple predictors</h2>
 <p>We will now continue the project the previous lab, and start considering more complex models, with more than one predictor. We will start with a model including all the predictors:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitAll &lt;-<span class="st"> </span><span class="kw">lm</span>(Black<span class="op">~</span>., <span class="dt">data=</span>targetingRaceDiff)
-<span class="kw">summary</span>(fitAll)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">fitAll &lt;-<span class="st"> </span><span class="kw">lm</span>(Black<span class="op">~</span>., <span class="dt">data=</span>targetingRaceDiff)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">summary</span>(fitAll)</a></code></pre></div>
 <p>Let’s take a closer look at this model. We have:</p>
 <ul>
 <li>The intercept</li>
@@ -71,71 +97,71 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>The coefficient for <code>White</code>.</li>
 </ul>
 <p>Calling <code>anova</code> on the model will tell us about each factor as a whole, and whether its contribution is statistically significant:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fitAll)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">anova</span>(fitAll)</a></code></pre></div>
 <p>This table identifies for us the contribution towards the overall variability in the sense of “sum of squared residuals” that comes from each of the predictors. The F-values compare the full model to the model without the corresponding predictor.</p>
 <p>We see that the predictor with the largest P-value, and hence smaller contribution, is the subject ID. This is good, there is no reason whatsoever that the subject ID should have anything to do with the data. Let’s remove it and reconsider:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubj &lt;-<span class="st"> </span><span class="kw">lm</span>(Black<span class="op">~</span>.<span class="op">-</span>subject, <span class="dt">data=</span>targetingRaceDiff)
-<span class="kw">summary</span>(fitNoSubj)
-<span class="kw">anova</span>(fitNoSubj)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">fitNoSubj &lt;-<span class="st"> </span><span class="kw">lm</span>(Black<span class="op">~</span>.<span class="op">-</span>subject, <span class="dt">data=</span>targetingRaceDiff)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">summary</span>(fitNoSubj)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">anova</span>(fitNoSubj)</a></code></pre></div>
 <p>We can see that the residual standard error remained essentially the same with the removal of the <code>subject</code> variable. And we also see a number of other variables that are potentially not influential. We now want to consider dropping other variables from the model.</p>
 <p>One powerful utility that R offers is the ability to remove one variable at a time from a model, and consider all the resulting smaller models. The <code>drop1</code> method is one way to proceed for that. It will compare the current model with all the models resulting from dropping (in turn) each of the current predictors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">drop1</span>(fitNoSubj)
-<span class="kw">drop1</span>(fitNoSubj, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)    <span class="co"># If you want to include F-tests</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">drop1</span>(fitNoSubj)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">drop1</span>(fitNoSubj, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)    <span class="co"># If you want to include F-tests</span></a></code></pre></div>
 <p>What we see is the effect of removing each of the variables, in terms of how much the RSS will change. The AIC column portrays the <strong>Akaike Information Criterion</strong>. The AIC is a number that takes into consideration the RSS but also penalizes models based on the number of parameters (<span class="math inline">\(p\)</span>) used. It is technically given by the formula: <span class="math display">\[-2\log(\textrm{likelihood}) + 2p\]</span> Here the likelihood is essentially the probability of observing the data that was observed under the assumptions in our model. Our model-fitting procedure chooses the model coefficients so as to maximize the likelihood.</p>
 <p>A larger model will fit the data better, and so will have a higher log(likelihood) and therefore a lower value for <span class="math inline">\(-2\log(\textrm{likelihood})\)</span>. But it will also have more parameters, so <span class="math inline">\(2p\)</span> will be higher. The formula aims to balance the two: The <em>lower</em> the AIC the more you have gained by the bigger model, while also accounting for how much bigger the model was. A model with <em>lower</em> AIC is fitting the data “more economically”. There is often an indeterminate additive constant involved in AIC computations, so the AIC values are only appropriate for comparisons between models.</p>
 <p>The first line, marked <code>&lt;none&gt;</code>, contains the values for the full model, while the remaining lines correspond to the models with the respective predictors removed.</p>
-<p>In this case we see that the biggest reduction in AIC can be obtained by dropping the <code>age</code> variable. This would make sense since that variable, coded as a factor variable, uses 5 parameters. If you carried out the line with <code>test=&quot;F&quot;</code>, you will notice that <code>age</code> is not the predictor with the largest P-value. This is because the F-test does not penalize models as much for how many parameters they use.</p>
+<p>In this case we see that the biggest reduction in AIC can be obtained by dropping the <code>age</code> variable. This would make sense since that variable, coded as a factor variable, uses 5 parameters. If you carried out the line with <code>test="F"</code>, you will notice that <code>age</code> is not the predictor with the largest P-value. This is because the F-test does not penalize models as much for how many parameters they use.</p>
 <p>Let’s remove <code>age</code> and consider the model again. Here we use the <code>update</code> function, which allows us to update an existing model and change one aspect of it. The formula <code>.~.-age</code> in the <code>update</code> function tells it that it should use the model as is but remove the <code>age</code> variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubjNoAge &lt;-<span class="st"> </span>fitNoSubj <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>age)
-<span class="kw">summary</span>(fitNoSubjNoAge)
-<span class="kw">anova</span>(fitNoSubjNoAge)
-<span class="kw">drop1</span>(fitNoSubjNoAge)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">fitNoSubjNoAge &lt;-<span class="st"> </span>fitNoSubj <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>age)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">summary</span>(fitNoSubjNoAge)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw">anova</span>(fitNoSubjNoAge)</a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw">drop1</span>(fitNoSubjNoAge)</a></code></pre></div>
 <p>We now see <code>iat</code> as a next possible variable to remove.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubjNoAgeNoIat &lt;-<span class="st"> </span>fitNoSubjNoAge <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>iat)
-<span class="kw">summary</span>(fitNoSubjNoAgeNoIat)
-<span class="kw">anova</span>(fitNoSubjNoAgeNoIat)
-<span class="kw">drop1</span>(fitNoSubjNoAgeNoIat)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">fitNoSubjNoAgeNoIat &lt;-<span class="st"> </span>fitNoSubjNoAge <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>iat)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw">summary</span>(fitNoSubjNoAgeNoIat)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">anova</span>(fitNoSubjNoAgeNoIat)</a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="kw">drop1</span>(fitNoSubjNoAgeNoIat)</a></code></pre></div>
 <p>Removing gender seems to be the next step:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitNoSubjNoAgeNoIatNoGender &lt;-<span class="st"> </span>fitNoSubjNoAgeNoIat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>gender)
-<span class="kw">summary</span>(fitNoSubjNoAgeNoIatNoGender)
-<span class="kw">anova</span>(fitNoSubjNoAgeNoIatNoGender)
-<span class="kw">drop1</span>(fitNoSubjNoAgeNoIatNoGender)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">fitNoSubjNoAgeNoIatNoGender &lt;-<span class="st"> </span>fitNoSubjNoAgeNoIat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>gender)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="kw">summary</span>(fitNoSubjNoAgeNoIatNoGender)</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">anova</span>(fitNoSubjNoAgeNoIatNoGender)</a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="kw">drop1</span>(fitNoSubjNoAgeNoIatNoGender)</a></code></pre></div>
 <p>We now have a model where removing a variable will not provide an AIC improvement.</p>
 <p>We can also consider adding predictors in, one at a time (the <code>scope=</code> formula specifies which predictors to try to add; here we’ve provided three such predictors):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">add1</span>(fitNoSubjNoAgeNoIatNoGender, <span class="dt">scope=</span>.<span class="op">~</span>.<span class="op">+</span>gender<span class="op">+</span>age<span class="op">+</span><span class="kw">poly</span>(iat, <span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">add1</span>(fitNoSubjNoAgeNoIatNoGender, <span class="dt">scope=</span>.<span class="op">~</span>.<span class="op">+</span>gender<span class="op">+</span>age<span class="op">+</span><span class="kw">poly</span>(iat, <span class="dv">2</span>))</a></code></pre></div>
 <p>We see that none of them is an improvement.</p>
 <p>It is clear however that the three most important effects are due to the reaction time against white targets, whether the target was armed or unarmed, and whether the action was correct or incorrect. Let’s review some graphs that break the cases down by these three variables:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(targetingRaceDiff) <span class="op">+</span>
-<span class="st">    </span><span class="kw">aes</span>(<span class="dt">y=</span>Black) <span class="op">+</span>
-<span class="st">    </span><span class="kw">facet_grid</span>(weapon<span class="op">~</span>action)
-
-p <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>White) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()
-p <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>White) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_lm</span>()</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(targetingRaceDiff) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="st">    </span><span class="kw">aes</span>(<span class="dt">y=</span>Black) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="st">    </span><span class="kw">facet_grid</span>(weapon<span class="op">~</span>action)</a>
+<a class="sourceLine" id="cb9-4" title="4"></a>
+<a class="sourceLine" id="cb9-5" title="5">p <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>White) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a>
+<a class="sourceLine" id="cb9-6" title="6">p <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>White) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_lm</span>()</a></code></pre></div>
 </section>
 <section id="interaction-terms" class="level2">
 <h2>Interaction Terms</h2>
 <p>Before moving on to more complex modeling techniques, let’s try adding interaction terms to our model. Our initial model was <code>fitAll</code>, but to keep it simple let’s at least remove the age and subject:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitStandard &lt;-<span class="st"> </span>fitAll <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>age<span class="op">-</span>subject)
-<span class="kw">summary</span>(fitStandard)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">fitStandard &lt;-<span class="st"> </span>fitAll <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">-</span>age<span class="op">-</span>subject)</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">summary</span>(fitStandard)</a></code></pre></div>
 <p>We would like to consider adding some interaction terms now. For example let’s add an interaction term that accounts for the effect of weapon status on the white reaction time contribution:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitInter1 &lt;-<span class="st"> </span>fitStandard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span>White<span class="op">:</span>weapon)
-<span class="kw">summary</span>(fitInter1)
-<span class="kw">anova</span>(fitStandard, fitInter1)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">fitInter1 &lt;-<span class="st"> </span>fitStandard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span>White<span class="op">:</span>weapon)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw">summary</span>(fitInter1)</a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="kw">anova</span>(fitStandard, fitInter1)</a></code></pre></div>
 <p>From the P-value, we see that this interaction term does not add anything significant. Let’s add an interaction term for weapon and action:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitInter2 &lt;-<span class="st"> </span>fitStandard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span>action<span class="op">:</span>weapon)
-<span class="kw">summary</span>(fitInter2)
-<span class="kw">anova</span>(fitStandard, fitInter2)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">fitInter2 &lt;-<span class="st"> </span>fitStandard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span>action<span class="op">:</span>weapon)</a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="kw">summary</span>(fitInter2)</a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="kw">anova</span>(fitStandard, fitInter2)</a></code></pre></div>
 <p>This appears to be significant! Let’s add an interaction term between white reaction time and action:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitInter3 &lt;-<span class="st"> </span>fitInter2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span>White<span class="op">:</span>action)
-<span class="kw">summary</span>(fitInter3)
-<span class="kw">anova</span>(fitInter2, fitInter3)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">fitInter3 &lt;-<span class="st"> </span>fitInter2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">formula=</span>.<span class="op">~</span>.<span class="op">+</span>White<span class="op">:</span>action)</a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="kw">summary</span>(fitInter3)</a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="kw">anova</span>(fitInter2, fitInter3)</a></code></pre></div>
 <p>That also appears to be significant!</p>
 <p>Before we move on, let’s use the <code>step</code> method to tell R to perform this step-wise model selection that we performed manually earlier:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">step</span>(fitInter3)</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">step</span>(fitInter3)</a></code></pre></div>
 <p>Take a minute to study the result of this call to step.</p>
 <p>We see that R successively removed the <code>iat</code> and <code>gender</code> factors from our model, using the AIC numbers as guides. You can look at the documentation for <code>step</code> to learn more about its use.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modelFinal &lt;-<span class="st"> </span><span class="kw">step</span>(fitInter3)
-<span class="kw">summary</span>(modelFinal)</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">modelFinal &lt;-<span class="st"> </span><span class="kw">step</span>(fitInter3)</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">summary</span>(modelFinal)</a></code></pre></div>
 </section>
 <section id="mixed-effects-modeling" class="level2">
 <h2>Mixed Effects Modeling</h2>
@@ -144,23 +170,23 @@ p <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(
 <p>The above techniques have not accounted at all for the nature of the distinct participants. It is reasonable to assume that each subject has a different baseline reaction time, and we have to account for that effect. The most appropriate way to model that is likely via a <em>random effect</em>, i.e. assuming that there is a constant base reaction time component to each subject’s reaction time, that comes from a distribution whose parameters we would need to determine. So our model for the reaction time may end up looking something like this: <span class="math display">\[\textrm{time} = \mu + \beta_1\times \textrm{iat} + \beta_2\times\textrm{weapon} + \cdots + \textrm{tsubj} + \epsilon\]</span> where <span class="math inline">\(\textrm{tsubj}\)</span> is a base reaction time for each subject and is drawn from a distribution <span class="math inline">\(N(0,\sigma_s)\)</span>, while <span class="math inline">\(\epsilon\)</span> is still the standard error term from a <span class="math inline">\(N(0,\sigma)\)</span> distribution, and <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span> etc are still the <em>fixed effects</em> from the various factors and predictors.</p>
 <p>We will start with a simple case. We need a new package for this, called <code>lme4</code>, as mixed effects modeling goes beyond the standard linear modeling techniques. You will need to install this package (using the <em>Install</em> menu in the <em>Packages</em> pane).</p>
 <p>The method <code>lmer</code> from that package is our main workhorse. Here is one example call:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lme4)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">library</span>(lme4)</a></code></pre></div>
 <p>Now we will consider a mixed effects model where in addition to our standard fixed terms, it also includes a random intercept addition for each subject. this is indicated by the term <code>(1|subject)</code> in the formula:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mixedFit1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span>
-<span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
-<span class="kw">summary</span>(mixedFit1)
-
-mixedFit2 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>iat <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span>
-<span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
-<span class="kw">anova</span>(mixedFit1, mixedFit2)
-
-mixedFit3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>iat <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span>
-<span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
-<span class="kw">anova</span>(mixedFit3, mixedFit2)
-
-mixedFit4 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span>
-<span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)
-<span class="kw">anova</span>(mixedFit4, mixedFit3)</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">mixedFit1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)</a>
+<a class="sourceLine" id="cb17-3" title="3"><span class="kw">summary</span>(mixedFit1)</a>
+<a class="sourceLine" id="cb17-4" title="4"></a>
+<a class="sourceLine" id="cb17-5" title="5">mixedFit2 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>iat <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-6" title="6"><span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)</a>
+<a class="sourceLine" id="cb17-7" title="7"><span class="kw">anova</span>(mixedFit1, mixedFit2)</a>
+<a class="sourceLine" id="cb17-8" title="8"></a>
+<a class="sourceLine" id="cb17-9" title="9">mixedFit3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>iat <span class="op">+</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-10" title="10"><span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)</a>
+<a class="sourceLine" id="cb17-11" title="11"><span class="kw">anova</span>(mixedFit3, mixedFit2)</a>
+<a class="sourceLine" id="cb17-12" title="12"></a>
+<a class="sourceLine" id="cb17-13" title="13">mixedFit4 &lt;-<span class="st"> </span><span class="kw">lmer</span>(time <span class="op">~</span><span class="st"> </span>weapon <span class="op">+</span><span class="st"> </span>action<span class="op">:</span>weapon <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-14" title="14"><span class="st">                    </span>(<span class="dv">1</span><span class="op">|</span>subject), <span class="dt">data=</span>targetingFinal)</a>
+<a class="sourceLine" id="cb17-15" title="15"><span class="kw">anova</span>(mixedFit4, mixedFit3)</a></code></pre></div>
 <p>TODO</p>
 </section>
 </section>

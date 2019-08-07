@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title></title>
+  <title>LabThoughts</title>
   <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
 
@@ -57,7 +57,7 @@
 </ul></li>
 <li>Create new project for counties</li>
 <li>Use “library(…)”, “data(…)” to load the package that has the counties data (need to create it).</li>
-<li>(Not for student use: <code>read.table(&quot;https://skiadas.github.io/AppliedStatsCourse/site/datasets/countyComplete.txt&quot;, sep=&quot;\t&quot;, header=TRUE)</code> )</li>
+<li>(Not for student use: <code>read.table("https://skiadas.github.io/AppliedStatsCourse/site/datasets/countyComplete.txt", sep="\t", header=TRUE)</code> )</li>
 <li>See the counties set on the right, click on it</li>
 <li>Data view comes up -&gt; document pane (also View command)</li>
 <li>Sort view to find 3 most/least populous counties based on 2010</li>
@@ -109,7 +109,7 @@
 </ul></li>
 <li>Union counties:
 <ul>
-<li><code>counties %&gt;% filter(name==&quot;Union County&quot;) %&gt;% select(state)</code></li>
+<li><code>counties %&gt;% filter(name=="Union County") %&gt;% select(state)</code></li>
 <li><code>summary</code></li>
 </ul></li>
 </ul>

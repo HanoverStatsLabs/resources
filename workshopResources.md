@@ -1,5 +1,9 @@
 # Workshop-related resources
 
+## Links to notes for our summer workshops
+
+- [Day 1 workshop](workshops/WorkshopDay1.md)
+
 ## Books
 
 While there are a large number of resources available for R, the following form a core start point:

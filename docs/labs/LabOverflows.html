@@ -6,44 +6,70 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title></title>
+  <title>LabOverflows</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
 
@@ -54,19 +80,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <body>
 <p>The data in <code>brfss</code> span 15 years; we have data for 2000, 2005, 2010, and 2015.</p>
 <ol start="14" type="1">
-<li><p>Make a stacked bar graph showing <code>age7</code> (age in 10-year increments) vs. <code>year</code> (survey year). What do you learn about the U.S. population over the last 15 years?</p></li>
+<li><p>Make a stacked bar graph showing <code>age7</code> (age in 10-year increments) vs. <code>year</code> (survey year). What do you learn about the U.S. population over the last 15 years?</p></li>
 <li><p>Use <code>tally</code> and <code>barchart</code> to make a graph of the general health level against the survey year, and write a conclusion. What do you learn about general health levels in the U.S. over the time span 2000 to 2015? Provide a plausible explanation for any pattern you see.</p></li>
 </ol>
 <p>Whenever we notice an association between two variables, we should ask if there are “lurking” variables that might help to explain the association. Age and sex are possible lurking variables in this situation.</p>
 <ol start="16" type="1">
 <li>Use the code provided below to make a graph of general health vs. survey year, broken down (paneled) by age group.</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myColors =<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;PuBuGn&quot;</span>)
-myKey =<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span><span class="kw">list</span>(<span class="kw">levels</span>(brfss<span class="op">$</span>genhealth)), <span class="dt">columns=</span><span class="dv">4</span>,
-    <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))
-healthVsYearAndAge &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>year<span class="op">+</span>age7, <span class="dt">data=</span>brfss,
-    <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
-healthVsYearAndAge <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">aperm</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">col=</span>myColors, <span class="dt">key=</span>myKey)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">myColors =<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">5</span>, <span class="st">&quot;PuBuGn&quot;</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2">myKey =<span class="st"> </span><span class="kw">list</span>(<span class="dt">text=</span><span class="kw">list</span>(<span class="kw">levels</span>(brfss<span class="op">$</span>genhealth)), <span class="dt">columns=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="dt">rectangles=</span><span class="kw">list</span>(<span class="dt">col=</span>myColors))</a>
+<a class="sourceLine" id="cb1-4" title="4">healthVsYearAndAge &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>genhealth<span class="op">|</span>year<span class="op">+</span>age7, <span class="dt">data=</span>brfss,</a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>, <span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</a>
+<a class="sourceLine" id="cb1-6" title="6">healthVsYearAndAge <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">aperm</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barchart</span>(<span class="dt">col=</span>myColors, <span class="dt">key=</span>myKey)</a></code></pre></div>
 <p>Describe what you see in this final graph. How does it compare with your observations in the previous question? How does this make sense?</p>
 <hr />
 <p>TODO: more options: pch, cex</p>
@@ -76,8 +102,8 @@ healthVsYearAndAge <span class="op">%&gt;%</span><span class="st"> </span><span 
 <h2>Mosaicplot</h2>
 <ol start="12" type="1">
 <li><p>As an alternative to the stacked bar graph, we can draw a <code>mosaicplot</code>. A basic 2-variable example shows the relationship between <code>income</code> and <code>health</code> for the <code>brfss</code> participants:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">healthVsIncome &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>income<span class="op">+</span>genhealth, <span class="dt">data=</span>brfss,<span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)
-healthVsIncome <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mosaicplot</span>(<span class="dt">color=</span><span class="kw">brewer.pal</span>(<span class="dv">5</span>,<span class="st">&quot;RdPu&quot;</span>))</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">healthVsIncome &lt;-<span class="st"> </span><span class="kw">tally</span>(<span class="op">~</span>income<span class="op">+</span>genhealth, <span class="dt">data=</span>brfss,<span class="dt">useNA=</span><span class="st">&quot;no&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">healthVsIncome <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mosaicplot</span>(<span class="dt">color=</span><span class="kw">brewer.pal</span>(<span class="dv">5</span>,<span class="st">&quot;RdPu&quot;</span>))</a></code></pre></div>
 <ol type="a">
 <li>What do you learn from this plot?</li>
 <li>What is the meaning of the varying bar widths in the mosaic plot?</li>
