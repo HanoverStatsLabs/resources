@@ -9,7 +9,7 @@ Our intent has *not* been to introduce students to the R programming language as
 **New users**: We recommend printing out the [Basic Cheatsheet](cheatSheet.md) and working through the first few [labs](labs.md).
 
 Labs
-  ~ [Our labs](labs.md) are a great place to start. They gradually introduce you to the various features of R and R-Studio. These are the labs we use in our Applied Statistics courses.
+  ~ [Our labs](labs.md) are a great place to start. They gradually introduce you to the various features of R and RStudio. These are the labs we use in our Applied Statistics courses.
 
 Advanced Labs
   ~ [These labs](advancedLabs.md) proceed to more advanced topics, including data manipulation, advanced graphing, and advanced linear modeling.
@@ -37,5 +37,5 @@ Workshop Resources
   ~ [This page](workshopResources.md) contains useful resources related to the workshops we do on learning R, and might be more broadly useful to others.
 
 Installation
-  ~ [Instructions](installation.md) for how to set up R Studio and related packages on your own machines.
+  ~ [Instructions](installation.md) for how to set up RStudio and related packages on your own machines.
 

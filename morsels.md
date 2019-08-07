@@ -1,11 +1,11 @@
-# Master list of R and R-studio "tidbits"
+# Master list of R and RStudio "moRsels"
 
 - Introduction
-    - [What are R and R Studio.](tidbits/whatAreRAndRStudio.md)
-    - [Why use R and R Studio instead of something else?](tidbits/whyRStudio.md)
-    - [Starting R Studio](tidbits/loggingToRStudio.md)
-    - The different R Studio panes
-    - Using the console and its history
+    - [What are R and RStudio.](morsels/whatAreRAndRStudio.md)
+    - [Why use R and RStudio instead of something else?](morsels/whyRStudio.md)
+    - [Starting RStudio](morsels/loggingToRStudio.md)
+    - [The different RStudio panes](morsels/RStudioSections.md)
+    - [Using the console, including help and history](morsels/WorkingWithConsole.md)
     - Recovering from errors
     - Starting a fresh session
     - Ending a session
@@ -17,7 +17,7 @@
     - Starting a new project
     - Opening an existing project
 - R Basics
-    - Basic arithmetic and scientific notation
+    - [Basic arithmetic and scientific notation](morsels/arithmetic.md)
     - Assigning to variables
     - Working with vectors/sequences
     - Basic functions
@@ -39,8 +39,8 @@
     - Setting an R-chunk to execute but not show output
     - Setting figure size for an R-chunk
 - Interacting with Files
-    - Your R-Studio workspace vs your computer
-    - Uploading a file to your R-Studio workspace
-    - Downloading a file from your R-Studio workspace
+    - Your RStudio workspace vs your computer
+    - Uploading a file to your RStudio workspace
+    - Downloading a file from your RStudio workspace
     - Importing an uploaded Excel data file
     - Importing an uploaded comman-separated data file
