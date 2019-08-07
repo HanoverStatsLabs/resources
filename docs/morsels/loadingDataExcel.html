@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>loadingDataCSV</title>
+  <title>loadingDataExcel</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
@@ -78,36 +78,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </script>
 </head>
 <body>
-<section id="loading-data-from-csv" class="level1">
-<h1>Loading data from CSV</h1>
+<section id="loading-excel-files" class="level1">
+<h1>Loading Excel files</h1>
+<p>Loading an Excel file is a two-three-step process:</p>
+<ol start="0" type="1">
+<li>If the file is somewhere on the web, download the Excel file to your local computer.</li>
+<li><a href="uploadFiles.html">Upload the Excel</a> file from your local computer to your RStudio workspace.</li>
+<li>Import the Excel file from the Rstudio workspace into your project workflow/document.</li>
+</ol>
+<p>We will describe this last step here.</p>
 <ul>
-<li>Comma-Separated-Value format is a simple data format that is easier to move around compared to Excel.</li>
-<li>You can export your Excel data into CSV, and you can open CSV files from within Excel, so it is easy to work with.</li>
-<li>R can load both CSV and <a href="loadingDataExcel.html">Excel</a> files.</li>
-<li>For CSV files R can work either with downloaded data files, or directly using a URL for the file.</li>
-</ul>
-<p>To load a CSV file into R:</p>
-<ul>
-<li>In the Environment Pane, use the “Import Datasets” button, then chooose “Fron CSV …”.</li>
-<li>In the resulting window, type or copy-paste the file path or URL of the file you want to open. We will use <code>https://hanoverstatslabs.github.io/resources/datasets/guns.csv</code>.</li>
-<li>Click “Update” and you should see your data arranged in columns.</li>
-<li>In the bottom left, if needed, change:
-<ul>
-<li>the <em>Name</em> that will be given to store the data,</li>
-<li>the number of lines to <em>skip</em> before reading data (for example there might have been some header/title lines),</li>
-<li>whether the first row contains the names of the variables,</li>
-<li>what is used as the “delimiter” between entries (if they don’t seem to be vertically arranged properly),</li>
-<li>and a few other options as needed.</li>
-</ul></li>
+<li>Locate the file in the <em>Files</em> pane.</li>
+<li>Click the file name and select “Import Dataset”. This will bring up the Import dialog window.</li>
+<li>Optionally change the “name” of the resulting object in the bottom left of the dialog.</li>
+<li>You may choose which sheet you want to include, as well as how many lines to skip.</li>
 <li>You should see on the right bottom a few lines of code similar to the ones below. Copy those lines and place them where they should go.
 <ul>
-<li>The <code>library(readr)</code> line is only needed once if you load multiple files, and should only appear once in your RMarkdown document if you use one.</li>
+<li>The <code>library(readxl)</code> line is only needed once if you load multiple files, and should only appear once in your RMarkdown document if you use one.</li>
 <li>If you are using RMarkdown, the <code>View(...)</code> line needs to instead go to the console, and it is used to offer a tabular visualization of the data.</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(readr)</a>
-<a class="sourceLine" id="cb1-2" title="2">guns &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://hanoverstatslabs.github.io/resources/datasets/guns.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">View</span>(guns)             <span class="co"># Opens up the data for viewing</span></a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb1-2" title="2">guns &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/Math217Labs/blank/guns.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">View</span>(guns)</a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="co">## Below lines showcase a graph, and are not part of &quot;loading the data&quot;</span></a>
 <a class="sourceLine" id="cb1-5" title="5">own_rate &lt;-<span class="st"> </span>guns<span class="op">$</span>own_rate</a>
 <a class="sourceLine" id="cb1-6" title="6"><span class="kw">names</span>(own_rate) &lt;-<span class="st"> </span>guns<span class="op">$</span>country</a>

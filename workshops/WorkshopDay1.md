@@ -24,6 +24,7 @@
 ## Analyzing some data
 
 - [Loading data from CSV.](../morsels/loadingDataCSV.md)
-- Loading data from Excel.
+- [Your Rstudio workspace vs your computer](../morsels/workspaceVsComputer.md)
 - Loading built-in datasets with `data()`.
+- [Loading data from Excel.](../morsels/loadingExcel.md)
 

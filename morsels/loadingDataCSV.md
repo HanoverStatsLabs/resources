@@ -18,7 +18,7 @@ To load a CSV file into R:
     - and a few other options as needed.
 - You should see on the right bottom a few lines of code similar to the ones below. Copy those lines and place them where they should go.
     - The `library(readr)` line is only needed once if you load multiple files, and should only appear once in your RMarkdown document if you use one.
-    - If you are using RMarkdown, the `View(...)` line needs to instead go to the console, and it is used to offers a tabular visualization of the data.
+    - If you are using RMarkdown, the `View(...)` line needs to instead go to the console, and it is used to offer a tabular visualization of the data.
 
 ```r
 library(readr)

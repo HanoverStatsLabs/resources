@@ -18,10 +18,10 @@
     - Opening an existing project
 - R Basics
     - [Basic arithmetic and scientific notation](morsels/arithmetic.md)
-    - Assigning to variables
-    - Working with vectors/sequences
+    - [Assigning to variables](morsels/variableAssignment.md)
+    - [Working with vectors/sequences](morsels/vectors.md)
     - Basic functions
-    - Quick creation of data using `scan` and copy-paste
+    - [Quick creation of data using `scan` and copy-paste](morsels/usingScan.md)
     - Loading built-in data sets
 - R-Markdown
     - What are R-Markdown documents
@@ -39,8 +39,8 @@
     - Setting an R-chunk to execute but not show output
     - Setting figure size for an R-chunk
 - Interacting with Files
-    - Your RStudio workspace vs your computer
-    - Uploading a file to your RStudio workspace
-    - Downloading a file from your RStudio workspace
-    - Importing an uploaded Excel data file
-    - Importing an uploaded comman-separated data file
+    - [Your RStudio workspace vs your computer](morsels/workspaceVsComputer.md)
+    - [Uploading a file to your RStudio workspace](morsels/uploadFiles.md)
+    - [Downloading a file from your RStudio workspace](morsels/downloadFiles.md)
+    - [Importing an uploaded Excel data file](morsels/loadingExcel.md)
+    - [Importing a comma-separated data file](morsels/loadingDataCSV.md)
