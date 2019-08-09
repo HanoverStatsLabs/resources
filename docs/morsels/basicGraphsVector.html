@@ -80,7 +80,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <body>
 <section id="basic-graphs-for-a-single-vector" class="level1">
 <h1>Basic graphs for a single vector</h1>
-<p>R has a variety of graphs that can be generated. <a href="../morsels/ggplot.html">The ggPlot package</a> allows us to generate some fancy graphics. In this section we instead see some simpler graphics.</p>
+<p>In this section we will look at some simple graph commands for vectors, that are part of the base R system. For fancier graphics, check out <a href="../morsels/ggplot.html">the ggPlot package</a>.</p>
 <p>Here is some data, in what is known as a <em>named vector</em>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">23</span>, <span class="dv">14</span>, <span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">-2</span>)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">names</span>(x) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Billy&quot;</span>, <span class="st">&quot;Joan&quot;</span>, <span class="st">&quot;Peter&quot;</span>, <span class="st">&quot;Melissa&quot;</span>, <span class="st">&quot;Betty&quot;</span>)</a>
@@ -91,10 +91,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Another would be a bar chart:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">barplot</span>(x)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">barplot</span>(<span class="kw">sort</span>(x))</a></code></pre></div>
+<p>If you are willing to use the <a href="packagesAsToolboxes.html">lattice package</a>, you can use the commands <code>dotplot</code> and <code>barchart</code> instead.</p>
 <p>For non-labeled data, we would typically build histograms or boxplots. The following command generates 500 normally distributed random values and uses those as <code>x</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">500</span>)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="kw">hist</span>(x)</a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="kw">boxplot</span>(x)</a></code></pre></div>
+<p>You can also use <code>bwplot</code> instead of <code>boxplot</code>, if you use the lattice package.</p>
 </section>
 </body>
 </html>

@@ -8,6 +8,9 @@ Our intent has *not* been to introduce students to the R programming language as
 
 **New users**: We recommend printing out the [Basic Cheatsheet](cheatSheet.md) and working through the first few [labs](labs.md).
 
+MoRsels
+  ~ [MoRsels](morsels.md) are little tidbits of information about individual aspects of using R and R-studio. Use them as quick references for how to do things.
+
 Labs
   ~ [Our labs](labs.md) are a great place to start. They gradually introduce you to the various features of R and RStudio. These are the labs we use in our Applied Statistics courses.
 

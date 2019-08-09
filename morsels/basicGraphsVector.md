@@ -1,6 +1,6 @@
 # Basic graphs for a single vector
 
-R has a variety of graphs that can be generated. [The ggPlot package](../morsels/ggplot.md) allows us to generate some fancy graphics. In this section we instead see some simpler graphics.
+In this section we will look at some simple graph commands for vectors, that are part of the base R system. For fancier graphics, check out [the ggPlot package](../morsels/ggplot.md).
 
 Here is some data, in what is known as a *named vector*:
 ```r
@@ -19,6 +19,7 @@ Another would be a bar chart:
 barplot(x)
 barplot(sort(x))
 ```
+If you are willing to use the [lattice package](packagesAsToolboxes.md), you can use the commands `dotplot` and `barchart` instead.
 
 For non-labeled data, we would typically build histograms or boxplots. The following command generates 500 normally distributed random values and uses those as `x`.
 ```r
@@ -26,3 +27,4 @@ x <- rnorm(500)
 hist(x)
 boxplot(x)
 ```
+You can also use `bwplot` instead of `boxplot`, if you use the lattice package.

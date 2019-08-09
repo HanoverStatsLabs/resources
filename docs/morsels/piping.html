@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>basicStatisticsDataset</title>
+  <title>piping</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
@@ -78,20 +78,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </script>
 </head>
 <body>
-<section id="basic-statistics-for-variables-in-datasets" class="level1">
-<h1>Basic Statistics for Variables in Datasets</h1>
+<section id="the-pipe-command" class="level1">
+<h1>The pipe command <code>%&gt;%</code></h1>
 <ul>
-<li><p>Most data in R come in the form of a <em>data frame</em>, which we will refer to as a <em>dataset</em>.</p></li>
-<li><p>It is simply a rectangular arrangement of data, where each row corresponds to an individual or case that we study, and each column corresponds to a specific question about the cases.</p></li>
-<li><p>In statistics, we typically call these columns <em>variables</em>.</p></li>
-<li><p>Most of the basic functions provide a <a href="formulas.html">formula</a> interface. You will need the <a href="packagesAsToolboxes.html">hanoverbase package</a> in order to use this interface.</p></li>
-<li><p>Some examples:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">data</span>(counties)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">View</span>(counties)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">favstats</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties)   <span class="co"># Five number summary</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">mean</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties)     <span class="co"># Average population for counties</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">median</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties)   <span class="co"># Median population for counties</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw">median</span>(<span class="op">~</span>pop2010<span class="op">|</span>state, <span class="dt">data=</span>counties)  <span class="co"># Median county population by state</span></a></code></pre></div></li>
+<li><p>A common pattern in R is to perform a series of operations on a dataset, where each operation is supposed to be performed on the result of the previous operation.</p></li>
+<li><p>We can think of this like a <em>pipeline</em> or <em>assembly</em> line, where each “station” along the way performs some task and then passes the result on to the next step.</p></li>
+<li><p>We can use the pipe command to make the syntax for this a bit easier to digest.</p></li>
+<li><p>Example: We start with the <code>counties</code> dataset and compute a tally/count of the counties on each state. Then we want to sort the resulting values, then put them in a dotplot. Here are the two ways to do that, with and without the pipe operator:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Without pipe:</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">dotplot</span>(<span class="kw">sort</span>(<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties)))</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co"># With pipe:</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dotplot</span>()</a></code></pre></div></li>
+<li><p>Syntactically, the following two general steps are the same:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">f</span>(x, ...)</a>
+<a class="sourceLine" id="cb2-2" title="2">x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">f</span>(...)</a></code></pre></div></li>
+<li><p>Therefore the pipe symbol only works when object to the left of the pipe is what should go to the first spot within the function.</p></li>
+<li><p>This is NOT the case for functions like <code>tally</code>, which expect the dataset in the <code>data=</code> spot.</p></li>
 </ul>
 </section>
 </body>

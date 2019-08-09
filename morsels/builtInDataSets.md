@@ -5,5 +5,5 @@ The various R packages contain a number of existing datasets that are easy to lo
 ```r
 data()           # Brings up list of all available datasets, grouped by package
 data(counties)   # Loads the dataset named counties
-help(countiers)  # We can find information about the dataset before or after loading
+help(counties)  # We can find information about the dataset before or after loading
 ```

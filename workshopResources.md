@@ -2,6 +2,7 @@
 
 ## Links to notes for our summer workshops
 
+- [Getting ready to work](morsels/gettingReadyToWork.md)
 - [Day 1 workshop](workshops/WorkshopDay1.md)
 
 ## Books

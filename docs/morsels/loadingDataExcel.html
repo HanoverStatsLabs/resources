@@ -80,21 +80,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <body>
 <section id="loading-excel-files" class="level1">
 <h1>Loading Excel files</h1>
-<p>Loading an Excel file is a two-three-step process:</p>
+<p>Loading an Excel file is a multi-step process:</p>
 <ol start="0" type="1">
 <li>If the file is somewhere on the web, download the Excel file to your local computer.</li>
 <li><a href="uploadFiles.html">Upload the Excel</a> file from your local computer to your RStudio workspace.</li>
 <li>Import the Excel file from the Rstudio workspace into your project workflow/document.</li>
 </ol>
-<p>We will describe this last step here.</p>
+<p>We will describe this “Import” step here.</p>
 <ul>
 <li>Locate the file in the <em>Files</em> pane.</li>
 <li>Click the file name and select “Import Dataset”. This will bring up the Import dialog window.</li>
 <li>Optionally change the “name” of the resulting object in the bottom left of the dialog.</li>
-<li>You may choose which sheet you want to include, as well as how many lines to skip.</li>
-<li>You should see on the right bottom a few lines of code similar to the ones below. Copy those lines and place them where they should go.
+<li>You may change which sheet you want to include, as well as how many lines to skip.</li>
+<li>You should see on the bottom right a few lines of code similar to the ones below. Copy those lines and place them where they should go.
 <ul>
-<li>The <code>library(readxl)</code> line is only needed once if you load multiple files, and should only appear once in your RMarkdown document if you use one.</li>
+<li>The <code>library(readxl)</code> line is only needed once, even if you load multiple files, and should only appear once in your RMarkdown document if you have one.</li>
 <li>If you are using RMarkdown, the <code>View(...)</code> line needs to instead go to the console, and it is used to offer a tabular visualization of the data.</li>
 </ul></li>
 </ul>

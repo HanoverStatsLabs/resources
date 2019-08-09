@@ -82,16 +82,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>Viewing a loaded dataset: The View command</h1>
 <ul>
 <li>RStudio offers a powerful and convenient spreadsheet-style view of a dataset with its <code>View</code> command.</li>
-<li>This is the only command that starts with a capital letter. This is a convenient reminder that it is a special command: It cannot be used within RMarkdown documents. It must only be used in the console.</li>
+<li>This is the only command that starts with a capital letter. This is a convenient reminder that it is a special command: It cannot be used within RMarkdown documents. It must only be used in the console, and only works within the RStudio environment.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">data</span>(counties)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">View</span>(counties)</a></code></pre></div>
 <p>The new spreadsheet view offers some convenient features:</p>
 <ul>
-<li>You can sort the rows by any particular column simply by clicking that column heading (and reverse the sort on a second click).</li>
+<li>You can sort the rows by any particular column simply by clicking that column heading (and reverse the sort order on a second click).</li>
 <li>The “Filter” button opens up new options on each column heading, where we can restrict which entries appear. For example clicking on the <code>pop2010</code> column brings up a slider.</li>
 </ul>
-<p>Note that you can NOT edit the dataset via this spreadsheet, it is only there for viewing.</p>
+<p>Note that you CANNOT edit the dataset via this spreadsheet, it is only there for viewing.</p>
 </section>
 </body>
 </html>

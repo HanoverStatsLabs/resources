@@ -6,6 +6,7 @@
     - [Starting RStudio](morsels/loggingToRStudio.md)
     - [The different RStudio panes](morsels/RStudioSections.md)
     - [Using the console, including help and history](morsels/WorkingWithConsole.md)
+    - [Getting ready to work](morsels/gettingReadyToWork.md)
     - Recovering from errors
     - Starting a fresh session
     - Ending a session

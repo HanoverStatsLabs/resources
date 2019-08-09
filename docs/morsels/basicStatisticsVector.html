@@ -80,10 +80,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <body>
 <section id="basic-statistics-for-a-vector" class="level1">
 <h1>Basic statistics for a vector</h1>
-<p>The simplest kind of work we can do in R with a vector is to compute various elementary statistics based on a vector.</p>
+<p>The simplest kind of work we can do in R with a vector is to compute various elementary statistics.</p>
 <p>For numerical vectors, a number of statistics can be computed:</p>
 <ul>
-<li>Minima and maxima, via the command <code>min</code> and <code>max</code>.</li>
+<li>Minima and maxima, via the commands <code>min</code> and <code>max</code>.</li>
 <li>Average and median values, via the commands <code>mean</code> and <code>median</code>.</li>
 <li>Measures of spread like the standard deviation, via the command <code>sd</code>.</li>
 </ul>
@@ -94,12 +94,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb1-5" title="5"><span class="kw">max</span>(x)</a></code></pre></div>
 <p>We can even combine these to compute, for example, standardized z-scores for the x values:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">z &lt;-<span class="st"> </span>(x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">mean</span>(z)    <span class="co"># 0</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw">sd</span>(z)      <span class="co"># 1</span></a></code></pre></div>
-<p>For character vectors, we typically want to build a frequency table, or also a percent table:</p>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">mean</span>(z)    <span class="co"># should be 0</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">sd</span>(z)      <span class="co"># should be 1</span></a></code></pre></div>
+<p>For character vectors, we typically want to build a count/frequency table, or a percent/relative frequency table:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;No Answer&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;No Answer&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">table</span>(y)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw">prop.table</span>(<span class="kw">table</span>(y))</a></code></pre></div>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">tally</span>(y)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">tally</span>(y, <span class="dt">format=</span><span class="st">&quot;percent&quot;</span>)          <span class="co"># for proportions</span></a></code></pre></div>
+<p>The tally command requires <a href="packagesAsToolboxes.html">the hanoverbase package</a></p>
 </section>
 </body>
 </html>

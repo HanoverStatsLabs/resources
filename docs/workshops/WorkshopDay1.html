@@ -8,6 +8,69 @@
   <meta name="generator" content="pandoc" />
   <title>WorkshopDay1</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
 <link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
 
 <script type="text/javascript" async
@@ -42,17 +105,40 @@
 <li><a href="../morsels/basicGraphsVector.html">Basic graphs for a vector</a></li>
 </ul>
 </section>
-<section id="analyzing-some-data" class="level2">
-<h2>Analyzing some data</h2>
+<section id="analyzing-data" class="level2">
+<h2>Analyzing data</h2>
 <ul>
 <li><a href="../morsels/packagesAsToolboxes.html">Packages</a></li>
-<li><a href="../morsels/loadingDataCSV.html">Loading data from CSV</a></li>
-<li><a href="../morsels/workspaceVsComputer.html">Your Rstudio workspace vs your computer</a></li>
+<li><a href="../morsels/loadingDataCSV.html">Loading data from CSV files</a></li>
 <li><a href="../morsels/builtInDataSets.html">Loading built-in datasets with <code>data()</code></a></li>
-<li><a href="../morsels/loadingExcel.html">Loading data from Excel.</a></li>
+<li><a href="../morsels/workspaceVsComputer.html">Your Rstudio workspace vs your computer</a></li>
+<li><a href="../morsels/loadingDataExcel.html">Loading data from Excel.</a></li>
 <li><a href="../morsels/viewCommand.html">Viewing a loaded dataset</a></li>
-<li><a href="../morsels/basicStatisticsDataset.html">Basic statistics for variables in dataset</a></li>
+<li><a href="../morsels/basicStatisticsDataset.html">Basic statistics for variables in datasets</a></li>
+<li><a href="../morsels/basicGraphsDataset.html">Basic graphs for variables in datasets</a></li>
+<li><a href="../morsels/filteringDatasets.html">Restricting a dataset using <code>filter</code></a></li>
+<li><a href="../morsels/headAndTail.html">Viewing only the top or bottom of a list: <code>head</code> and <code>tail</code></a></li>
 </ul>
+<section id="practice" class="level3">
+<h3>Practice</h3>
+<ol type="1">
+<li><p>Which counties have the smallest/largest population?</p></li>
+<li><p>Draw a histogram of the different counties populations. How would we describe the distribution? Restrict the dataset to smaller and smaller ranges to get a better view.</p></li>
+<li><p>What are the mean and median populations for counties? Which one is larger, how does that make sense?</p></li>
+<li><p>The following command draws histograms of the percent of foreign_born on each county for each of three states. What can we learn about the states from this graph?</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">histogram</span>(<span class="op">~</span>foreign_born<span class="op">|</span>state,</a>
+<a class="sourceLine" id="cb1-2" title="2">    <span class="dt">data=</span>counties <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="st">        </span><span class="kw">filter</span>(state <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;California&quot;</span>, <span class="st">&quot;Indiana&quot;</span>, <span class="st">&quot;West Virginia&quot;</span>)),</a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="dt">layout=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>), <span class="dt">breaks=</span><span class="dv">20</span>)</a></code></pre></div></li>
+<li><p>Change the above code to instead show you the percent of residents that have graduated from high school for the counties of Indiana, Kentucky and Ohio, and compare the states.</p></li>
+<li><p>Do the same looking at the percent of residents with incomes below the poverty line.</p></li>
+<li><p>Produce dotplot or barchart with one dot/bar for each state where the value is the number (tally) of counties in that state. What stands out?</p></li>
+<li><p>What are some popular county names?</p></li>
+<li><p>Create a new dataset <code>lincolnCounties</code> that contains only those counties named <code>Lincoln County</code>.</p></li>
+<li><p>Draw histograms and statistics for the percent of females in the different counties, and discuss interesting patterns.</p></li>
+<li><p>Identify counties with extremely small or extremely large percent of female population. Repeat for some specific state.</p></li>
+</ol>
+</section>
 </section>
 </section>
 </body>
