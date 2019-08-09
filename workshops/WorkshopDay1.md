@@ -23,8 +23,10 @@
 
 ## Analyzing some data
 
-- [Loading data from CSV.](../morsels/loadingDataCSV.md)
+- [Packages](../morsels/packagesAsToolboxes.md)
+- [Loading data from CSV](../morsels/loadingDataCSV.md)
 - [Your Rstudio workspace vs your computer](../morsels/workspaceVsComputer.md)
-- Loading built-in datasets with `data()`.
+- [Loading built-in datasets with `data()`](../morsels/builtInDataSets.md)
 - [Loading data from Excel.](../morsels/loadingExcel.md)
-
+- [Viewing a loaded dataset](../morsels/viewCommand.md)
+- [Basic statistics for variables in dataset](../morsels/basicStatisticsDataset.md)
