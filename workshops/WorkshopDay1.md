@@ -42,15 +42,14 @@
 4. The following command draws histograms of the percent of foreign_born on each county for each of three states. What can we learn about the states from this graph?
 
     ```r
-    histogram(~foreign_born|state,
-        data=counties %>%
-            filter(state %in% c("California", "Indiana", "West Virginia")),
-        layout=c(1,3,1), breaks=20)
+    counties %>%
+       filter(state %in% c("California", "Indiana", "West Virginia")) %>%
+       gf_histogram(~foreign_born, bins=20) %>% gf_facet_grid(state~.)
     ```
-5. Change the above code to instead show you the percent of residents that have graduated from high school for the counties of Indiana, Kentucky and Ohio, and compare the states.
-6. Do the same looking at the percent of residents with incomes below the poverty line.
-7. Produce dotplot or barchart with one dot/bar for each state where the value is the number (tally) of counties in that state. What stands out?
+5. Change the above code to instead show the percent of residents that have graduated from high school for the counties in Indiana, Kentucky and Ohio, and compare the states.
+6. Do the same, looking at the percent of residents with incomes below the poverty line.
+7. Produce a dotplot or barchart with one dot/bar for each state, where the value is the number (tally) of counties in that state. What stands out?
 8. What are some popular county names?
 9. Create a new dataset `lincolnCounties` that contains only those counties named `Lincoln County`.
-10. Draw histograms and statistics for the percent of females in the different counties, and discuss interesting patterns.
-11. Identify counties with extremely small or extremely large percent of female population. Repeat for some specific state.
+10. Draw histograms and calculate statistics for the percent of females in the different counties, and discuss any interesting patterns.
+11. Identify counties with extremely small or extremely large percentages of female population. Repeat for some specific state.

@@ -1,8 +1,8 @@
-# The pipe command `%>%`
+# The pipe operator `%>%`
 
 - A common pattern in R is to perform a series of operations on a dataset, where each operation is supposed to be performed on the result of the previous operation.
 - We can think of this like a  *pipeline* or *assembly* line, where each "station" along the way performs some task and then passes the result on to the next step.
-- We can use the pipe command to make the syntax for this a bit easier to digest.
+- We can use the pipe operator to make the syntax for this a bit easier to digest.
 - Example: We start with the `counties` dataset and compute a tally/count of the counties on each state. Then we want to sort the resulting values, then put them in a dotplot. Here are the two ways to do that, with and without the pipe operator:
 
     ```r

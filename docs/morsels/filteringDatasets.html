@@ -80,7 +80,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <body>
 <section id="restricting-a-dataset-using-filter" class="level1">
 <h1>Restricting a dataset using <code>filter</code></h1>
-<p>When considering a dataset, we often want to restrict to a subset of it, for example only those counties in Indiana. The <code>filter</code> command is handy for this, and it requires the <a href="packagesAsToolboxes.html">hanoverbase package</a>. The examples below use the <a href="piping.html">“pipe” command <code>%&gt;%</code></a> but they can also be used without it.</p>
+<p>When considering a dataset, we often want to restrict to a subset of it, for example only those counties in Indiana. The <code>filter</code> command is handy for this, and it requires the <a href="packagesAsToolboxes.html">hanoverbase package</a>. The examples below use the <a href="piping.html">pipe operator <code>%&gt;%</code></a> but they can also be used without it.</p>
 <p>You can assign the results to a new name, or you can use the whole expression as is wherever you need it:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">data</span>(counties)</a>
 <a class="sourceLine" id="cb1-2" title="2">onlyIndianaCounties &lt;-<span class="st"> </span>counties <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pop2010 <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2e6</span>)</a>

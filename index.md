@@ -11,6 +11,9 @@ Our intent has *not* been to introduce students to the R programming language as
 MoRsels
   ~ [MoRsels](morsels.md) are little tidbits of information about individual aspects of using R and R-studio. Use them as quick references for how to do things.
 
+Workshops
+  ~ [Our Workshop material](workshops.md).
+
 Labs
   ~ [Our labs](labs.md) are a great place to start. They gradually introduce you to the various features of R and RStudio. These are the labs we use in our Applied Statistics courses.
 
@@ -33,11 +36,11 @@ RMarkdown
 
     Here is an [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) that describes the markup syntax more.
 
-Other Resources
-  ~ [Various resources](various.md) with further links.
-
 Workshop Resources
   ~ [This page](workshopResources.md) contains useful resources related to the workshops we do on learning R, and might be more broadly useful to others.
+
+Other Resources
+  ~ [Various resources](various.md) with further links.
 
 Installation
   ~ [Instructions](installation.md) for how to set up RStudio and related packages on your own machines.

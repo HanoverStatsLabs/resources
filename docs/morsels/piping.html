@@ -78,12 +78,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </script>
 </head>
 <body>
-<section id="the-pipe-command" class="level1">
-<h1>The pipe command <code>%&gt;%</code></h1>
+<section id="the-pipe-operator" class="level1">
+<h1>The pipe operator <code>%&gt;%</code></h1>
 <ul>
 <li><p>A common pattern in R is to perform a series of operations on a dataset, where each operation is supposed to be performed on the result of the previous operation.</p></li>
 <li><p>We can think of this like a <em>pipeline</em> or <em>assembly</em> line, where each “station” along the way performs some task and then passes the result on to the next step.</p></li>
-<li><p>We can use the pipe command to make the syntax for this a bit easier to digest.</p></li>
+<li><p>We can use the pipe operator to make the syntax for this a bit easier to digest.</p></li>
 <li><p>Example: We start with the <code>counties</code> dataset and compute a tally/count of the counties on each state. Then we want to sort the resulting values, then put them in a dotplot. Here are the two ways to do that, with and without the pipe operator:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Without pipe:</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">dotplot</span>(<span class="kw">sort</span>(<span class="kw">tally</span>(<span class="op">~</span>state, <span class="dt">data=</span>counties)))</a>
