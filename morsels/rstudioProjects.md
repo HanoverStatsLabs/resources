@@ -7,3 +7,4 @@
     - Click on "Create Project" to create the project.
     - You should now be seeing a fresh session, and the "Files" pane should be showing the new directory.
 - A special file will be created in this folder, with extension `Rproj` and named after the project. You can double-click this file later on to "reactivate" the project.
+- A typical project directory will contain the special project file, one or more [RMarkdown documents](rmarkdown.md) and their derivatives, uploaded datasets etc.

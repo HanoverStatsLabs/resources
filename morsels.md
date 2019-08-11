@@ -43,5 +43,5 @@
     - [Your RStudio workspace vs your computer](morsels/workspaceVsComputer.md)
     - [Uploading a file to your RStudio workspace](morsels/uploadFiles.md)
     - [Downloading a file from your RStudio workspace](morsels/downloadFiles.md)
-    - [Importing an uploaded Excel data file](morsels/loadingExcel.md)
+    - [Importing an uploaded Excel data file](morsels/loadingDataExcel.md)
     - [Importing a comma-separated data file](morsels/loadingDataCSV.md)

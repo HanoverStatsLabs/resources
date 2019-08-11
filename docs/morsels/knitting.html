@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>knitting</title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="knitting-an-rmarkdown-document" class="level1">
+<h1>Knitting an RMarkdown document</h1>
+<ul>
+<li>Knitting is the process of converting an RMarkdown document into a more visually-pleasant format like a PDF or an HTML page.</li>
+<li>When you knit, the program first executes the various <a href="RChunks.html">R-chunks</a> and replaces them with their output in the document.</li>
+<li>Then it processes the <a href="markdown.html">markdown</a> instructions (sections, emphasis, lists etc) and produces a resulting HTML or PDF document.</li>
+<li>If you encounter any errors during the knitting process, there are two likely candidates:
+<ul>
+<li>There is something wrong with your <a href="rmarkdownSettings.html">preamble</a> settings</li>
+<li>You have somehow broken one of the <a href="RChunks.html">R-chunks</a> and it has spilled into the text around it.</li>
+</ul></li>
+<li>You can control where the output of the knitting process resides by changing the <a href="globalSettings.html">RStudio global settings</a></li>
+</ul>
+</section>
+</body>
+</html>

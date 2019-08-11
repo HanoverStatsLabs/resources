@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>rchunkRunning</title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="running-r-chunks" class="level1">
+<h1>Running R-chunks</h1>
+<p>There are various ways to run one or more R-chunks:</p>
+<ul>
+<li>When you <a href="knitting.html">knit</a> the document, all R-chunks are executed in order on a brand-new system instance. Anything you have in the environment or the console at the moment will be completely ignored. It is therefore important to make sure that everything you want to have executed be in a R-chunk in your RMarkdown document, and in the correct order.</li>
+<li>You can press the green right arrow to the right of a chunk to execute that single chunk. This will execute the code of the chunk into the console, and will show you the resulting output just below the chunk (as well as in the console).
+<ul>
+<li>If the chunk you executed had multiple commands with multiple outputs, a series of tabs will appear below the chunk allowing you to switch between the different outputs.</li>
+</ul></li>
+<li>You can press a downward arrow right before the green right arrow. This will execute all all the chunks that appear before this chunk, in the corresponding order. This is a useful option when you restart a project or document, as the console will likely be reset at that point.</li>
+<li>There is also a “run” menu above the document, with a number of useful options.</li>
+</ul>
+</section>
+</body>
+</html>

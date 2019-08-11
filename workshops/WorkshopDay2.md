@@ -3,10 +3,10 @@
 ## RStudio projects and RMarkdown
 
 - [RStudio projects](../morsels/rstudioProjects.md)
-- Creating RMarkdown document
-- RMarkdown syntax
-- Knitting
-- Rchunks
+- [Creating an RMarkdown document](../morsels/rmarkdown.md)
+- [Markdown syntax](../morsels/markdown.md)
+- [Knitting](../morsels/knitting.md)
+- [Rchunks](../morsels/RChunks.md)
 
 - Simple analysis of data from web (driving)
 - Multivariate graphs
@@ -18,3 +18,4 @@
 
 ### Practice
 
+1. Create a simple RMarkdown report that includes some data and graphics from one of the datasets we have used so far.

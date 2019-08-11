@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>markdown</title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="the-markdown-syntax" class="level1">
+<h1>The Markdown syntax</h1>
+<ul>
+<li>Markdown is a simple syntax for generating text files along with some structure to them. These files can then be converted into various output formats.</li>
+<li>Think of it a little bit like working with a Word document, but with limited functionality in terms of formatting.</li>
+<li>For example you can create distinct paragraphs, have different levels of sections, create numbered or unnumbered lists, mark some text as italic or bold, show code in a monospaced font, include links and images, introduce a quoted section, etc.</li>
+<li>But you cannot set different colors or font sizes for a particular part of the text.</li>
+<li>You can however customize the overall look and feel of your document through some <a href="rmarkdownSettings.html">“document-level” settings in the preamble</a>.</li>
+<li>Here is a <a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">quick though somewhat overwhelming reference</a>, including some of the <a href="rmarkdown.html">RMarkdown</a> additions.</li>
+<li>Here is a shorter reference to the <a href="https://commonmark.org/help/">basic markdown elements</a>.</li>
+</ul>
+<p>Brief example: You can put this in your RMarkdown document and <a href="knitting.html">Knit</a> to see how it looks:</p>
+<pre><code># A top level heading, the title automatically provides this
+
+## A main section heading
+
+### A subsection here
+
+1. A numbered list of items
+2. Here&#39;s how you can make something **bold**
+3. Or *italic*. You can also use _underscores instead_.
+
+- Unnumbered list start with dashes or stars.
+    a. Make subslists by prepending four spaces.
+        * Can even nest deeper. It is useful to use different icons to keep it straight.
+
+&gt; Create a quote by using a &quot;greater-than&quot; symbol then a space.
+&gt; Can continue on multiple lines.
+
+A link: [The link text](www.google.com)
+
+You can also put reference links, where the actual link is somwhere else, typically the bottom of the document:  [Link text][1]
+
+![Image links have exclamations in front](https://flaglane.com/download/greek-flag/greek-flag-medium.jpg)
+
+![You can control their size with extra parameters](https://flaglane.com/download/greek-flag/greek-flag-medium.jpg){width=100px}
+
+[1]: www.google.com</code></pre>
+</section>
+</body>
+</html>

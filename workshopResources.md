@@ -9,6 +9,7 @@ While there are a large number of resources available for R, the following form 
 3. [Linear Models with R](https://www.amazon.com/Linear-Models-Chapman-Statistical-Science/dp/1439887330) discusses linear modeling with a more practical viewpoint and using a lot of R code in the process.
 4. [Extending the Linear Model with R: Generalized Linear, Mixed Effects and Nonparametric Regression Models](https://www.amazon.com/Extending-Linear-Model-Generalized-Nonparametric/dp/149872096X/) discusses more advanced modeling, including topics like Logistic Regression, Random Effects and Repeated Measures.
 5. [An Introduction to Statistical Learning: with Applications in R](https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370) is a great broad introduction to various topics related to statistical learning.
+6. [Online book on RMarkdown](https://bookdown.org/yihui/rmarkdown/)
 
 ## Cheatsheets
 
