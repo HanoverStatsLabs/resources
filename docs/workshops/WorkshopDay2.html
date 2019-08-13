@@ -20,23 +20,40 @@
 <section id="rstudio-projects-and-rmarkdown" class="level2">
 <h2>RStudio projects and RMarkdown</h2>
 <ul>
-<li><p><a href="../morsels/rstudioProjects.html">RStudio projects</a></p></li>
-<li><p><a href="../morsels/rmarkdown.html">Creating an RMarkdown document</a></p></li>
-<li><p><a href="../morsels/markdown.html">Markdown syntax</a></p></li>
-<li><p><a href="../morsels/knitting.html">Knitting</a></p></li>
-<li><p><a href="../morsels/RChunks.html">Rchunks</a></p></li>
-<li><p>Simple analysis of data from web (driving)</p></li>
-<li><p>Multivariate graphs</p></li>
-<li><p>gentle intro to tidyverse (using driving data)</p></li>
-<li><p>graph customizations (warmup ggplot2)</p></li>
+<li><a href="../morsels/rstudioProjects.html">RStudio projects</a></li>
+<li><a href="../morsels/rmarkdown.html">Creating an RMarkdown document</a></li>
+<li><a href="../morsels/markdown.html">Markdown syntax</a></li>
+<li><a href="../morsels/knitting.html">Knitting</a></li>
+<li><a href="../morsels/RChunks.html">Rchunks</a></li>
+<li><a href="../morsels/ggformula.html">The GGFormula system for graphics based on a dataset</a></li>
 </ul>
 </section>
-<section id="section" class="level2">
-<h2>???</h2>
-<section id="practice" class="level3">
-<h3>Practice</h3>
+<section id="practice" class="level2">
+<h2>Practice</h2>
+<ul>
+<li>We will be working with the “driving” dataset:
+<ul>
+<li>Start a new project</li>
+<li>Start a new RMarkdown document</li>
+<li>Add a R-chunk to the document, that contains the code to load the packages <code>hanoverbase</code> and <code>ggformula</code>.</li>
+<li>Download <a href="http://hanoverstatslabs.github.io/resources/datasets/driving.csv">this file</a></li>
+<li>Upload the file into your new project space</li>
+<li>Import the dataset into your RMarkdown document, but on the Import window screen, after the data was appeared, do the following:
+<ul>
+<li>Select the first column heading (day), and change it to the “Date” format, with format string <code>%Y/%m/%d</code>.</li>
+<li>For the “leaveTime” and “arrTime” columns, change their format to “Time” with format <code>%H:%M</code>. We learned these formats by looking at the actual file in a program like Excel and reading the documentation for <code>col_date</code> (try <code>?col_date</code>).</li>
+<li>Now copy the updated code in the import window and paste into a code chunk in your document (set it to show no output but run code). Remember to use the <code>View</code> line only in the console, not in the RMarkdown.</li>
+</ul></li>
+</ul></li>
+<li>In a new chunk, use <code>gf_histogram</code> to draw a histogram of the <code>leaveTime</code> variable, and describe and explain the result.</li>
+<li>Draw a similar histogram of the <code>miles</code> variable. What patterns do you notice?</li>
+<li>Draw a scatterplot (<code>gf_point</code>) comparing <code>miles</code> and <code>time</code>, restricting to the part of the dataset where <code>miles</code> is at most 48.</li>
+</ul>
+<section id="more-practice" class="level3">
+<h3>More Practice</h3>
 <ol type="1">
 <li>Create a simple RMarkdown report that includes some data and graphics from one of the datasets we have used so far.</li>
+<li>Choose 3-5 states and filter the counties data to these states. Then draw a scatterplot comparing the populations in 2000 and 2010, with a different color for each state, then add smooth lines for each state as well as overall. Add title and caption to the graph, set the x and y labels, and change the label that goes with the colors.</li>
 </ol>
 </section>
 </section>

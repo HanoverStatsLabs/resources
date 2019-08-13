@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>ggformula</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="the-ggformula-system-for-graphics-based-on-a-dataset" class="level1">
+<h1>The GGFormula system for graphics based on a dataset</h1>
+<ul>
+<li><p>There are many different graphics systems in R. GGFormula is an extension of the <a href="ggplot.html">ggplot</a> package which provides a nicer <a href="formulas.html">formula-based</a> but also <a href="piping.html">pipe-based</a> workflow.</p></li>
+<li><p>The basic syntax for ggformula graphics is as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">gf_graphtype</span>(formula, <span class="dt">data=</span>..., other parameters)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">gf_graphtype</span>(formula, <span class="dt">data=</span>..., other parameters) <span class="op">%&gt;%</span><span class="st"> </span>otherCustomizations</a>
+<a class="sourceLine" id="cb1-3" title="3">dataset <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_graphtype</span>(formula, other parameters) ...</a></code></pre></div></li>
+<li><p>The ggformula methods allow for the dataset to be entered either via pipe system or via the <code>data=...</code> parameter.</p></li>
+<li><p>The parameters can be used to <a href="ggformulaParameters.html">customize the graph</a>, and the choices differ somewhat from method to method, although there are a number of common entries.</p></li>
+<li><p>A lot of <a href="ggformulaAddons.html">graph addons</a> can be used via the piping mechanism, to add elements to a graph (or to overlay two graphs).</p></li>
+<li><p>Here is a list of the most standard basic graph commands. Most of these would generate a horizontal plot instead of a vertical one by addin the letter <code>h</code> to the end of the name.</p>
+<ul>
+<li><code>gf_bar</code> and <code>gf_barh</code> generate barcharts</li>
+<li><code>gf_percents</code>, <code>gf_percentsh</code>, <code>gf_props</code> and <code>gf_propsh</code> use proportions and percents instead of counts.</li>
+<li><code>gf_histogram</code> and <code>gf_histogramh</code> generate histograms</li>
+<li><code>gf_dhistogram</code> and <code>gf_dhistogramh</code> generate histograms based on density instead of count. These are well set up to overlay with density plots.</li>
+<li><code>gf_point</code> generates xy-plots.</li>
+<li><code>gf_boxplot</code> and <code>gf_boxploth</code> generate boxplots.</li>
+<li><code>gf_dens</code> and <code>gf_density</code> generate so-called “density plots”.</li>
+</ul></li>
+</ul>
+<p>Example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(hanoverbase)</a>
+<a class="sourceLine" id="cb2-2" title="2">driving &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;driving.csv&quot;</span>, <span class="dt">col_types =</span> <span class="kw">cols</span>(<span class="dt">day =</span> <span class="kw">col_date</span>(<span class="dt">format =</span> <span class="st">&quot;%Y/%m/%d&quot;</span>),</a>
+<a class="sourceLine" id="cb2-3" title="3">                                                     <span class="dt">arrTime=</span><span class="kw">col_time</span>(<span class="dt">format=</span><span class="st">&quot;%H:%M&quot;</span>),</a>
+<a class="sourceLine" id="cb2-4" title="4">                                                     <span class="dt">leaveTime=</span><span class="kw">col_time</span>(<span class="dt">format=</span><span class="st">&quot;%H:%M&quot;</span>)))</a>
+<a class="sourceLine" id="cb2-5" title="5">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_barh</span>(<span class="op">~</span>weekDay)</a>
+<a class="sourceLine" id="cb2-6" title="6">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_percentsh</span>(<span class="op">~</span>weekDay)</a>
+<a class="sourceLine" id="cb2-7" title="7">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_histogram</span>(<span class="op">~</span>miles)</a>
+<a class="sourceLine" id="cb2-8" title="8">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_histogram</span>(<span class="op">~</span>miles<span class="op">|</span>direction)</a>
+<a class="sourceLine" id="cb2-9" title="9">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_dhistogram</span>(<span class="op">~</span>miles<span class="op">|</span>direction) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_dens</span>(<span class="op">~</span>miles<span class="op">|</span>direction)</a>
+<a class="sourceLine" id="cb2-10" title="10">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(miles <span class="op">&lt;=</span><span class="st"> </span><span class="dv">48</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_density</span>(<span class="op">~</span>miles, <span class="dt">fill=</span><span class="op">~</span>direction)</a>
+<a class="sourceLine" id="cb2-11" title="11">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(miles <span class="op">&lt;=</span><span class="st"> </span><span class="dv">48</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_boxploth</span>(direction<span class="op">~</span>miles)</a>
+<a class="sourceLine" id="cb2-12" title="12">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_boxploth</span>(<span class="op">~</span>miles<span class="op">|</span>direction)</a>
+<a class="sourceLine" id="cb2-13" title="13">driving <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(miles <span class="op">&lt;=</span><span class="st"> </span><span class="dv">48</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_point</span>(time<span class="op">~</span>miles, <span class="dt">color=</span><span class="op">~</span>direction)</a></code></pre></div>
+</section>
+</body>
+</html>
