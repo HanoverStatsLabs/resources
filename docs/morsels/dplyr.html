@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>dplyr</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="data-manipulation-using-dplyr" class="level1">
+<h1>Data manipulation using dplyr</h1>
+<p>Here we look at the basic functionality offered by the <a href="https://dplyr.tidyverse.org/">dplyr</a> package for data manipulation.</p>
+<p>The main commands in <code>dplyr</code> are the following:</p>
+<ul>
+<li><code>mutate</code> adds new variables to a dataset.</li>
+<li><code>transmute</code> creates a new dataset from transformations on an existing dataset. It is like <code>mutate</code> but “forgets” all the old variables.</li>
+<li><code>filter</code> restricts the rows that we consider.</li>
+<li><code>select</code> restricts the columns that we consider.</li>
+<li><code>group_by</code> organizes the data into groups based on a variable.</li>
+<li><code>summarize</code> aggregates multiple values (typically using a grouping variable).</li>
+<li><code>arrange</code> allows the reordering of the dataset based on a variable.</li>
+</ul>
+<section id="example-1-counties" class="level2">
+<h2>Example 1: counties</h2>
+<p>To see some examples of using these, let’s consider the following situation from the <code>counties</code> dataset:</p>
+<ol type="1">
+<li>We would like to find the percent of females on each state, and order the states based on that percent.</li>
+<li>What we have at our disposal is the percent of females on each county, as well as the number of people on each county.</li>
+<li>We can use this information to compute the number of females on each county, then add all those up by grouping per state.</li>
+<li>We can also at the same time compute the total population on each state.</li>
+<li>Finally, we can divide the two to find the percent of females on the state.</li>
+<li>Then we can order by the state.</li>
+</ol>
+<p>We will use the above commands in succession as follows:</p>
+<ol type="1">
+<li>We will use <code>mutate</code> to add a “count_female” variable that counts the number of females on each county.</li>
+<li>We will <code>group_by</code> the state variable.</li>
+<li>We will <code>summarize</code> to add up the female count and overall population count for each state. This will result in a dataset with <em>one row for each state</em>.</li>
+<li>We will use <code>mutate</code> again to compute the percent of females on each state.</li>
+<li>We will then use <code>arrange</code> to reorder the states.</li>
+</ol>
+<p>Here is the overall code, though what you really want to do is look at each piece step by step (perhaps by piping it into the <code>View()</code> command):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">counties <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">count_female =</span> female <span class="op">*</span><span class="st"> </span>pop2010 <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="st">    </span><span class="kw">group_by</span>(state) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="st">    </span><span class="kw">summarize</span>(</a>
+<a class="sourceLine" id="cb1-5" title="5">        <span class="dt">counties =</span> <span class="kw">n</span>(),</a>
+<a class="sourceLine" id="cb1-6" title="6">        <span class="dt">pop2010 =</span> <span class="kw">sum</span>(pop2010),</a>
+<a class="sourceLine" id="cb1-7" title="7">        <span class="dt">female =</span> <span class="kw">sum</span>(count_female)</a>
+<a class="sourceLine" id="cb1-8" title="8">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">femalePercent =</span> female<span class="op">/</span>pop2010 <span class="op">*</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="st">    </span><span class="kw">arrange</span>(femalePercent)</a></code></pre></div>
+<p>We could store the result, or further process it by piping it into a graph or something of the kind. Let’s suppose we had stored it in a variable <code>femalesByState</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">femalesByState &lt;-<span class="st"> </span>counties <span class="op">%&gt;%</span><span class="st"> </span>......</a>
+<a class="sourceLine" id="cb2-2" title="2">femalesByState <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_point</span>(state<span class="op">~</span>femalePercent)</a></code></pre></div>
+<p>Note that this graph does not actually order the states in increasing order, which is what we wanted. In order to achieve that, we must use the <a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a> command from the <code>forcats</code> package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">femalesByState <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gf_point</span>(<span class="kw">fct_reorder</span>(state, femalePercent)<span class="op">~</span>femalePercent)</a></code></pre></div>
+</section>
+<section id="example-2-smallest-county-per-state" class="level2">
+<h2>Example 2: smallest county per state</h2>
+<p>In this example we would like to collect one county from each state, namely the county with the smallest population in that state. In order to achieve that, we will perform the following steps:</p>
+<ol type="1">
+<li>Group the counties by state.</li>
+<li>Arrange the counties by population size.</li>
+<li>Summarize the counties, choosing the “first” for each group. At this point we have one county per state.</li>
+<li>Include in that summary a column with the number of counties in the state.</li>
+<li>Filter out states with only 1 county (DC).</li>
+<li>Order by county population.</li>
+<li>Create a new column containing the state name concatenated with the county name.</li>
+<li>Draw a dotplot of the populations, with the new combined names.</li>
+<li>Use <code>fct_reorder</code> to order the cases by population.</li>
+<li>Set a logarithmic scale on the x axis.</li>
+<li>Add the actual population counts to the data locations.</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">counties <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="st">    </span><span class="kw">group_by</span>(state) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="st">    </span><span class="kw">arrange</span>(pop2010) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="st">    </span><span class="kw">summarize</span>(</a>
+<a class="sourceLine" id="cb4-5" title="5">        <span class="dt">name =</span> <span class="kw">first</span>(name),</a>
+<a class="sourceLine" id="cb4-6" title="6">        <span class="dt">pop2010 =</span> <span class="kw">first</span>(pop2010),</a>
+<a class="sourceLine" id="cb4-7" title="7">        <span class="dt">counties =</span> <span class="kw">n</span>()</a>
+<a class="sourceLine" id="cb4-8" title="8">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="st">    </span><span class="kw">filter</span>(counties <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="st">    </span><span class="kw">arrange</span>(pop2010) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="st">    </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb4-12" title="12">        <span class="dt">full =</span> <span class="kw">str_c</span>(state, name, <span class="dt">sep =</span> <span class="st">&quot; - &quot;</span>)</a>
+<a class="sourceLine" id="cb4-13" title="13">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="st">    </span><span class="kw">gf_point</span>(<span class="kw">fct_reorder</span>(full, pop2010)<span class="op">~</span>pop2010) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="st">    </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_log10</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">label=</span><span class="op">~</span>pop2010, <span class="dt">size=</span><span class="dv">3</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>, <span class="dt">nudge_x=</span><span class="fl">0.3</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+</section>
+</section>
+<section id="example-3-smallest-and-largest-county" class="level1">
+<h1>Example 3: Smallest and largest county</h1>
+<p>We build on the previous example. We will now also compute the largest county per state. Some differences:</p>
+<ul>
+<li>We include both smallest and largest county points in the graph.</li>
+<li>We draw lines connecting the smallest and largest points.</li>
+<li>We also compute and place a dot at the median values on each state.</li>
+<li>We order the states by this median name.</li>
+<li>We join the medians with a line.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">counties <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="st">    </span><span class="kw">group_by</span>(state) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="st">    </span><span class="kw">arrange</span>(pop2010) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="st">    </span><span class="kw">summarize</span>(</a>
+<a class="sourceLine" id="cb5-5" title="5">        <span class="dt">smallest_name =</span> <span class="kw">first</span>(name),</a>
+<a class="sourceLine" id="cb5-6" title="6">        <span class="dt">smallest =</span> <span class="kw">first</span>(pop2010),</a>
+<a class="sourceLine" id="cb5-7" title="7">        <span class="dt">largest_name =</span> <span class="kw">last</span>(name),</a>
+<a class="sourceLine" id="cb5-8" title="8">        <span class="dt">largest =</span> <span class="kw">last</span>(pop2010),</a>
+<a class="sourceLine" id="cb5-9" title="9">        <span class="dt">median =</span> <span class="kw">median</span>(pop2010),</a>
+<a class="sourceLine" id="cb5-10" title="10">        <span class="dt">counties =</span> <span class="kw">n</span>()</a>
+<a class="sourceLine" id="cb5-11" title="11">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="st">    </span><span class="kw">filter</span>(counties <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="st">    </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb5-14" title="14">        <span class="dt">state =</span> <span class="kw">fct_reorder</span>(state, median)</a>
+<a class="sourceLine" id="cb5-15" title="15">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-16" title="16"><span class="st">    </span><span class="kw">gf_point</span>(state<span class="op">~</span>smallest) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="st">    </span><span class="kw">gf_point</span>(state<span class="op">~</span>largest) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="st">    </span><span class="kw">gf_linerangeh</span>(state<span class="op">~</span>smallest<span class="op">+</span>largest) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="st">    </span><span class="kw">gf_point</span>(state<span class="op">~</span>median, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-20" title="20"><span class="st">    </span><span class="kw">gf_line</span>(state<span class="op">~</span>median, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">group=</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="st">    </span><span class="kw">gf_refine</span>(<span class="kw">scale_x_log10</span>())</a></code></pre></div>
+</section>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>WorkshopDay3</title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="r-workshop-day-3" class="level1">
+<h1>R Workshop Day 3<span class="small"> (<a href="3.pdf" class="small" title="3">pdf</a>)</span></h1>
+<section id="data-manipulation-with-dplyr-and-the-tidyverse" class="level2">
+<h2>Data manipulation with dplyr and the tidyverse</h2>
+<ul>
+<li><a href="../morsels/tidyverse.html">The tidyverse family of packages</a></li>
+<li><a href="../morsels/dplyr.html">data manipulations using dplyr</a></li>
+</ul>
+</section>
+</section>
+<section id="practice" class="level1">
+<h1>Practice</h1>
+<ol type="1">
+<li>Enhance the graph we generated for <code>femalesByState</code> by adding a reference line at the nationwide female percentage. To compute that, you will need to do some more work using <code>summarize</code> on the <code>femalesByState</code> dataset, to compute the total female population as well as the total population, then divide the two.</li>
+<li>Add a text next to the reference line from the previous part, indicating the value.</li>
+<li>Repeat a similar analysis by using the high school graduation percentage instead of the female percentage.</li>
+<li>Compute both black and female population percentages per state, then draw an scatterplot comparing these two variables.
+<ul>
+<li>Also compute the nationwide black percentage and female percentage and add appropriate horizontal and vertical reference lines at those locations (preferably red).</li>
+<li>Add state labels for those states that are below the nationwide average in both.</li>
+<li>Arrange the states dataset in order of female percentage, then use <code>gf_line</code> to join all the points together (maybe with some alpha).</li>
+<li>Also include a computation of high school graduation percentages, and color the points (only the points) using that.</li>
+</ul></li>
+</ol>
+</section>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono:300' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>tidyverse</title>
+  <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="https://skiadas.github.io/css/course.css" type="text/css" />
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<section id="the-tidyverse-family-of-packages" class="level1">
+<h1>The tidyverse family of packages</h1>
+<p><a href="https://www.tidyverse.org/">tidyverse</a> is a collection of <a href="packagesAsToolboxes.html">packages</a> that collectively work to make processing and transforming data a lot easier. These are all included in our hanoverbase package.</p>
+<p>This <a href="http://r4ds.had.co.nz/">online book</a> is a great resource for learning more about this suite of packages.</p>
+<p>Here is a brief listing of these packages and what they enable us to do:</p>
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/"><strong>ggplot2</strong></a> offers support for graphs. The ggformula package we have seen uses it behind the scenes.</li>
+<li><a href="https://dplyr.tidyverse.org/"><strong>dplyr</strong></a> offers functionality for manipulating a dataset: changing variables, creating new variables from existing ones, aggregating, etc.</li>
+<li><a href="https://tidyr.tidyverse.org/"><strong>tidyr</strong></a> helps us bring a dataset into a more standardized form: reshaping between “long format” and “wide format”, breaking a column into two or more columns based on the values, etc. It is often the first step after importing a new dataset from Excel or some similar source.</li>
+<li><a href="https://readr.tidyverse.org/"><strong>readr</strong></a> is a set of utilities for reading in datasets of various file formats.</li>
+<li><a href="https://tibble.tidyverse.org/"><strong>tibble</strong></a> is an alternative representation of datasets, that is used under the hood by all the other libraries.</li>
+<li><a href="https://stringr.tidyverse.org/"><strong>stringr</strong></a> provides tools for breaking a string into pieces, and is helpful when different pieces of information have been encoded in variable names.</li>
+<li><a href="https://forcats.tidyverse.org/"><strong>forcats</strong></a> provides utilities that work with factor (categorical) variables.</li>
+</ul>
+<p>Some other packages are:</p>
+<ul>
+<li><a href="https://readxl.tidyverse.org/">readxl</a> and <a href="https://haven.tidyverse.org/">haven</a>, used to read Excel documents and SAS/SPSS/Stata documents respectively.</li>
+<li><a href="https://googledrive.tidyverse.org/">googledrive</a> can be used to connect to files in Google Drive.</li>
+<li>There are also <a href="https://www.tidyverse.org/packages/">other more specialized packages</a> for web scraping, connecting to web APIs, databases, reading XML or JSON files, and more.</li>
+</ul>
+</section>
+</body>
+</html>
