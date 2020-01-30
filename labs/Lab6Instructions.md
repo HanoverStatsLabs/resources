@@ -61,6 +61,7 @@ We will start off by looking at the `height` variable.  Use `?brfss` in the cons
 Because of the presence of outliers, the histogram is forced to show a wide range on the scale, so we do not get a very good view of the non-outliers. In order to get a better view, we will create a smaller dataset which removes the outliers. We will keep the middle 99% of the values, using the quantile function to find the lowest half-percent and highest half-percent in the `height` data.
 
 2. Pipe the brfss data through a filter to remove the `height` outliers. First find the height cutoffs for the middle 99% and then use those cutoffs in a filter to form a subset of the `brfss` data:
+
 	```r
 	lowCutoff <- quantile(~height, data=brfss, na.rm=TRUE, probs=.005)
 	highCutoff <- quantile(~height, data=brfss, na.rm=TRUE, probs=.995)
@@ -70,6 +71,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
     If this was successful, you should see a `brfssSubset` entry in the Environment pane, showing around 99% of the initial observations.
 
 	Now draw the histogram with the filtered data. Note: Instead of letting the histogram breaks be set by default, we will ask for 20 breaks.  Later on, we'll take finer control of the breaks.
+
 	```r
 	histogram(~height, data=brfssSubset, breaks=20)
 	```
@@ -83,6 +85,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 	Also, if we have bins of width less than 1 then some bins will be empty just because they do not contain a whole number within their bounds.
 
 	To avoid these problems, we can put breaks specifically at all the ".5" marks on the axis. We use the `seq` command to create a sequence of numbers with a given start value, stop value, and step size.
+
 	```r
 	myBreaks <- seq(from=lowCutoff - 0.5, to=highCutoff + 0.5, by=1)
 	myBreaks  		# this just prints the sequence of numbers
@@ -97,6 +100,7 @@ Because of the presence of outliers, the histogram is forced to show a wide rang
 4. Because of the difference in average heights for males as compared to females, we might have expected the histogram to be clearly bimodal.  Indeed, with a boxplot we can see this difference. Draw a `bwplot` of `sex~height` now, using the `brfssSubset` data.
 
     As a companion to the `bwplot`, let's also make a histogram which is paneled by sex.  Notice the use of the formula `~height|sex` for height versus sex, and the `layout=c(1,2)` option for forcing the panels to line up vertically (1 column, 2 rows):
+
     ```r
     histogram(~height|sex, data=brfssSubset, breaks=myBreaks, layout=c(1,2))
     ```
@@ -167,6 +171,7 @@ After running this command, you should see another new column titled `bmicat` in
 8. We now have a categorical variable called `bmicat`. Do a tally and barchart (you can also do a pie chart) of this variable. What can we say about the respondents' BMI values from this?
 9. We would like to investigate how the BMI might be related to the general health of the respondents. Make an initial prediction as to how you expect the BMI level to be reflected in the general health.
 10. In order to properly answer the previous question with the provided data, we will need to create a stacked bar chart of the BMI and general health. To do this you will need to follow similar steps to those used when we looked at `healthVsExercise` and `healthVsIncome` in the previous lab. Produce a stacked bar graph with *one bar for each BMI category* and *stacks determined by the `genhealth` variable*. The first command for this would be:
+
     ```r
     healthVsBmicat <- tally(~genhealth|bmicat, data=brfssSubset,
          format="percent", useNA="no")

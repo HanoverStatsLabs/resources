@@ -55,6 +55,7 @@ We start similar to the last lab. We will start a new project based on a prepare
 
 1. Make a tally and a barchart (as you did for WeekDays in a previous lab) for the `genhealth` variable.  Which category of the variable is the most frequent?
 2. It would be useful to have **percentages** rather than raw counts in our tally.  Add a *command option* by inserting the code `format="percent"` before the closing parentheses of the tally command, like this:
+
     ```r
     tally(~genhealth, data=brfss, format="percent")
     ```
@@ -88,6 +89,7 @@ tally(~genhealth, data=brfss, format="percent", useNA="no") %>%
 
 3. **Pie charts** are popular, but also tend to be over-used.  Once in a while it's nice to have one, as long as "proportion of the whole" is the item of interest.  To show the `genhealth` responses in a pie chart, try
 piping the tally into a piechart command, as follows:
+
     ```r
     tally(~genhealth, data=brfss, format="percent", useNA="no") %>%
         pie(col=brewer.pal(5, "YlGnBu"))
@@ -101,6 +103,7 @@ piping the tally into a piechart command, as follows:
 **Stacked bar graphs** are nice for visualizing the relationship between two categorical variables.  Unfortunately, this is one of the trickier plots to make in R.  Suppose we're interested in the relationship between `genhealth` and `exerciseany`.  We expect to see that those respondents who never exercise have worse general health (right?).
 
 4. Make a tally of percentages for `genhealth` against `exerciseany`, and store the result:
+
     ```r
     healthVsExercise <- tally(~genhealth|exerciseany, data=brfss,
         format="percent", useNA="no")

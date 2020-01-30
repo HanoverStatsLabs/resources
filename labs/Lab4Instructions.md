@@ -130,6 +130,7 @@ The (elapsed) `time` variable is calculated as the difference in minutes between
 
 - A `favstats` summary and a histogram of the `time` variable.
 - Two `xyplot`s (scatterplots) of the `time` variable against the `miles` variable. In the first plot we exclude three particularly unusual/incorrect time values, and in the second plot we restrict further to the "`miles < 50`" region containing the typical distances. Use the following commands for this (may want to copy-paste them rather than type them in):
+
     ```r
     scatter1 <- xyplot(time~miles,
         data=driving %>% filter(time <= 90 & time > 40))
@@ -147,6 +148,7 @@ Here are the questions for you to answer.
 8. Describe the relationship between the `time` variable and the `miles` variable. What is the overall pattern, how does it make sense? Are there deviations? Is there a clear linear association?
 
 9. For this question, we are enhancing the scatterplots from above by adding straight lines at the 55 mph speed limit. Note that 55 mph corresponds to 60 minutes per 55 miles, making the slope of the line (`b`) equal to `60/55`:
+
     ```r
     ladd(panel.abline(a=0, b=60/55), plot=scatter1)
     ladd(panel.abline(a=0, b=60/55), plot=scatter2)
@@ -158,6 +160,7 @@ Here are the questions for you to answer.
     c. Where are most of the points in relation to the line (below vs. above)? What does this tell you about the instructor's driving habits?
 
 10. We will now color the points in the scatterplot based on the direction of travel (we will learn more in a future lab about the special graph settings used in this example):
+
     ```r
     xyplot(time~miles, data=driving %>%
         filter(time <= 90 & time > 40 & miles < 50),
