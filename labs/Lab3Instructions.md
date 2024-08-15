@@ -1,4 +1,4 @@
-#Lab 3: Generating Reports with R Markdown
+# Lab 3: Generating Reports with R Markdown
 
 ## Introduction
 
