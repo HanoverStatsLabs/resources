@@ -117,7 +117,7 @@ Notice that the "prompt" changed from the usual `>` to a plus sign `+`.  R is wa
 
 ### Load Data and Start your Investigation
 
-The U.S. 2010 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties. (Always `View` the data when you load it. Notice that `View` starts with a *capital* `V`.)
+The U.S. 2020 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties. (Always `View` the data when you load it. Notice that `View` starts with a *capital* `V`.)
 
 To load the data set, type:
 ```r
@@ -133,7 +133,7 @@ You should also bring up the documentation page for the dataset by running `?cou
 
 You can use the search box at the top right of the data view to filter the rows. For instance typing `Indiana` will show only the rows that have the word Indiana in one of their fields.
 
-Notice that you can **sort** the data file according to any column by clicking the column heading. Click a second time to sort in the opposite direction.  For example, try this out (using the `pop2010` column) to discover which U.S. county has the smallest population (2010) and which has the largest.
+Notice that you can **sort** the data file according to any column by clicking the column heading. Click a second time to sort in the opposite direction.  For example, try this out (using the `pop2020` column) to discover which U.S. county has the smallest population (2020) and which has the largest.
 
 \newpage
 
@@ -143,7 +143,7 @@ Don't forget that you can use scrolling and sorting to answer some of the follow
 
 \vfill
 
-2. Name the top 3 counties by population (2010); give the county name, the state name and the 2010 population. For each of these three counties, explain why the county has such a large population. (Use internet search as needed.)
+2. Name the top 3 counties by population (2020); give the county name, the state name and the 2020 population. For each of these three counties, explain why the county has such a large population. (Use internet search as needed.)
 
 \vfill
 \vfill
@@ -151,7 +151,7 @@ Don't forget that you can use scrolling and sorting to answer some of the follow
 \vfill
 
 
-3. List the 3 counties with the least population (2010), including their populations. Use the internet to find an interesting fact about each county.
+3. List the 3 counties with the least population (2020), including their populations. Use the internet to find an interesting fact about each county.
 
 \vfill
 \vfill
@@ -162,15 +162,15 @@ Don't forget that you can use scrolling and sorting to answer some of the follow
 
 ### Histogram and Summary Statistics, One Quantitative Variable
 
-The most popular graph for showing the distribution of a single quantitative variable is the histogram. The following will draw the default histogram for `pop2010`:
+The most popular graph for showing the distribution of a single quantitative variable is the histogram. The following will draw the default histogram for `pop2020`:
 ```r
-histogram(~pop2010, data=counties)
+histogram(~pop2020, data=counties)
 ```
 **You may need to wait several seconds for the results.**  You can get a bigger version of the graph by clicking the Zoom button in the *Plots* pane.
 
 We can enhance our understanding of the distribution by producing summary statistics. The command `favstats` will give us the five-number summary and the mean for the distribution:
 ```r
-favstats(~pop2010, data=counties)
+favstats(~pop2020, data=counties)
 ```
 
 4. What are the mean and median populations for counties? Which one is larger? Does that make sense based on the shape of the distribution?
@@ -183,9 +183,9 @@ favstats(~pop2010, data=counties)
 
 \newpage
 
-In the above histogram, almost all of the counties are thrown into a single bin, and not much can be said about the distribution (e.g. number and location of modes). We can filter the data to exclude counties with large population (e.g. require `pop2010 <= 2e6`). We can use the "piping" command for this to pipe the counties through a `filter`. The command for this is:
+In the above histogram, almost all of the counties are thrown into a single bin, and not much can be said about the distribution (e.g. number and location of modes). We can filter the data to exclude counties with large population (e.g. require `pop2020 <= 2e6`). We can use the "piping" command for this to pipe the counties through a `filter`. The command for this is:
 ```r
-histogram(~pop2010, data=counties %>% filter(pop2010 <= 2e6))
+histogram(~pop2020, data=counties %>% filter(pop2020 <= 2e6))
 ```
 
 6. This histogram is still lacking in detail, and we should filter out even more values. Adjust the histogram command to use a lower cutoff point than 2 million. Use your judgment to find a cutoff so that the main pattern of the distribution is clearly shown. How many modes does the distribution have and what are their approximate values (these modes represent "typical" county populations)?

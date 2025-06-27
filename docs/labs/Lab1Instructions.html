@@ -179,7 +179,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2>Data Investigations</h2>
 <section id="load-data-and-start-your-investigation" class="level3">
 <h3>Load Data and Start your Investigation</h3>
-<p>The U.S. 2010 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties. (Always <code>View</code> the data when you load it. Notice that <code>View</code> starts with a <em>capital</em> <code>V</code>.)</p>
+<p>The U.S. 2020 Census generated a wealth of data. We will see later how to download data from the web and other sources. For now, we will use a built-in dataset, containing information about the U.S. counties. (Always <code>View</code> the data when you load it. Notice that <code>View</code> starts with a <em>capital</em> <code>V</code>.)</p>
 <p>To load the data set, type:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">data</span>(counties)</a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="kw">View</span>(counties)</a></code></pre></div>
@@ -187,7 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the Environment pane (upper right), you should now see a <code>counties</code> entry under Data. It should tell you the number of observations (rows) and the number of variables (columns) in the data.</p>
 <p>You should also bring up the documentation page for the dataset by running <code>?counties</code> or <code>help(counties)</code> in the Console.</p>
 <p>You can use the search box at the top right of the data view to filter the rows. For instance typing <code>Indiana</code> will show only the rows that have the word Indiana in one of their fields.</p>
-<p>Notice that you can <strong>sort</strong> the data file according to any column by clicking the column heading. Click a second time to sort in the opposite direction. For example, try this out (using the <code>pop2010</code> column) to discover which U.S. county has the smallest population (2010) and which has the largest.</p>
+<p>Notice that you can <strong>sort</strong> the data file according to any column by clicking the column heading. Click a second time to sort in the opposite direction. For example, try this out (using the <code>pop2020</code> column) to discover which U.S. county has the smallest population (2020) and which has the largest.</p>
 
 <p>Don’t forget that you can use scrolling and sorting to answer some of the following questions.</p>
 <ol type="1">
@@ -195,22 +195,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 
 <ol start="2" type="1">
-<li>Name the top 3 counties by population (2010); give the county name, the state name and the 2010 population. For each of these three counties, explain why the county has such a large population. (Use internet search as needed.)</li>
+<li>Name the top 3 counties by population (2020); give the county name, the state name and the 2020 population. For each of these three counties, explain why the county has such a large population. (Use internet search as needed.)</li>
 </ol>
 
 <ol start="3" type="1">
-<li>List the 3 counties with the least population (2010), including their populations. Use the internet to find an interesting fact about each county.</li>
+<li>List the 3 counties with the least population (2020), including their populations. Use the internet to find an interesting fact about each county.</li>
 </ol>
 
 
 </section>
 <section id="histogram-and-summary-statistics-one-quantitative-variable" class="level3">
 <h3>Histogram and Summary Statistics, One Quantitative Variable</h3>
-<p>The most popular graph for showing the distribution of a single quantitative variable is the histogram. The following will draw the default histogram for <code>pop2010</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">histogram</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties)</a></code></pre></div>
+<p>The most popular graph for showing the distribution of a single quantitative variable is the histogram. The following will draw the default histogram for <code>pop2020</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">histogram</span>(<span class="op">~</span>pop2020, <span class="dt">data=</span>counties)</a></code></pre></div>
 <p><strong>You may need to wait several seconds for the results.</strong> You can get a bigger version of the graph by clicking the Zoom button in the <em>Plots</em> pane.</p>
 <p>We can enhance our understanding of the distribution by producing summary statistics. The command <code>favstats</code> will give us the five-number summary and the mean for the distribution:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">favstats</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">favstats</span>(<span class="op">~</span>pop2020, <span class="dt">data=</span>counties)</a></code></pre></div>
 <ol start="4" type="1">
 <li>What are the mean and median populations for counties? Which one is larger? Does that make sense based on the shape of the distribution?</li>
 </ol>
@@ -220,8 +220,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 
 
-<p>In the above histogram, almost all of the counties are thrown into a single bin, and not much can be said about the distribution (e.g. number and location of modes). We can filter the data to exclude counties with large population (e.g. require <code>pop2010 &lt;= 2e6</code>). We can use the “piping” command for this to pipe the counties through a <code>filter</code>. The command for this is:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">histogram</span>(<span class="op">~</span>pop2010, <span class="dt">data=</span>counties <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pop2010 <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2e6</span>))</a></code></pre></div>
+<p>In the above histogram, almost all of the counties are thrown into a single bin, and not much can be said about the distribution (e.g. number and location of modes). We can filter the data to exclude counties with large population (e.g. require <code>pop2020 &lt;= 2e6</code>). We can use the “piping” command for this to pipe the counties through a <code>filter</code>. The command for this is:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">histogram</span>(<span class="op">~</span>pop2020, <span class="dt">data=</span>counties <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(pop2020 <span class="op">&lt;=</span><span class="st"> </span><span class="fl">2e6</span>))</a></code></pre></div>
 <ol start="6" type="1">
 <li>This histogram is still lacking in detail, and we should filter out even more values. Adjust the histogram command to use a lower cutoff point than 2 million. Use your judgment to find a cutoff so that the main pattern of the distribution is clearly shown. How many modes does the distribution have and what are their approximate values (these modes represent “typical” county populations)?</li>
 </ol>
